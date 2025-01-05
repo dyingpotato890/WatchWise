@@ -7,7 +7,7 @@ const Login = () => {
     const handleLogin = (e) => {
         e.preventDefault();
         alert('Logged in Successfully!');
-        navigate('/');
+        navigate('/home');
     };
 
     return (
