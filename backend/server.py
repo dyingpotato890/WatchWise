@@ -2,11 +2,12 @@ from flask import Flask, request, jsonify, session, redirect
 from flask_cors import CORS
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user
 from datetime import date
-from Utilities.User import User
+
+from utilities.user import User
 
 app = Flask(__name__)
 CORS(app)
-app.config['SECRET_KEY']='meowmeowmeow'
+app.config['SECRET_KEY'] = 'meowmeowmeow'
 
 login_manager = LoginManager()
 login_manager.init_app(app)
