@@ -2,13 +2,11 @@ import json
 import hashlib
 import pymongo      
 
-# Function to hash passwords
 def hashPassword(password: str) -> str:
     h = hashlib.new("sha256")
     h.update(bytes(password, 'utf-8'))
     return h.hexdigest()
 
-# Connect to the database
 client = pymongo.MongoClient("mongodb://localhost:27017/")
 db = client["WatchWise"]
 
