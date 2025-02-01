@@ -28,12 +28,12 @@ def login():
     password = data.get('password')
     
     user = User.get(username)
-    
-    if user and user.verify_password(password):
+
+    if user and user.verify_password(username, password):
         login_user(user, remember = True)
         return jsonify({"message": "Login Successful"})
     else:
         return jsonify({"message": "Login Failed"}), 401
     
 if __name__ == "__main__":
-    app.run(debug = True)
+    app.run(debug = True, port = 5010)

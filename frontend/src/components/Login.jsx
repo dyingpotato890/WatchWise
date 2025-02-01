@@ -1,14 +1,32 @@
+import React from 'react';
 import { Container, TextField, Button, Typography, Box, Link, Paper } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 const Login = () => {
     const navigate = useNavigate();
 
-    const handleLogin = (e) => {
+    const handleLogin = async (e) => {
         e.preventDefault();
-        alert('Logged in Successfully!');
-        navigate('/home');
-    };
+        
+        const username = e.target.username.value; // Use name="username"
+        const password = e.target.password.value; // Use name="password"
+    
+        try {
+            const response = await axios.post('http://localhost:5010/api/login', {
+                username: username, // Send the username
+                password: password, // Send the password
+            });
+    
+            // Handle success
+            alert('Logged in Successfully!');
+            navigate('/home');
+        } catch (error) {
+            // Handle error (wrong credentials or server issues)
+            console.error(error); // Log the error for debugging
+            alert('Login Failed!');
+        }
+    };    
 
     return (
         <Container
@@ -37,11 +55,12 @@ const Login = () => {
 
                 <form onSubmit={handleLogin}>
                     <TextField
-                        label="Email Address"
+                        label="Username"
                         variant="outlined"
                         fullWidth
                         required
-                        type="email"
+                        type="text"
+                        name="username" // Add name attribute
                         InputLabelProps={{ style: { color: 'white' } }}
                         InputProps={{ style: { color: 'white' } }}
                         style={{ marginBottom: '1rem' }}
@@ -52,6 +71,7 @@ const Login = () => {
                         fullWidth
                         required
                         type="password"
+                        name="password" // Add name attribute
                         InputLabelProps={{ style: { color: 'white' } }}
                         InputProps={{ style: { color: 'white' } }}
                         style={{ marginBottom: '1rem' }}

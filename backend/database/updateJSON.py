@@ -1,11 +1,18 @@
 import json
-import hashlib
-import pymongo      
+import bcrypt
+import pymongo
 
-def hashPassword(password: str) -> str:
-    h = hashlib.new("sha256")
-    h.update(bytes(password, 'utf-8'))
-    return h.hexdigest()
+# def hashPassword(password: str) -> str:
+#     h = hashlib.new("sha256")
+#     h.update(bytes(password, 'utf-8'))
+#     return h.hexdigest()
+
+def hashPassword(password):
+    # Generate a salt
+    salt = bcrypt.gensalt()
+    # Hash the password with the salt
+    hashed_password = bcrypt.hashpw(password.encode('utf-8'), salt)
+    return hashed_password
 
 client = pymongo.MongoClient("mongodb://localhost:27017/")
 db = client["WatchWise"]
@@ -38,3 +45,6 @@ if "login" not in collections or "users" not in collections:
 
 else:
     print("Database and collections already exist. No action needed.")
+
+
+"fcf16261e5da4c913baa070a33ee125bda503021da7ddc870d5f4b3a73e2a755"
