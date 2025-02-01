@@ -1,12 +1,31 @@
-
 import { Container, TextField, Button, Typography, Box, Link, Paper } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
+import { useState } from 'react';
 
 const SignUp = () => {
     const navigate = useNavigate();
+    const [password, setPassword] = useState('');
+    const [error, setError] = useState('');
+
+    const handlePasswordChange = (e) => {
+        const newPassword = e.target.value;
+        setPassword(newPassword);
+
+        // Validate password: at least 8 characters, one special character, and one number
+        const passwordRegex = /^(?=.*[!@#$%^&*])(?=.*\d)[A-Za-z\d!@#$%^&*]{8,}$/;
+        if (!passwordRegex.test(newPassword)) {
+            setError('Password must be at least 8 characters long and include at least one special character and one number.');
+        } else {
+            setError('');
+        }
+    };
 
     const handleSubmit = (e) => {
         e.preventDefault();
+        if (error) {
+            alert('Please fix the errors before submitting.');
+            return;
+        }
         alert('Account Created Successfully!');
         navigate('/login');
     };
@@ -50,9 +69,13 @@ const SignUp = () => {
                         fullWidth
                         required
                         type="password"
+                        value={password}
+                        onChange={handlePasswordChange}
                         InputLabelProps={{ style: { color: 'white' } }}
                         InputProps={{ style: { color: 'white' } }}
                         style={{ marginBottom: '1rem' }}
+                        error={!!error}
+                        helperText={error}
                     />
 
                     <Button
@@ -60,6 +83,7 @@ const SignUp = () => {
                         fullWidth
                         variant="contained"
                         style={{ backgroundColor: 'red', color: 'white' }}
+                        disabled={!!error}
                     >
                         Create Account
                     </Button>
