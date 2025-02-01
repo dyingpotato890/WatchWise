@@ -26,10 +26,14 @@ def login():
     data = request.get_json()
     username = data.get('username')
     password = data.get('password')
+    
     user = User.get(username)
-    if user and user.password == User.hashPassword(password):
-        login_user(user, remember=True)
-        print("Logged in: ",current_user.is_authenticated, current_user.id)
+    
+    if user and user.verify_password(password):
+        login_user(user, remember = True)
         return jsonify({"message": "Login Successful"})
     else:
         return jsonify({"message": "Login Failed"}), 401
+    
+if __name__ == "__main__":
+    app.run(debug = True)
