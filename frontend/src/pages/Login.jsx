@@ -2,6 +2,7 @@ import React from 'react';
 import { Container, TextField, Button, Typography, Box, Link, Paper } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import Navbar from '../components/Navbar';
 
 const Login = () => {
     const navigate = useNavigate();
@@ -29,6 +30,8 @@ const Login = () => {
     };    
 
     return (
+        <>
+        <Navbar/>
         <Container
             component="main"
             maxWidth="xs"
@@ -96,6 +99,7 @@ const Login = () => {
                 </Box>
             </Paper>
         </Container>
+    </>
     );
 };
 

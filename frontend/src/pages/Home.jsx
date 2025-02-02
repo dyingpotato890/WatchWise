@@ -1,5 +1,6 @@
 import React from 'react';
 import { Container, Typography, Button, Paper, Box } from '@mui/material';
+import Navbar from '../components/Navbar';
 
 const MovieRecommendation = () => {
     const moodEmojis = {
@@ -10,6 +11,8 @@ const MovieRecommendation = () => {
     };
 
     return (
+        <>
+        <Navbar/>
         <Container
             component="main"
             maxWidth="sm"
@@ -45,6 +48,7 @@ const MovieRecommendation = () => {
                 </Box>
             </Paper>
         </Container>
+        </>
     );
 };
 
