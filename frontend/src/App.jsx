@@ -3,7 +3,7 @@ import { Route, Routes } from 'react-router-dom';
 import SignUp from './pages/Signup/SignUp';
 import Login from './pages/Login'
 import Home from './pages/Home'
-
+import MoodPage from './pages/MoodPage'
 
 const App = () => {
   return (
@@ -11,6 +11,7 @@ const App = () => {
       <Route path="/signup" element={<SignUp />} />
       <Route path="/login" element={<Login />} />
       <Route path="/home" element={<Home />} />
+      <Route path="/mood" element={<MoodPage />} />
     </Routes>
   );
 };
