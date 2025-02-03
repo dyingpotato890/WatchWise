@@ -14,11 +14,11 @@ if "login" not in collections or "users" not in collections:
 
     if "login" not in collections:
         for login_record in login_data:
-            if db["login"].count_documents({"user_id": login_record["user_id"]}) == 0:
+            if db["login"].count_documents({"email": login_record["email"]}) == 0:
                 db["login"].insert_one(login_record)
-                print(f"Inserted login record for user_id: {login_record['user_id']}")
+                print(f"Inserted login record for email: {login_record['email']}")
             else:
-                print(f"Login record for user_id: {login_record['user_id']} already exists. Skipping insertion.")
+                print(f"Login record for email: {login_record['email']} already exists. Skipping insertion.")
 
     if "users" not in collections:
         for user_record in users_data:

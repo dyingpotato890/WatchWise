@@ -3,102 +3,122 @@
     {
       "user_id": "1707043285_a1b2c3",
       "username": "user1",
-      "password": "pass1"
+      "password": "pass1",
+      "email": "user1@example.com"
     },
     {
       "user_id": "1707043286_d4e5f6",
       "username": "user2",
-      "password": "pass2"
+      "password": "pass2",
+      "email": "user2@example.com"
     },
     {
       "user_id": "1707043287_g7h8i9",
       "username": "user3",
-      "password": "pass3"
+      "password": "pass3",
+      "email": "user3@example.com"
     },
     {
       "user_id": "1707043288_j1k2l3",
       "username": "user4",
-      "password": "pass4"
+      "password": "pass4",
+      "email": "user4@example.com"
     },
     {
       "user_id": "1707043289_m4n5o6",
       "username": "user5",
-      "password": "pass5"
+      "password": "pass5",
+      "email": "user5@example.com"
     },
     {
       "user_id": "1707043290_p7q8r9",
       "username": "user6",
-      "password": "pass6"
+      "password": "pass6",
+      "email": "user6@example.com"
     },
     {
       "user_id": "1707043291_s1t2u3",
       "username": "user7",
-      "password": "pass7"
+      "password": "pass7",
+      "email": "user7@example.com"
     },
     {
       "user_id": "1707043292_v4w5x6",
       "username": "user8",
-      "password": "pass8"
+      "password": "pass8",
+      "email": "user8@example.com"
     },
     {
       "user_id": "1707043293_y7z8a9",
       "username": "user9",
-      "password": "pass9"
+      "password": "pass9",
+      "email": "user9@example.com"
     },
     {
       "user_id": "1707043294_b1c2d3",
       "username": "user10",
-      "password": "pass10"
+      "password": "pass10",
+      "email": "user10@example.com"
     },
     {
       "user_id": "1707043295_d4e5f6",
       "username": "user11",
-      "password": "pass11"
+      "password": "pass11",
+      "email": "user11@example.com"
     },
     {
       "user_id": "1707043296_g7h8i9",
       "username": "user12",
-      "password": "pass12"
+      "password": "pass12",
+      "email": "user12@example.com"
     },
     {
       "user_id": "1707043297_j1k2l3",
       "username": "user13",
-      "password": "pass13"
+      "password": "pass13",
+      "email": "user13@example.com"
     },
     {
       "user_id": "1707043298_m4n5o6",
       "username": "user14",
-      "password": "pass14"
+      "password": "pass14",
+      "email": "user14@example.com"
     },
     {
       "user_id": "1707043299_p7q8r9",
       "username": "user15",
-      "password": "pass15"
+      "password": "pass15",
+      "email": "user15@example.com"
     },
     {
       "user_id": "1707043300_s1t2u3",
       "username": "user16",
-      "password": "pass16"
+      "password": "pass16",
+      "email": "user16@example.com"
     },
     {
       "user_id": "1707043301_v4w5x6",
       "username": "user17",
-      "password": "pass17"
+      "password": "pass17",
+      "email": "user17@example.com"
     },
     {
       "user_id": "1707043302_y7z8a9",
       "username": "user18",
-      "password": "pass18"
+      "password": "pass18",
+      "email": "user18@example.com"
     },
     {
       "user_id": "1707043303_b1c2d3",
       "username": "user19",
-      "password": "pass19"
+      "password": "pass19",
+      "email": "user19@example.com"
     },
     {
       "user_id": "1707043304_d4e5f6",
       "username": "user20",
-      "password": "pass20"
+      "password": "pass20",
+      "email": "user20@example.com"
     }
   ]
 }
