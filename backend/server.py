@@ -24,12 +24,12 @@ def unauthorized():
 @app.route('/api/login', methods=['POST'])
 def login():
     data = request.get_json()
-    username = data.get('username')
+    email = data.get('email')
     password = data.get('password')
     
-    user = User.get(username)
+    user = User.get(email)
 
-    if user and user.verify_password(username, password):
+    if user and user.verify_password(email, password):
         login_user(user, remember = True)
         return jsonify({"message": "Login Successful"})
     else:
