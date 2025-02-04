@@ -1,40 +1,44 @@
 from flask_login import UserMixin
 import uuid
 import time
-import hashlib
+import bcrypt
 import pymongo
 
 client = pymongo.MongoClient("mongodb://localhost:27017/")
 db = client["WatchWise"]
 
 class User(UserMixin):
-    def __init__(self, user_id, password_hash):
+    def __init__(self, user_id, password):
         self.id = user_id  # Flask-Login requires .id
-        self.password_hash = password_hash
+        self.password = password
 
     @staticmethod
-    def hashPassword(password: str) -> str:
-        h = hashlib.new("sha256")
-        h.update(bytes(password, 'utf-8'))
-        return h.hexdigest()
+    def hashPassword(password):
+        salt = bcrypt.gensalt()
+        hashed_password = bcrypt.hashpw(password.encode('utf-8'), salt)
+        return hashed_password
 
     @staticmethod
-    def get(username):
+    def get(email):
         login_collection = db['login']
-        user_data = login_collection.find_one({'username': username})
+        user_data = login_collection.find_one({'email': email})
 
         if user_data:
-            return User(user_data['user_id'], user_data['password_hash'])
+            return User(user_data['user_id'], user_data['password'])
         return None  
 
-    def verify_password(self, username, enteredPassword):
-        login = db['login']
-        dbPass = login.find_one({'username': username})
+    def verify_password(self, enteredPassword):
+        if isinstance(self.password, str):
+            stored_hash = self.password.encode('utf-8')
+        else:
+            stored_hash = self.password
 
-        if dbPass == self.hashPassword(enteredPassword):
+        if bcrypt.checkpw(enteredPassword.encode('utf-8'), stored_hash):
+            print("Password matches!")
             return True
-        
-        return False
+        else:
+            print("Incorrect password!")
+            return False
 
     @staticmethod
     def generate_user_id():

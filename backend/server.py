@@ -1,7 +1,6 @@
 from flask import Flask, request, jsonify, session, redirect
 from flask_cors import CORS
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user
-from datetime import date
 
 from utilities.user import User
 
@@ -29,8 +28,8 @@ def login():
     
     user = User.get(email)
 
-    if user and user.verify_password(email, password):
-        login_user(user, remember = True)
+    if user and user.verify_password(password):
+        login_user(user, remember=True)
         return jsonify({"message": "Login Successful"})
     else:
         return jsonify({"message": "Login Failed"}), 401

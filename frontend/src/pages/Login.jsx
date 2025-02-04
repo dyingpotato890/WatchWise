@@ -10,12 +10,12 @@ const Login = () => {
     const handleLogin = async (e) => {
         e.preventDefault();
         
-        const username = e.target.username.value; // Use name="username"
+        const email = e.target.email.value; // Use name="username"
         const password = e.target.password.value; // Use name="password"
     
         try {
             const response = await axios.post('http://localhost:5010/api/login', {
-                username: username, // Send the username
+                email: email, // Send the username
                 password: password, // Send the password
             });
     
@@ -58,12 +58,12 @@ const Login = () => {
 
                 <form onSubmit={handleLogin}>
                     <TextField
-                        label="Username"
+                        label="Email"
                         variant="outlined"
                         fullWidth
                         required
                         type="text"
-                        name="username" // Add name attribute
+                        name="email" // Add name attribute
                         InputLabelProps={{ style: { color: 'white' } }}
                         InputProps={{ style: { color: 'white' } }}
                         style={{ marginBottom: '1rem' }}
