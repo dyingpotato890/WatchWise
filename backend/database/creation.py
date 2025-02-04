@@ -1,5 +1,14 @@
 import json
+import bcrypt
 import pymongo
+
+def hashPassword(password):
+    # Generate a salt
+    salt = bcrypt.gensalt()
+    
+    # Hash the password with the salt
+    hashed_password = bcrypt.hashpw(password.encode('utf-8'), salt)
+    return hashed_password.decode('utf-8')
 
 client = pymongo.MongoClient("mongodb://localhost:27017/")
 db = client["WatchWise"]
@@ -14,11 +23,12 @@ if "login" not in collections or "users" not in collections:
 
     if "login" not in collections:
         for login_record in login_data:
-            if db["login"].count_documents({"email": login_record["email"]}) == 0:
+            if db["login"].count_documents({"user_id": login_record["user_id"]}) == 0:
+                login_record["password"] = hashPassword(login_record["password"])
                 db["login"].insert_one(login_record)
-                print(f"Inserted login record for email: {login_record['email']}")
+                print(f"Inserted login record for user_id: {login_record['user_id']}")
             else:
-                print(f"Login record for email: {login_record['email']} already exists. Skipping insertion.")
+                print(f"Login record for user_id: {login_record['user_id']} already exists. Skipping insertion.")
 
     if "users" not in collections:
         for user_record in users_data:
@@ -30,3 +40,6 @@ if "login" not in collections or "users" not in collections:
 
 else:
     print("Database and collections already exist. No action needed.")
+
+
+"fcf16261e5da4c913baa070a33ee125bda503021da7ddc870d5f4b3a73e2a755"
