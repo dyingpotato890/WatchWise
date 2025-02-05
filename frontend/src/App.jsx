@@ -2,7 +2,7 @@
 import { Route, Routes } from 'react-router-dom';
 import SignUp from './pages/Signup/SignUp';
 import Login from './pages/Login'
-import Home from './pages/Home'
+import Home from './pages/home/Home'
 import MoodPage from './pages/MoodPage'
 
 const App = () => {

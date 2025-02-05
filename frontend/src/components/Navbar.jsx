@@ -1,78 +1,68 @@
-import { AppBar, Toolbar, Box, Button } from '@mui/material';
-import { Link } from 'react-router-dom';
-import logo from '../assets/logo.png';
+import { AppBar, Toolbar, Box, Button } from "@mui/material";
+import { Link } from "react-router-dom";
+import logo from "../assets/logo.png";
 
 const Navbar = () => {
-    return (
-        <AppBar
-            position="static"
-            style={{
-                backgroundColor: '#000000',
-                boxShadow: '0 4px 20px rgba(255, 0, 0, 0.8)',
-            }}
-        >
-            <Toolbar>
-                {/* Logo */}
-                <Box sx={{ flexGrow: 1 }}>
-                    <img
-                        src={logo}
-                        alt="WatchWise Logo"
-                        style={{ height: '25px' }} // Adjusted logo size
-                    />
-                </Box>
+  return (
+    <AppBar
+      position="fixed" // Stays on top even when scrolling
+      sx={{
+        backgroundColor: "rgba(255, 255, 255, 0)", // Light transparent tint
+        backdropFilter: "blur(10px)", // Blur effect
+       // RED GLOWING SHADOW
+        top: "25px", // Space from the top for floating effect
+        left: "50%", // Centered horizontally
+        transform: "translateX(-50%)",
+        width: "95%", // Slightly reduced width to look floating
+        zIndex: 1000, // Ensures it's always on top
+      }}
+    >
+      <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>
+        {/* Logo */}
+        <Box>
+          <img src={logo} alt="Logo" style={{ height: "30px" }} />
+        </Box>
 
-                {/* Navigation Links */}
-                <Box
-                    sx={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: '2rem', // Increased gap between links
-                        marginRight: '2rem', // Move links a bit to the left (more centered)
-                    }}
+        {/* Navigation Links */}
+        <Box sx={{ display: "flex", gap: "2rem" }}>
+          {["Features", "About Us", "Integration", "Pricing", "Contact"].map(
+            (item) => (
+              <Button key={item} color="inherit">
+                <Link
+                  to={`/${item.toLowerCase().replace(" ", "-")}`}
+                  style={{
+                    textDecoration: "none",
+                    color: "#ffffff",
+                    fontSize: "1rem",
+                    fontWeight: "600",
+                    fontFamily: "'Poppins', sans-serif",
+                  }}
                 >
-                    <Button color="inherit">
-                        <Link
-                            to="/"
-                            style={{
-                                textDecoration: 'none',
-                                color: 'white',
-                                fontSize: '1.1rem', // Increased font size
-                                fontWeight: '500', // Slightly bolder
-                            }}
-                        >
-                            Home
-                        </Link>
-                    </Button>
-                    <Button color="inherit">
-                        <Link
-                            to="/about"
-                            style={{
-                                textDecoration: 'none',
-                                color: 'white',
-                                fontSize: '1.1rem', // Increased font size
-                                fontWeight: '500', // Slightly bolder
-                            }}
-                        >
-                            About
-                        </Link>
-                    </Button>
-                    <Button color="inherit">
-                        <Link
-                            to="/contact"
-                            style={{
-                                textDecoration: 'none',
-                                color: 'white',
-                                fontSize: '1.1rem', // Increased font size
-                                fontWeight: '500', // Slightly bolder
-                            }}
-                        >
-                            Contact
-                        </Link>
-                    </Button>
-                </Box>
-            </Toolbar>
-        </AppBar>
-    );
+                  {item}
+                </Link>
+              </Button>
+            )
+          )}
+        </Box>
+
+        {/* Get Started Button */}
+        <Button
+          variant="contained"
+          sx={{
+            backgroundColor: "#8B0000",
+            borderRadius: "20px",
+            padding: "8px 20px",
+            textTransform: "none",
+            fontSize: "1rem",
+            color: "#fff",
+            "&:hover": { backgroundColor: "#5734E0" },
+          }}
+        >
+          Get Started →
+        </Button>
+      </Toolbar>
+    </AppBar>
+  );
 };
 
 export default Navbar;
