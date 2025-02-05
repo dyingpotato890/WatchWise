@@ -52,6 +52,11 @@ const SignUp = () => {
     return (
         <>
             <Navbar />
+            <div>
+                <div className="wave"></div>
+                <div className="wave"></div>
+                <div className="wave"></div>
+            </div>
             <Container
                 component="main"
                 maxWidth="xs"
@@ -67,10 +72,10 @@ const SignUp = () => {
                     className="signup-paper" // Add animation class
                     style={{
                         padding: '2rem',
-                        backgroundColor: '#000000',
+                        backgroundColor: 'rgba(0,0,0,0)',
                         color: 'white',
                         borderRadius: '12px',
-                        boxShadow: '0 4px 20px rgba(255, 0, 0, 0.8)',
+                        boxShadow: '0 4px 20px rgba(0, 0, 0, 0.8)',
                         transform: 'scale(1)',
                         transition: 'transform 0.3s ease-in-out',
                     }}
@@ -135,6 +140,7 @@ const SignUp = () => {
                             helperText={matchError}
                             className="animated-input" // Add animation class
                         />
+                        
 
                         <Button
                             type="submit"
