@@ -58,7 +58,7 @@ const Navbar = () => {
             "&:hover": { backgroundColor: "#5734E0" },
           }}
         >
-          Get Started →
+          Recommend →
         </Button>
       </Toolbar>
     </AppBar>
