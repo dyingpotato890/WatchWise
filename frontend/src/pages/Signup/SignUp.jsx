@@ -1,11 +1,39 @@
 import { Container, TextField, Button, Typography, Box, Link, Paper } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
-import { useState } from 'react';
+
+import { useEffect, useRef, useState } from 'react';
+
 import Navbar from '../../components/Navbar';
 import './SignUp.css'; // Import the CSS file
 
 const SignUp = () => {
+    
     const navigate = useNavigate();
+    const [vantaEffect, setVantaEffect] = useState(null);
+        const vantaRef = useRef(null);
+    
+        useEffect(() => {
+            if (!vantaEffect && window.VANTA) {
+                setVantaEffect(
+                    window.VANTA.NET({
+                        el: vantaRef.current,
+                        mouseControls: true,
+                        touchControls: true,
+                        gyroControls: false,
+                        minHeight: 200.0,
+                        minWidth: 200.0,
+                        scale: 1.0,
+                        scaleMobile: 1.0,
+                        color: 0xdb0000,
+                        backgroundColor: 0x000000,
+                    })
+                );
+            }
+    
+            return () => {
+                if (vantaEffect) vantaEffect.destroy();
+            };
+        }, [vantaEffect]);
     const [fullName, setFullName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -52,11 +80,7 @@ const SignUp = () => {
     return (
         <>
             <Navbar />
-            <div>
-                <div className="wave"></div>
-                <div className="wave"></div>
-                <div className="wave"></div>
-            </div>
+            <div ref={vantaRef} style={{ position: "absolute", width: "100vw", height: "100vh", top: 0, left: 0, zIndex: -1 }}></div>
             <Container
                 component="main"
                 maxWidth="xs"
