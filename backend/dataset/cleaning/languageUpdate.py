@@ -4,6 +4,7 @@ from dict import movies
 from dict import encoding
 csv_file = "backend/dataset/netflix_mood_recommender_test.csv"
 df = pd.read_csv(csv_file)
+df.drop('language',axis=1,inplace=True)
 # def clean_titles(df, encoding, csv_file):
 #     if 'title' in df.columns:
 #         print("Original Titles: ", df["title"].head())  # Check original titles
@@ -41,7 +42,7 @@ for index, row in missing_langs.iterrows():
     title = row['title']
     updatelang = movies.get(title,"not found")
     
-    df.at[index,'language']=updatelang
+    df.at[index,'languages']=updatelang
     print("Update language of", title,"to",updatelang)
 
 df.to_csv(csv_file,index=False)
