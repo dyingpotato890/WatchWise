@@ -45,3 +45,20 @@ class User(UserMixin):
         timestamp = int(time.time())
         unique_id = uuid.uuid4().hex[:6]
         return f"{timestamp}_{unique_id}"
+    
+    @staticmethod
+    def register_user(email, password):
+        user_id = generate_user_id()
+        hashed_pwd = hashPassword(password)
+        login_collection = db['login']
+        data = {'user_id':user_id, 'password':hashed_pwd, 'email':email}
+        try:
+            login_collection.insert_one(data)
+            return True
+        except:
+            print("Error occurred in insertion")
+            return False
+
+
+
+
