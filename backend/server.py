@@ -2,7 +2,7 @@ from flask import Flask, request, jsonify, session, redirect
 from flask_cors import CORS
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user
 
-from utilities.user import User
+from Utilities.User import User
 
 app = Flask(__name__)
 CORS(app)
