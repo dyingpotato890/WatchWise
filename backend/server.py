@@ -34,5 +34,15 @@ def login():
     else:
         return jsonify({"message": "Login Failed"}), 401
     
+@app.route('/api/register',methods=['POST'])
+def register():
+    data = request.get_json()
+    email = data.get('email')
+    password = data.get('password')
+    if User.register_user(email,password):
+        return jsonify({"message":"Registered successfully"})
+    else:
+        return jsonify({"message":"Registration unsuccessful"}), 401
+
 if __name__ == "__main__":
     app.run(debug = True, port = 5010)
