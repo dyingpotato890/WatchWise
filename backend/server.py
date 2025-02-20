@@ -5,7 +5,7 @@ from flask_login import (LoginManager, current_user, login_required,
 from Utilities.User import User
 
 app = Flask(__name__)
-CORS(app)
+CORS(app, supports_credentials = True)
 app.config["SECRET_KEY"] = "meowmeowmeow"
 
 login_manager = LoginManager()
@@ -22,33 +22,67 @@ def load_user(user_id):
 def unauthorized():
     return jsonify({"message": "Unauthorized"}), 401
 
+# Handle preflight OPTIONS requests (Fix for CORS issue)
+@app.route("/api/<path:path>", methods=["OPTIONS"])
+def handle_options(path):
+    response = jsonify({"message": "Preflight OK"})
+    response.headers.add("Access-Control-Allow-Origin", "http://localhost:5173")
+    response.headers.add("Access-Control-Allow-Methods", "POST, GET, OPTIONS")
+    response.headers.add("Access-Control-Allow-Headers", "Content-Type, Authorization")
+    response.headers.add("Access-Control-Allow-Credentials", "true")
+    return response, 204
 
 @app.route("/api/login", methods=["POST"])
 def login():
-    data = request.get_json()
-    email = data.get("email")
-    password = data.get("password")
+    try:
+        data = request.get_json()
+        email = data.get("email")
+        password = data.get("password")
 
-    user = User.get(email)
+        if not email or not password:
+            return jsonify({"message": "Missing email or password"}), 400
 
-    if user and user.verify_password(password):
-        login_user(user, remember=True)
-        return jsonify({"message": "Login Successful"})
-    else:
-        return jsonify({"message": "Login Failed"}), 401
+        user = User.get(email)
 
+        if user and user.verify_password(password):
+            login_user(user, remember=True)
+            return jsonify({"message": "Login Successful"}), 200
+        else:
+            return jsonify({"message": "Invalid email or password"}), 401
+
+    except Exception as e:
+        print(f"Error during login: {e}")
+        return jsonify({"message": "Server error"}), 500
 
 @app.route("/api/register", methods=["POST"])
 def register():
-    data = request.get_json()
-    email = data.get("email")
-    password = data.get("password")
-    name = data.get("name")
-    if User.register_user(email, password, name):
-        return jsonify({"message": "Registered successfully"})
-    else:
-        return jsonify({"message": "Registration unsuccessful"}), 401
+    try:
+        data = request.get_json()
+        print("Received data:", data)
 
+        email = data.get("email")
+        password = data.get("password")
+        name = data.get("name")
+
+        if not email or not password or not name:
+            return jsonify({"message": "Missing fields"}), 400
+
+        if User.register_user(email, password, name):
+            print("User registered successfully!")
+            return jsonify({"message": "Registered successfully"}), 201
+        else:
+            print("Registration failed!")
+            return jsonify({"message": "Registration unsuccessful"}), 400
+
+    except Exception as e:
+        print(f"Error during registration: {e}")
+        return jsonify({"message": "Server error"}), 500
+    
+@app.route("/api/logout", methods=["POST"])
+@login_required
+def logout():
+    logout_user()
+    return jsonify({"message": "Logged out successfully"}), 200
 
 if __name__ == "__main__":
     app.run(debug=True, port=5010)
