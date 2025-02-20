@@ -75,21 +75,25 @@ const SignUp = () => {
     }
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    const email = e.target.email.value;
-    const password = e.target.password.value;
-    const name = e.target.fullName.value;
-    axios
-
-      .post("http://localhost:5010/api/register/", { email, password, name })
-      .then(() => {
+  const handleSubmit = async (e) => {
+    e.preventDefault(); // Prevent page refresh
+  
+    try {
+      const response = await axios.post("http://localhost:5010/api/register/", {
+        email,
+        password,
+        name: fullName,
+      });
+  
+      if (response.status === 200) {
         alert("Account Created Successfully!");
-        navigate("/login");
-      })
-      .catch(() => alert("Account Creation Failed!"));
-    navigate("/login");
-  };
+        navigate("/login"); // Navigate after success
+      }
+    } catch (error) {
+      console.error("Error:", error.response || error.message);
+      alert("Account Creation Failed! " + (error.response?.data?.message || "Something went wrong"));
+    }
+  };  
 
   const isFormValid =
     fullName && email && password && confirmPassword && !error && !matchError;
