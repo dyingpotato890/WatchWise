@@ -1,0 +1,123 @@
+/* Reset default margin and padding for body and html */
+body, html {
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden; /* Prevent horizontal scrolling */
+  }
+  
+  /* Home Page Styling */
+  .home {
+    text-align: center;
+    min-height: 100vh;
+    color: white;
+    padding-top: 40px;
+    margin: 0; /* Ensure no margin */
+    padding-left: 0; /* Remove left padding */
+    padding-right: 0; /* Remove right padding */
+    overflow: hidden; /* Prevent scrollbars */
+  }
+  
+  /* Navbar Styling */
+  .navbar {
+    background: rgba(0, 0, 0, 0.9);
+    position: fixed;
+    width: 100%;
+    top: 0;
+    left: 0;
+    padding: 15px 20px;
+    z-index: 1000;
+  }
+  
+  /* Hero Section */
+  .hero h1 {
+    font-size: 6rem;
+    margin-bottom: 10px;
+    font-weight: bold;
+    font-family: 'Montserrat', sans-serif;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+  }
+  
+  .hero p {
+    font-size: 1.6rem;
+    margin-top: -5px;
+    font-weight: 400;
+    font-family: 'Roboto', sans-serif;
+    letter-spacing: 1px;
+    font-style: normal;
+    transform: none;
+    display: block;
+  }
+  
+  .hero-btn {
+    background-color: #8B0000 !important;
+    color: white;
+    font-size: 1.2rem;
+    padding: 10px 20px;
+    border-radius: 20px;
+    transition: 0.3s;
+    margin-top: 20px;
+    display: inline-block;
+  }
+  
+  .hero-btn:hover {
+    background-color: #5734E0 !important;
+  }
+  
+  /* Carousel Container */
+  .carousel-container {
+    margin-top: 40px;
+    width: 100%; /* Full width */
+    overflow: hidden; /* Hide overflow */
+    position: relative;
+    margin-left: 0; /* Remove left margin */
+    margin-right: 0; /* Remove right margin */
+    padding-left: 0; /* Remove left padding */
+    padding-right: 0; /* Remove right padding */
+  }
+  
+  /* Carousel */
+  .carousel {
+    display: flex;
+    flex-wrap: nowrap;
+    width: max-content;
+    animation: scrollAnimation 36s linear infinite; /* Slower animation (36s) */
+  }
+  
+  /* Keyframes for Infinite Scroll */
+  @keyframes scrollAnimation {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+  
+  /* Carousel Item */
+  .carousel-item {
+    flex: 0 0 auto;
+    padding: 7px;
+    width: 3%; /* 6 items per row (100% / 6) */
+    box-sizing: border-box; /* Ensure padding is included in width */
+  }
+  
+  .carousel img {
+    width: 100%;
+    height: 280px; /* Decreased height */
+    border-radius: 10px;
+    object-fit: cover;
+    transition: transform 0.3s ease-in-out, opacity 0.5s ease-in-out;
+  }
+  
+  .carousel img:hover {
+    transform: scale(1.05);
+  }
+  
+  /* Hide Carousel Arrows */
+  .carousel-arrow {
+    display: none;
+  }
+  
+  /* Footer */
+  .footer {
+    margin-top: 50px;
+    padding: 20px;
+    background-color: rgba(0, 0, 0, 0.8);
+  }
