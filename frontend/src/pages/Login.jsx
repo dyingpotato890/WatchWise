@@ -72,6 +72,7 @@ const Login = () => {
                                 .post("http://localhost:5010/api/login", { email, password })
                                 .then(() => {
                                     alert("Logged in Successfully!");
+                                    localStorage.setItem("isLoggedIn",true);
                                     navigate("/home");
                                 })
                                 .catch(() => alert("Login Failed!"));
