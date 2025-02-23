@@ -40,6 +40,12 @@ def login():
 
 @app.route("/api/register", methods=["OPTIONS", "POST"])
 def register():
+    if request.method == "OPTIONS":  # Handle CORS preflight request
+        response = jsonify({"message": "CORS preflight successful"})
+        response.headers.add("Access-Control-Allow-Origin", "*")
+        response.headers.add("Access-Control-Allow-Methods", "POST, OPTIONS")
+        response.headers.add("Access-Control-Allow-Headers", "Content-Type, Authorization")
+        return response, 200
     data = request.get_json()
     email = data.get("email")
     password = data.get("password")
