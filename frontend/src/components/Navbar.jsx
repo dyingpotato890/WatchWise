@@ -1,21 +1,60 @@
-import React, { useState } from "react";
-import { AppBar, Toolbar, Box, Button, Menu, MenuItem } from "@mui/material";
-import { Link } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { AppBar, Toolbar, Box, Button, Menu, MenuItem, Snackbar, Alert } from "@mui/material";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import logo from "../assets/logo.png";
 
 const Navbar = () => {
-  const [loggedIn, setLoggedIn] = useState(false);
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  // Default value should be false
+  const [loggedIn, setLoggedIn] = useState(() => JSON.parse(localStorage.getItem("isLoggedIn")) || false);
   const [anchorEl, setAnchorEl] = useState(null);
+  const [openSnackbar, setOpenSnackbar] = useState(false);
   const open = Boolean(anchorEl);
 
-  const handleLogin = () => setLoggedIn(true);
-  const handleLogout = () => {
-    setLoggedIn(false);
-    setAnchorEl(null);
+  // Keep isLoggedIn in sync with localStorage
+  useEffect(() => {
+    localStorage.setItem("isLoggedIn", JSON.stringify(loggedIn));
+  }, [loggedIn]);
+
+  // If on login page, force login button (avoid showing profile)
+  useEffect(() => {
+    if (location.pathname === "/login") {
+      setLoggedIn(false);
+      localStorage.setItem("isLoggedIn", "false");
+    }
+  }, [location.pathname]);
+
+  // Simulate successful authentication (Replace with actual authentication logic)
+  const handleLogin = () => {
+    // Normally, this would be set after a backend API call for authentication
+    setLoggedIn(true);
+    navigate("/"); // Redirect to homepage after login
+  };
+
+  const handleLogout = async () => {
+    try {
+      // Call backend to update isLoggedIn to false (mocking API call)
+      await new Promise((resolve) => setTimeout(resolve, 500)); // Simulate API delay
+      setLoggedIn(false);
+      localStorage.setItem("isLoggedIn", "false");
+      setAnchorEl(null);
+    } catch (error) {
+      console.error("Logout failed:", error);
+    }
   };
 
   const handleProfileClick = (event) => setAnchorEl(event.currentTarget);
   const handleClose = () => setAnchorEl(null);
+
+  const handleRecommendClick = () => {
+    if (!loggedIn) {
+      setOpenSnackbar(true);
+    } else {
+      navigate("/recommend");
+    }
+  };
 
   return (
     <AppBar
@@ -32,20 +71,21 @@ const Navbar = () => {
     >
       <Toolbar sx={{ display: "flex", justifyContent: "space-between", minHeight: "50px !important" }}>
         {/* Logo */}
-        <Box>
-          <img src={logo} alt="Logo" style={{ height: "25px" }} />
+        <Box sx={{ cursor: "pointer" }} onClick={() => navigate("/")}>
+          <img src={logo} alt="WatchWise Logo" style={{ height: "30px" }} />
         </Box>
 
+
         {/* Navigation Links */}
-        <Box sx={{ display: "flex", gap: "1.5rem" }}>
-          {["Features", "About Us", "Recommend", "Contact"].map((item) => (
+        <Box sx={{ display: "flex", gap: "2rem" }}>
+          {["Features", "About Us", "Contact"].map((item) => (
             <Button key={item} color="inherit">
               <Link
                 to={`/${item.toLowerCase().replace(" ", "-")}`}
                 style={{
                   textDecoration: "none",
                   color: "#ffffff",
-                  fontSize: "0.9rem",
+                  fontSize: "1rem",
                   fontWeight: "600",
                   fontFamily: "'Poppins', sans-serif",
                 }}
@@ -54,9 +94,14 @@ const Navbar = () => {
               </Link>
             </Button>
           ))}
+
+          {/* Recommend Button */}
+          <Button color="inherit" onClick={handleRecommendClick} sx={{ fontSize: "1rem", fontWeight: "600" }}>
+            Recommend
+          </Button>
         </Box>
 
-        {/* Before Login: Display "Login" Button */}
+        {/* Show Login Button if Not Logged In */}
         {!loggedIn && (
           <Button
             variant="contained"
@@ -67,15 +112,15 @@ const Navbar = () => {
               textTransform: "none",
               fontSize: "0.9rem",
               color: "#fff",
-              "&:hover": { backgroundColor: "#5734E0" },
+              "&:hover": { backgroundColor: "#600000" },
             }}
-            onClick={handleLogin}
+            onClick={() => navigate("/login")}
           >
             Login
           </Button>
         )}
 
-        {/* After Login: Display Profile Picture with Dropdown */}
+        {/* Show Profile Picture if Logged In */}
         {loggedIn && (
           <Box
             sx={{
@@ -96,7 +141,7 @@ const Navbar = () => {
           </Box>
         )}
 
-        {/* Dropdown Menu for Profile */}
+        {/* Dropdown Menu */}
         <Menu
           anchorEl={anchorEl}
           open={open}
@@ -115,6 +160,13 @@ const Navbar = () => {
           <MenuItem onClick={handleLogout}>Logout</MenuItem>
         </Menu>
       </Toolbar>
+
+      {/* Snackbar for Login Alert */}
+      <Snackbar open={openSnackbar} autoHideDuration={3000} onClose={() => setOpenSnackbar(false)}>
+        <Alert onClose={() => setOpenSnackbar(false)} severity="warning" sx={{ width: "100%" }}>
+          Login to continue!
+        </Alert>
+      </Snackbar>
     </AppBar>
   );
 };

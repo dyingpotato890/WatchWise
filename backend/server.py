@@ -5,7 +5,7 @@ from flask_login import (LoginManager, current_user, login_required,
 from Utilities.User import User
 
 app = Flask(__name__)
-CORS(app, supports_credentials = True)
+CORS(app, resources={r"/api/*": {"origins": "*"}}, supports_credentials=True)
 app.config["SECRET_KEY"] = "meowmeowmeow"
 
 login_manager = LoginManager()
@@ -54,35 +54,17 @@ def login():
         print(f"Error during login: {e}")
         return jsonify({"message": "Server error"}), 500
 
-@app.route("/api/register", methods=["POST"])
+@app.route("/api/register", methods=["OPTIONS", "POST"])
 def register():
-    try:
-        data = request.get_json()
-        print("Received data:", data)
+    data = request.get_json()
+    email = data.get("email")
+    password = data.get("password")
+    name = data.get("name")
+    if User.register_user(email, password, name):
+        return jsonify({"message": "Registered successfully"}), 200
+    else:
+        return jsonify({"message": "Registration unsuccessful"}), 401
 
-        email = data.get("email")
-        password = data.get("password")
-        name = data.get("name")
-
-        if not email or not password or not name:
-            return jsonify({"message": "Missing fields"}), 400
-
-        if User.register_user(email, password, name):
-            print("User registered successfully!")
-            return jsonify({"message": "Registered successfully"}), 201
-        else:
-            print("Registration failed!")
-            return jsonify({"message": "Registration unsuccessful"}), 400
-
-    except Exception as e:
-        print(f"Error during registration: {e}")
-        return jsonify({"message": "Server error"}), 500
-    
-@app.route("/api/logout", methods=["POST"])
-@login_required
-def logout():
-    logout_user()
-    return jsonify({"message": "Logged out successfully"}), 200
 
 if __name__ == "__main__":
     app.run(debug=True, port=5010)
