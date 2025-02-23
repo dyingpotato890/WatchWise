@@ -79,7 +79,7 @@ useEffect(() => {
 
   return (
     <>
-      <Navbar />
+      <Navbar/>
       <div ref={vantaRef} style={{ position: "absolute", width: "100vw", height: "100vh", top: 0, left: 0, zIndex: -1 }}></div>
       <div className="container" style={{ paddingTop: "100px" }}>
         {/* Mood Input Section */}
