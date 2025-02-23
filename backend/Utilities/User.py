@@ -9,7 +9,6 @@ from flask_login import UserMixin
 client = pymongo.MongoClient("mongodb://localhost:27017/")
 db = client["WatchWise"]
 
-
 class User(UserMixin):
     def __init__(self, user_id, password):
         self.id = user_id  # Flask-Login requires .id
@@ -56,7 +55,8 @@ class User(UserMixin):
         login_collection = db["login"]
         user_collection = db["users"]
         login_data = {"user_id": user_id,
-                      "password": hashed_pwd, "email": email}
+                      "password": hashed_pwd,
+                      "email": email}
 
         current_time = datetime.datetime.now()
         isotime = current_time.isoformat()
