@@ -62,7 +62,7 @@ const Navbar = () => {
       sx={{
         backgroundColor: "rgba(255, 255, 255, 0)",
         backdropFilter: "blur(10px)",
-        top: "25px",
+        top: "20px",
         left: "50%",
         transform: "translateX(-50%)",
         width: "95%",
@@ -108,9 +108,9 @@ const Navbar = () => {
             sx={{
               backgroundColor: "#8B0000",
               borderRadius: "20px",
-              padding: "8px 20px",
+              padding: "6px 16px",
               textTransform: "none",
-              fontSize: "1rem",
+              fontSize: "0.9rem",
               color: "#fff",
               "&:hover": { backgroundColor: "#600000" },
             }}
@@ -124,8 +124,8 @@ const Navbar = () => {
         {loggedIn && (
           <Box
             sx={{
-              width: "40px",
-              height: "40px",
+              width: "35px",
+              height: "35px",
               borderRadius: "50%",
               overflow: "hidden",
               border: "2px solid #ffffff",
@@ -147,7 +147,7 @@ const Navbar = () => {
           open={open}
           onClose={handleClose}
           sx={{
-            mt: 2,
+            mt: 1.5,
             "& .MuiPaper-root": {
               backgroundColor: "rgba(0, 0, 0, 0.8)",
               color: "#ffffff",
