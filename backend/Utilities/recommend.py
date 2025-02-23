@@ -3,9 +3,6 @@ import joblib
 import numpy as np
 from sklearn.metrics.pairwise import cosine_similarity
 
-client = pymongo.MongoClient("mongodb://localhost:27017/")
-db = client["WatchWise"]
-
 class Recommend():
     user_item_matrix = joblib.load('backend/models/user_item_matrix.joblib')
     tfidf_matrix = joblib.load('backend/models/tfidf_matrix.joblib')

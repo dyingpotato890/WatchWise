@@ -1,6 +1,5 @@
 import datetime
-import time
-import uuid
+import random
 
 import bcrypt
 import pymongo
@@ -8,6 +7,8 @@ from flask_login import UserMixin
 
 client = pymongo.MongoClient("mongodb://localhost:27017/")
 db = client["WatchWise"]
+
+users_collection = db["users"] # For user_id generation
 
 class User(UserMixin):
     def __init__(self, user_id, password):
@@ -41,12 +42,17 @@ class User(UserMixin):
         else:
             print("Incorrect password!")
             return False
+    
+    @staticmethod
+    def is_user_id_exists(user_id):
+        return users_collection.find_one({"user_id": user_id}) is not None
 
     @staticmethod
     def generate_user_id():
-        timestamp = int(time.time())
-        unique_id = uuid.uuid4().hex[:6]
-        return f"{timestamp}_{unique_id}"
+        while True:
+            new_id = str(random.randint(100000, 2999999))
+            if not User.is_user_id_exists(new_id):  # Check uniqueness in MongoDB
+                return new_id
 
     @staticmethod
     def register_user(email, password, name):
