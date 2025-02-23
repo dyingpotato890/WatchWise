@@ -1,6 +1,9 @@
 from recommend import Recommend
 
-# Test Hybrid Recommendations
 print("\nHybrid Recommendations:")
-hybrid_recommendations = Recommend.hybrid_recommend(mood_input="fear, surprise", top_n = 20)
-print(hybrid_recommendations)
+recommended_shows = Recommend.hybrid_recommend(mood_input="fear, surprise", top_n = 20)
+
+for catg in recommended_shows:
+  movies = list(set(recommended_shows[catg]))
+  for movie in movies:
+    print(f"- {movie}")
