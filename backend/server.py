@@ -5,7 +5,7 @@ from flask_login import (LoginManager, current_user, login_required,
 from Utilities.User import User
 
 app = Flask(__name__)
-CORS(app)
+CORS(app, resources={r"/api/*": {"origins": "*"}}, supports_credentials=True)
 app.config["SECRET_KEY"] = "meowmeowmeow"
 
 login_manager = LoginManager()
@@ -38,14 +38,14 @@ def login():
         return jsonify({"message": "Login Failed"}), 401
 
 
-@app.route("/api/register", methods=["POST"])
+@app.route("/api/register", methods=["OPTIONS", "POST"])
 def register():
     data = request.get_json()
     email = data.get("email")
     password = data.get("password")
     name = data.get("name")
     if User.register_user(email, password, name):
-        return jsonify({"message": "Registered successfully"})
+        return jsonify({"message": "Registered successfully"}), 200
     else:
         return jsonify({"message": "Registration unsuccessful"}), 401
 
