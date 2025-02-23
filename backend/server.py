@@ -22,37 +22,21 @@ def load_user(user_id):
 def unauthorized():
     return jsonify({"message": "Unauthorized"}), 401
 
-# Handle preflight OPTIONS requests (Fix for CORS issue)
-@app.route("/api/<path:path>", methods=["OPTIONS"])
-def handle_options(path):
-    response = jsonify({"message": "Preflight OK"})
-    response.headers.add("Access-Control-Allow-Origin", "http://localhost:5173")
-    response.headers.add("Access-Control-Allow-Methods", "POST, GET, OPTIONS")
-    response.headers.add("Access-Control-Allow-Headers", "Content-Type, Authorization")
-    response.headers.add("Access-Control-Allow-Credentials", "true")
-    return response, 204
 
 @app.route("/api/login", methods=["POST"])
 def login():
-    try:
-        data = request.get_json()
-        email = data.get("email")
-        password = data.get("password")
+    data = request.get_json()
+    email = data.get("email")
+    password = data.get("password")
 
-        if not email or not password:
-            return jsonify({"message": "Missing email or password"}), 400
+    user = User.get(email)
 
-        user = User.get(email)
+    if user and user.verify_password(password):
+        login_user(user, remember=True)
+        return jsonify({"message": "Login Successful"})
+    else:
+        return jsonify({"message": "Login Failed"}), 401
 
-        if user and user.verify_password(password):
-            login_user(user, remember=True)
-            return jsonify({"message": "Login Successful"}), 200
-        else:
-            return jsonify({"message": "Invalid email or password"}), 401
-
-    except Exception as e:
-        print(f"Error during login: {e}")
-        return jsonify({"message": "Server error"}), 500
 
 @app.route("/api/register", methods=["OPTIONS", "POST"])
 def register():

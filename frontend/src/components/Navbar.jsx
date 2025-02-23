@@ -69,7 +69,7 @@ const Navbar = () => {
         zIndex: 1000,
       }}
     >
-      <Toolbar sx={{ display: "flex", justifyContent: "space-between", minHeight: "50px !important" }}>
+      <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>
         {/* Logo */}
         <Box sx={{ cursor: "pointer" }} onClick={() => navigate("/")}>
           <img src={logo} alt="WatchWise Logo" style={{ height: "30px" }} />
