@@ -46,7 +46,7 @@ const Navbar = () => {
     if (!loggedIn) {
       setOpenSnackbar(true);
     } else {
-      navigate("/recommend");
+      navigate("/mood");
     }
   };
 
@@ -108,7 +108,7 @@ const Navbar = () => {
             }}
             onClick={() => navigate("/login")}
           >
-            Login
+            LOGIN
           </Button>
         )}
 

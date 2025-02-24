@@ -1,10 +1,13 @@
 import React, { useEffect, useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
+
 import "./Home.css";
 import Navbar from "../../components/Navbar";
 import { Button } from "@mui/material";
 import { ArrowBackIos, ArrowForwardIos } from "@mui/icons-material";
 import * as VANTA from "vanta";
 import NET from "vanta/dist/vanta.net.min";
+
 
 const moviePosters = [
   { title: "Drishyam", image: "https://m.media-amazon.com/images/M/MV5BM2Q2YTczM2QtNDBkNC00M2I5LTkyMzgtOTMwNzQ0N2UyYWQ0XkEyXkFqcGc@._V1_FMjpg_UX1000_.jpg" },
@@ -27,10 +30,12 @@ const moviePosters = [
 // Duplicate posters for smooth infinite scrolling
 const extendedPosters = [...moviePosters, ...moviePosters];
 
+
 export default function Home() {
   const carouselRef = useRef(null);
   const [vantaEffect, setVantaEffect] = useState(null);
   const vantaRef = useRef(null);
+  const navigate = useNavigate();
 
   // Vanta.js background effect
   useEffect(() => {
@@ -66,6 +71,7 @@ export default function Home() {
         <h1 className="neon-text">WatchWise</h1>
         <p>Find Your Mood with Movies</p>
         <Button variant="contained" className="hero-btn">
+          
           Start Watching
         </Button>
       </section>
