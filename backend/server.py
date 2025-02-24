@@ -1,4 +1,5 @@
-from flask import Flask, jsonify, redirect, request, session
+from flask import Flask, jsonify, redirect, request, session, send_from_directory
+import os
 from flask_cors import CORS
 from flask_login import (LoginManager, current_user, login_required,
                          login_user, logout_user)
@@ -11,6 +12,14 @@ app.config["SECRET_KEY"] = "meowmeowmeow"
 login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = "login"
+frontend_path = os.path.join(os.getcwd(),"frontend","dist")
+
+@app.route("/",defaults={"filename":""})
+@app.route("/<path:filename>")
+def index(filename):
+    if not filename:
+        filename="index.html"
+    return send_from_directory(frontend_path,filename)
 
 
 @login_manager.user_loader
