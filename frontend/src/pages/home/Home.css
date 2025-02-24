@@ -1,3 +1,9 @@
+@import url('https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible+Next:ital,wght@0,200..800;1,200..800&family=Poppins:wght@400;500;600&display=swap');
+
+/* body {
+    font-family: 'Poppins', sans-serif;
+} */
+
 /* Reset default margin and padding for body and html */
 body, html {
     margin: 0;
@@ -32,10 +38,11 @@ body, html {
   .hero h1 {
     font-size: 6rem;
     margin-bottom: 10px;
-    font-weight: bold;
-    font-family: 'Montserrat', sans-serif;
-    letter-spacing: 3px;
+    font-family: 'Atkinson Hyperlegible Next', sans-serif;
+    font-weight: 600;
+    letter-spacing: 5px;
     text-transform: uppercase;
+    color: #ffffff; /*e51313*/
   }
   
   .hero p {
@@ -55,13 +62,13 @@ body, html {
     font-size: 1.2rem;
     padding: 10px 20px;
     border-radius: 20px;
-    transition: 0.3s;
+    transition: 0.5s;
     margin-top: 20px;
     display: inline-block;
   }
   
   .hero-btn:hover {
-    background-color: #5734E0 !important;
+    background-color: #520303 !important;
   }
   
   /* Carousel Container */
