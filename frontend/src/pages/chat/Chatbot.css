@@ -1,0 +1,58 @@
+.background {
+    position: absolute;
+    width: 100vw;
+    height: 100vh;
+    top: 0;
+    left: 0;
+    z-index: -1;
+}
+
+
+.chat-window {
+    padding: 2rem;
+    background-color: rgba(50, 50, 50, 0); /* Semi-transparent gray tint */
+    color: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.8);
+    width: 100%;
+    height: 70vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    backdrop-filter: blur(10px); /* Blurred background effect */
+}
+.icon-button:hover {
+    background-color: rgb(43, 10, 10) ;
+}
+
+.messages-box {
+    flex-grow: 1;
+    overflow-y: auto;
+    padding: 1rem;
+}
+
+.user-message {
+    text-align: right;
+    color: #ff4d4d;
+}
+
+.bot-message {
+    text-align: left;
+    color: #ffffff;
+}
+
+.input-box {
+    display: flex;
+    margin-top: 1rem;
+    border-color: #a52929;
+}
+
+.chat-input {
+    margin-right: 1rem;
+    color: white !important;
+}
+
+.send-button {
+    background-color: red !important;
+    color: white !important;
+}
