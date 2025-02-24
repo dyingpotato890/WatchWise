@@ -1,6 +1,7 @@
 import json
 import bcrypt
 import pymongo
+import pandas as pd
 
 def hashPassword(password):
     # Generate a salt
@@ -37,6 +38,12 @@ if "login" not in collections or "users" not in collections:
                 print(f"Inserted user record for user_id: {user_record['user_id']}")
             else:
                 print(f"User record for user_id: {user_record['user_id']} already exists. Skipping insertion.")
+
+    if "ratings" not in collections:
+        df = pd.read_csv("backend/dataset/Netflix_Dataset_Rating.csv")
+        data = df.to_dict(orient = "records")
+        db["ratings"].insert_many(data)
+        print("Inserted Ratings Into Database")
 
 else:
     print("Database and collections already exist. No action needed.")
