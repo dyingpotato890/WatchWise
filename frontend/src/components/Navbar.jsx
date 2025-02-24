@@ -7,18 +7,15 @@ const Navbar = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  // Default value should be false
   const [loggedIn, setLoggedIn] = useState(() => JSON.parse(localStorage.getItem("isLoggedIn")) || false);
   const [anchorEl, setAnchorEl] = useState(null);
   const [openSnackbar, setOpenSnackbar] = useState(false);
   const open = Boolean(anchorEl);
 
-  // Keep isLoggedIn in sync with localStorage
   useEffect(() => {
     localStorage.setItem("isLoggedIn", JSON.stringify(loggedIn));
   }, [loggedIn]);
 
-  // If on login page, force login button (avoid showing profile)
   useEffect(() => {
     if (location.pathname === "/login") {
       setLoggedIn(false);
@@ -26,17 +23,14 @@ const Navbar = () => {
     }
   }, [location.pathname]);
 
-  // Simulate successful authentication (Replace with actual authentication logic)
   const handleLogin = () => {
-    // Normally, this would be set after a backend API call for authentication
     setLoggedIn(true);
-    navigate("/"); // Redirect to homepage after login
+    navigate("/");
   };
 
   const handleLogout = async () => {
     try {
-      // Call backend to update isLoggedIn to false (mocking API call)
-      await new Promise((resolve) => setTimeout(resolve, 500)); // Simulate API delay
+      await new Promise((resolve) => setTimeout(resolve, 500));
       setLoggedIn(false);
       localStorage.setItem("isLoggedIn", "false");
       setAnchorEl(null);
@@ -62,31 +56,29 @@ const Navbar = () => {
       sx={{
         backgroundColor: "rgba(255, 255, 255, 0)",
         backdropFilter: "blur(10px)",
-        top: "20px",
+        top: "10px", // Moved navbar slightly up
         left: "50%",
         transform: "translateX(-50%)",
-        width: "95%",
+        width: "98%", // Decreased the size slightly
         zIndex: 1000,
+        padding: "8px 0", // Reduced padding
       }}
     >
-      <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>
+      <Toolbar sx={{ display: "flex", justifyContent: "space-between", minHeight: "48px" }}>
         {/* Logo */}
         <Box sx={{ cursor: "pointer" }} onClick={() => navigate("/")}>
-          <img src={logo} alt="WatchWise Logo" style={{ height: "30px" }} />
+          <img src={logo} alt="WatchWise Logo" style={{ height: "28px" }} />
         </Box>
 
-
         {/* Navigation Links */}
-        <Box sx={{ display: "flex", gap: "2rem" }}>
+        <Box sx={{ display: "flex", gap: "1.5rem" }}> {/* Reduced gap */}
           {["Features", "About Us", "Contact"].map((item) => (
-            <Button key={item} color="inherit">
+            <Button key={item} color="inherit" sx={{ fontSize: "0.9rem", fontWeight: "500" }}>
               <Link
                 to={`/${item.toLowerCase().replace(" ", "-")}`}
                 style={{
                   textDecoration: "none",
                   color: "#ffffff",
-                  fontSize: "1rem",
-                  fontWeight: "600",
                   fontFamily: "'Poppins', sans-serif",
                 }}
               >
@@ -96,7 +88,7 @@ const Navbar = () => {
           ))}
 
           {/* Recommend Button */}
-          <Button color="inherit" onClick={handleRecommendClick} sx={{ fontSize: "1rem", fontWeight: "600" }}>
+          <Button color="inherit" onClick={handleRecommendClick} sx={{ fontSize: "0.9rem", fontWeight: "500" }}>
             Recommend
           </Button>
         </Box>
@@ -107,10 +99,10 @@ const Navbar = () => {
             variant="contained"
             sx={{
               backgroundColor: "#8B0000",
-              borderRadius: "20px",
-              padding: "6px 16px",
+              borderRadius: "15px", // Adjusted for a sleeker look
+              padding: "4px 14px", // Reduced padding
               textTransform: "none",
-              fontSize: "0.9rem",
+              fontSize: "0.85rem",
               color: "#fff",
               "&:hover": { backgroundColor: "#600000" },
             }}
@@ -124,8 +116,8 @@ const Navbar = () => {
         {loggedIn && (
           <Box
             sx={{
-              width: "35px",
-              height: "35px",
+              width: "30px", // Reduced profile picture size
+              height: "30px",
               borderRadius: "50%",
               overflow: "hidden",
               border: "2px solid #ffffff",
