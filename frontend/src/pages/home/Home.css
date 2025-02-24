@@ -11,6 +11,22 @@ body, html {
     overflow-x: hidden; /* Prevent horizontal scrolling */
   }
   
+  .neon-text {
+    font-size: 4rem;
+    color: #fff;
+    text-shadow: 0 0 5px #ff005e, 0 0 10px #ff005e, 0 0 20px #ff005e, 0 0 40px #ff005e, 0 0 80px #ff005e;
+    animation: glow 1.5s infinite alternate;
+}
+
+@keyframes glow {
+    0% {
+        text-shadow: 0 0 5px #ff005e, 0 0 10px #ff005e, 0 0 20px #ff005e, 0 0 40px #ff005e, 0 0 80px #ff005e;
+    }
+    100% {
+        text-shadow: 0 0 10px #da1212, 0 0 20px #da1212, 0 0 40px #da1212, 0 0 80px #da1212, 0 0 160px #da1212;
+    }
+}
+  
   /* Home Page Styling */
   .home {
     text-align: center;

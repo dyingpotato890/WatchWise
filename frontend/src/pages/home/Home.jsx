@@ -63,7 +63,7 @@ export default function Home() {
       <Navbar />
 
       <section className="hero">
-        <h1>WatchWise</h1>
+        <h1 className="neon-text">WatchWise</h1>
         <p>Find Your Mood with Movies</p>
         <Button variant="contained" className="hero-btn">
           Start Watching
