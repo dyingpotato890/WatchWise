@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 
 import "./Home.css";
 import Navbar from "../../components/Navbar";
-import { Button } from "@mui/material";
+import { Button ,Snackbar,Alert } from "@mui/material";
 import { ArrowBackIos, ArrowForwardIos } from "@mui/icons-material";
 import * as VANTA from "vanta";
 import NET from "vanta/dist/vanta.net.min";
@@ -35,7 +35,18 @@ export default function Home() {
   const carouselRef = useRef(null);
   const [vantaEffect, setVantaEffect] = useState(null);
   const vantaRef = useRef(null);
+  const [openSnackbar, setOpenSnackbar] = useState(false);
   const navigate = useNavigate();
+  
+  const handleStartWatching = () => {
+    const isLoggedIn = JSON.parse(localStorage.getItem("isLoggedIn")) || false;
+    if (!isLoggedIn) {
+      setOpenSnackbar(true); // Show alert if not logged in
+    } else {
+      navigate("/mood"); // Navigate to the mood page if logged in
+    }
+  };
+  
 
   // Vanta.js background effect
   useEffect(() => {
@@ -70,10 +81,10 @@ export default function Home() {
       <section className="hero">
         <h1 className="neon-text">WatchWise</h1>
         <p>Find Your Mood with Movies</p>
-        <Button variant="contained" className="hero-btn">
-          
+        <Button variant="contained" className="hero-btn" onClick={handleStartWatching}>
           Start Watching
         </Button>
+
       </section>
 
       <section className="carousel-container">
@@ -89,6 +100,12 @@ export default function Home() {
       <footer className="footer">
         <p>© 2025 WatchWise. All rights reserved.</p>
       </footer>
+      <Snackbar open={openSnackbar} autoHideDuration={3000} onClose={() => setOpenSnackbar(false)}>
+        <Alert onClose={() => setOpenSnackbar(false)} severity="warning" sx={{ width: "100%" }}>
+          Login to continue!
+        </Alert>
+      </Snackbar>
+
     </div>
   );
 }

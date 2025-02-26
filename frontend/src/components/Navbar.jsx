@@ -72,7 +72,7 @@ const Navbar = () => {
 
         {/* Navigation Links */}
         <Box sx={{ display: "flex", gap: "1.5rem" }}> {/* Reduced gap */}
-          {["Features", "About Us", "Contact"].map((item) => (
+          {["Chat", "About Us", "Contact"].map((item) => (
             <Button key={item} color="inherit" sx={{ fontSize: "0.9rem", fontWeight: "500" }}>
               <Link
                 to={`/${item.toLowerCase().replace(" ", "-")}`}
@@ -154,7 +154,7 @@ const Navbar = () => {
       </Toolbar>
 
       {/* Snackbar for Login Alert */}
-      <Snackbar open={openSnackbar} autoHideDuration={3000} onClose={() => setOpenSnackbar(false)}>
+      <Snackbar open={openSnackbar} autoHideDuration={3000} onClose={() => setOpenSnackbar(false)} >
         <Alert onClose={() => setOpenSnackbar(false)} severity="warning" sx={{ width: "100%" }}>
           Login to continue!
         </Alert>

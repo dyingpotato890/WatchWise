@@ -110,24 +110,41 @@ const Chatbot = () => {
                     }}
                 >
                     {/* Chat Messages */}
-                    <Box sx={{ flexGrow: 1, overflowY: "auto", padding: "1rem" }}>
+                    <Box
+                        sx={{
+                            flexGrow: 1,
+                            overflowY: "auto",
+                            padding: "1rem",
+                            display: "flex",
+                            flexDirection: "column",
+                        }}
+                    >
                         {messages.map((msg, index) => (
-                            <Typography
+                            <Box
                                 key={index}
-                                style={{
-                                    textAlign: msg.sender === "user" ? "right" : "left",
-                                    color: msg.sender === "user" ? "#ff4d4d" : "#ffffff",
-                                    padding: "10px",
-                                    borderRadius: "8px",
-                                    display: "inline-block",
-                                    backgroundColor: msg.sender === "user" ? "rgba(255, 77, 77, 0.2)" : "transparent",
-                                    boxShadow: msg.sender === "user" ? "0 0 10px rgba(255, 77, 77, 0.8)" : "none",
+                                sx={{
+                                    display: "flex",
+                                    justifyContent: msg.sender === "user" ? "flex-end" : "flex-start",
+                                    marginBottom: "8px", // Adds spacing between messages
                                 }}
                             >
-                                {msg.text}
-                            </Typography>
-                        ))}
-                    </Box>
+                                    <Typography
+                                        sx={{
+                                            maxWidth: "70%",
+                                            wordWrap: "break-word",
+                                            padding: "10px",
+                                            borderRadius: "12px",
+                                            backgroundColor: msg.sender === "user" ? "rgba(255, 77, 77, 0.2)" : "rgba(255, 255, 255, 0.1)",
+                                            color: msg.sender === "user" ? "#ff4d4d" : "#ffffff",
+                                            boxShadow: msg.sender === "user" ? "0 0 10px rgba(255, 77, 77, 0.8)" : "none",
+                                            textAlign: "left",
+                                        }}
+                                    >
+                                        {msg.text}
+                                    </Typography>
+                                </Box>
+                            ))}
+                        </Box>
 
                     {/* Input and Send Button */}
                     <Box display="flex" alignItems="center" mt={2} gap={1}>
@@ -151,9 +168,16 @@ const Chatbot = () => {
                             placeholder="Type a message..."
                             value={input}
                             onChange={(e) => setInput(e.target.value)}
+                            onKeyDown={(e) => {
+                                if (e.key === "Enter" && !e.shiftKey) { // Send message on Enter, but allow Shift+Enter for new line
+                                    e.preventDefault(); // Prevents adding a new line
+                                    handleSendMessage(); // Calls the function to send the message
+                                }
+                            }}
                             InputLabelProps={{ style: { color: "white" } }}
                             InputProps={{ style: { color: "white" } }}
                         />
+
 
                         <IconButton
                             onClick={handleSendMessage}
