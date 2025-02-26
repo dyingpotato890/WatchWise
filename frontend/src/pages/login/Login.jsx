@@ -2,7 +2,8 @@ import React, { useEffect, useRef, useState } from "react";
 import { Container, TextField, Button, Typography, Box, Link, Paper } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import Navbar from "../components/Navbar";
+import Navbar from "../../components/Navbar";
+import "./Login.css"; // Import the CSS file
 
 const Login = () => {
     const navigate = useNavigate();

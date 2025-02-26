@@ -1,7 +1,7 @@
 
 import { Route, Routes } from 'react-router-dom';
 import SignUp from './pages/Signup/SignUp';
-import Login from './pages/Login'
+import Login from './pages/login/Login'
 import MoodPage from './pages/Mood/Mood'
 import Home from './pages/home/Home';
 import Chatbot from './pages/chat/Chatbot'

@@ -1,0 +1,9 @@
+/* styles.css */
+input:-webkit-autofill,
+input:-webkit-autofill:hover, 
+input:-webkit-autofill:focus, 
+input:-webkit-autofill:active {
+    -webkit-text-fill-color: white !important; /* Text color */
+    -webkit-box-shadow: 0 0 0px 1000px #000 inset !important; /* Background color */
+    transition: background-color 5000s ease-in-out 0s; /* Prevent background color change */
+}
