@@ -43,6 +43,9 @@ class Chatbot:
         })
 
     def confirm_corrections(self, user_id, corrections):
+        if not isinstance(corrections, dict):
+            return jsonify({"error": "Invalid input format. Please provide corrections as a dictionary."})
+        
         self.session_data[user_id]["mood"] = corrections.get("mood", self.session_data[user_id].get("mood"))
         self.session_data[user_id]["genre"] = corrections.get("genre", self.session_data[user_id].get("genre"))
         self.session_data[user_id]["language"] = corrections.get("language", self.session_data[user_id].get("language"))
