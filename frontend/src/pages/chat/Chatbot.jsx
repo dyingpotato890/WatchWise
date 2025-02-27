@@ -51,8 +51,17 @@ const Chatbot = () => {
                 });
     
                 const data = await response.json();
-                setMessages((prev) => [...prev, { text: data.response, sender: "bot" }]);
-    
+
+                // Extract and format bot response
+                const botMessage = `Mood: ${data.mood || "Not detected"}\nGenre: ${data.genre || "Not specified"}\nLanguage: ${data.language || "Not specified"}`;
+
+                // Update chat messages
+                setMessages((prev) => [
+                    ...prev,
+                    { text: botMessage, sender: "bot" },
+                    { text: "Is this correct? If not, please specify your mood, genre, or language.", sender: "bot" }
+                ]);
+
             } catch (error) {
                 setMessages((prev) => [...prev, { text: "Error connecting to server!", sender: "bot" }]);
             }
@@ -128,23 +137,23 @@ const Chatbot = () => {
                                     marginBottom: "8px", // Adds spacing between messages
                                 }}
                             >
-                                    <Typography
-                                        sx={{
-                                            maxWidth: "70%",
-                                            wordWrap: "break-word",
-                                            padding: "10px",
-                                            borderRadius: "12px",
-                                            backgroundColor: msg.sender === "user" ? "rgba(255, 77, 77, 0.2)" : "rgba(255, 255, 255, 0.1)",
-                                            color: msg.sender === "user" ? "#ff4d4d" : "#ffffff",
-                                            boxShadow: msg.sender === "user" ? "0 0 10px rgba(255, 77, 77, 0.8)" : "none",
-                                            textAlign: "left",
-                                        }}
-                                    >
-                                        {msg.text}
-                                    </Typography>
-                                </Box>
-                            ))}
-                        </Box>
+                                <Typography
+                                    sx={{
+                                        maxWidth: "70%",
+                                        wordWrap: "break-word",
+                                        padding: "10px",
+                                        borderRadius: "12px",
+                                        backgroundColor: msg.sender === "user" ? "rgba(255, 77, 77, 0.2)" : "rgba(255, 255, 255, 0.1)",
+                                        color: msg.sender === "user" ? "#ff4d4d" : "#ffffff",
+                                        boxShadow: msg.sender === "user" ? "0 0 10px rgba(255, 77, 77, 0.8)" : "none",
+                                        textAlign: "left",
+                                    }}
+                                >
+                                    {msg.text}
+                                </Typography>
+                            </Box>
+                        ))}
+                    </Box>
 
                     {/* Input and Send Button */}
                     <Box display="flex" alignItems="center" mt={2} gap={1}>
@@ -177,7 +186,6 @@ const Chatbot = () => {
                             InputLabelProps={{ style: { color: "white" } }}
                             InputProps={{ style: { color: "white" } }}
                         />
-
 
                         <IconButton
                             onClick={handleSendMessage}
