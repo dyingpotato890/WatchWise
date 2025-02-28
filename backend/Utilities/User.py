@@ -20,9 +20,16 @@ class User(UserMixin):
         salt = bcrypt.gensalt()
         hashed_password = bcrypt.hashpw(password.encode("utf-8"), salt)
         return hashed_password
+    @staticmethod
+    def get(user_id):
+        login_collection = db["login"]
+        user_data = login_collection.find_one({"user_id":user_id})
+        if user_data:
+            return User(user_data["user_id"],user_data["password"])
+        return None
 
     @staticmethod
-    def get(email):
+    def get_user(email):
         login_collection = db["login"]
         user_data = login_collection.find_one({"email": email})
 
