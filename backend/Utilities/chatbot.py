@@ -21,7 +21,7 @@ class Chatbot:
 
         prompt = f"""
         1) You are an AI that extracts a user's mood, genre preference, and language preference.
-        2) The mood should be one from the following: relaxed, curious, tense, excited, lonely, scared, annoyed, anger, disgust, fear, joy, sadness, romantic, surprise.
+        2) The mood should be extracted exactly as written from the following list: relaxed, curious, tense, excited, lonely, scared, annoyed, anger, disgust, fear, joy, sadness, romantic, surprise. Do not convert or simplify the mood.
         3) Identify only one genre preference if mentioned (e.g., romance, horror, comedy, action, drama, sci-fi, fantasy, etc.).
         4) Retain previously extracted values unless the user changes them.
         5) Current preferences:
@@ -77,10 +77,14 @@ class Chatbot:
             genre_match = re.search(r"(?i)Genre\s*:\s*(.+)|Genre Preference\s*:\s*(.+)", cleaned_response)
             language_match = re.search(r"(?i)Language\s*:\s*(.+)|Language Preference\s*:\s*(.+)", cleaned_response)
 
+            mood_mapping = {"sad": "sadness", "angry": "anger", "romance": "romantic"}
+            mood = mood_match.group(1).strip('* ') if mood_match else None
+            mood = mood_mapping.get(mood, mood)
+
             return {
-                "mood": mood_match.group(1).strip() if mood_match else None,
-                "genre": (genre_match.group(1) or genre_match.group(2)).strip() if genre_match else None,
-                "language": (language_match.group(1) or language_match.group(2)).strip() if language_match else None
+                "mood": mood,
+                "genre": (genre_match.group(1) or genre_match.group(2)).strip('* ') if genre_match else None,
+                "language": (language_match.group(1) or language_match.group(2)).strip('* ') if language_match else None
             }
 
         except Exception as e:
