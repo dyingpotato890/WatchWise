@@ -60,6 +60,9 @@ class User(UserMixin):
         hashed_pwd = User.hashPassword(password)
         login_collection = db["login"]
         user_collection = db["users"]
+        if login_collection.find_one({'email':email}):
+            print("User already exists")
+            return False
         login_data = {"user_id": user_id,
                       "password": hashed_pwd,
                       "email": email}
