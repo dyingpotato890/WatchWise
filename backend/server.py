@@ -90,7 +90,7 @@ def register():
             "Access-Control-Allow-Headers", "Content-Type, Authorization"
         )
         return response, 200
-    data = requestGEMINI_API_KEY = AIzaSyCsT22Fxkipg8V7kH_I4EuTGlgpUEGIags.get_json()
+    data = request.get_json()
     email = data.get("email")
     password = data.get("password")
     name = data.get("name")

@@ -8,7 +8,7 @@ class Chatbot:
     def __init__(self):
         self.session_data = {}
         load_dotenv()
-        gemini_api_key = os.getenv("GEMINI_API_KEY")
+        gemini_api_key = os.getenv("GEMINI_API_KEY_CHATBOT")
         genai.configure(api_key = gemini_api_key)
         self.model = genai.GenerativeModel("gemini-1.5-flash")
 
