@@ -4,14 +4,17 @@ import json
 import time
 import signal
 import sys
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
 
 api_keys = [
-    "AIzaSyCsT22Fxkipg8V7kH_I4EuTGlgpUEGIags",
-    "AIzaSyAussGsx-Z1EA7-ae37nv3jxEPpARve4LM",
-    "AIzaSyDFqpi0SfUBeSvk3FlgfLVKACXw5mvU6cw",
-    "AIzaSyB8CG7OBOmPRRNZGv6f1rYr1mCXGL_z-5Q",
-    "AIzaSyAptkIW83exuEk9Oq5co-ViW2TtaQaNSLc",
-    "AIzaSyDRIWj5KNBvd5qARLr7yuQlq7wAYvoKZ0M"
+    os.getenv("GEMINI_API_KEY_1"),
+    os.getenv("GEMINI_API_KEY_2"),
+    os.getenv("GEMINI_API_KEY_3"),
+    os.getenv("GEMINI_API_KEY_4"),
+    os.getenv("GEMINI_API_KEY_5")
 ]
 used_keys = []  # Stores exhausted API keys to retry later
 
