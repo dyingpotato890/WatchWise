@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import { AppBar, Toolbar, Box, Button, Menu, MenuItem, Snackbar, Alert } from "@mui/material";
 import { Link, useNavigate, useLocation } from "react-router-dom";
@@ -50,6 +51,18 @@ const Navbar = () => {
     }
   };
 
+  // Function to handle smooth scrolling to a section
+  const scrollToSection = (sectionId) => {
+    console.log(`Scrolling to section with id: ${sectionId}`); // Debugging log
+    const section = document.getElementById(sectionId);
+    if (section) {
+      console.log("Section found:", section); // Debugging log
+      section.scrollIntoView({ behavior: "smooth", block: "start" });
+    } else {
+      console.error("Section not found!"); // Debugging log
+    }
+  };
+
   return (
     <AppBar
       position="fixed"
@@ -73,17 +86,13 @@ const Navbar = () => {
         {/* Navigation Links */}
         <Box sx={{ display: "flex", gap: "1.5rem" }}> {/* Reduced gap */}
           {["Chat", "About Us", "Contact"].map((item) => (
-            <Button key={item} color="inherit" sx={{ fontSize: "0.9rem", fontWeight: "500" }}>
-              <Link
-                to={`/${item.toLowerCase().replace(" ", "-")}`}
-                style={{
-                  textDecoration: "none",
-                  color: "#ffffff",
-                  fontFamily: "'Poppins', sans-serif",
-                }}
-              >
-                {item}
-              </Link>
+            <Button
+              key={item}
+              color="inherit"
+              sx={{ fontSize: "0.9rem", fontWeight: "500" }}
+              onClick={() => scrollToSection(item === "Contact" ? "contact-us" : item.toLowerCase().replace(" ", "-"))} // Scroll to section
+            >
+              {item}
             </Button>
           ))}
 

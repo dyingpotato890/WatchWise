@@ -1,4 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible+Next:ital,wght@0,200..800;1,200..800&family=Poppins:wght@400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200');
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700&display=swap');
 
 /* body {
     font-family: 'Poppins', sans-serif;
@@ -6,6 +8,7 @@
 
 /* Reset default margin and padding for body and html */
 body, html {
+  scroll-padding-top: 10px; /* Adjust this value based on the height of your navbar */
     margin: 0;
     padding: 0;
     overflow-x: hidden; /* Prevent horizontal scrolling */
@@ -147,3 +150,492 @@ body, html {
     padding: 20px;
     background-color: rgba(0, 0, 0, 0.8);
   }
+
+  .about-section {
+    padding: 80px 20px;
+    background: linear-gradient(to bottom, #000, #7f1d1d1a);
+    position: relative;
+    font-family: 'Open Sans', sans-serif;
+  }
+  
+  .about-content {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  
+  .about-title {
+    font-size: 2.5rem;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 40px;
+  }
+/* About Description - More Readable */
+.about-description {
+  color: white;
+  font-size: 1.1rem;
+  line-height: 1.8;
+  max-width: 850px;
+  margin: 0 auto;
+  text-align: center;
+  font-family: 'Open Sans', sans-serif; /* Open Sans for description */
+  font-weight: 400;
+}
+
+/* Feature Card Text - More Visible */
+.feature-card p {
+  color: #E0E0E0; /* Brighter gray for better readability */
+  font-size: 1.05rem; /* Slightly larger text */
+  line-height: 1.6; /* More spacing between lines */
+  transition: color 0.3s ease-in-out;
+}
+
+.feature-card:hover p {
+  color: white; /* Brightens text on hover */
+}
+
+/* Feature Card Styling - More Visibility */
+.feature-card {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 15px;
+  padding: 25px; /* More padding for better spacing */
+  text-align: center;
+  transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(255, 75, 75, 0.2);
+  font-family: 'Open Sans', sans-serif; 
+}
+
+.feature-card:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 20px rgba(255, 75, 75, 0.5);
+}
+
+.dynamic-gradient-text {
+  font-size: 2.5rem;
+  font-weight: 700;
+  background: linear-gradient(90deg, #ff416c, #ff4b2b, #ff416c);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 2px 2px 15px rgba(255, 75, 75, 0.6);
+  animation: glowingTitle 3s infinite alternate;
+  transition: transform 0.3s ease-in-out;
+  font-family: 'Open Sans', sans-serif; /* Ensures title uses Open Sans */
+}
+  
+  .dynamic-gradient-text:hover {
+    transform: scale(1.1);
+  }
+  
+  /* Glowing Effect Animation */
+  @keyframes glowingTitle {
+    0% {
+      text-shadow: 2px 2px 10px rgba(255, 75, 75, 0.6);
+    }
+    100% {
+      text-shadow: 2px 2px 25px rgba(255, 75, 75, 1);
+    }
+  }
+  
+  .gradient-text {
+    background: linear-gradient(to right, #ef4444, #dc2626);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  
+  .title-underline {
+    width: 80px;
+    height: 4px;
+    background: linear-gradient(to right, #ef4444, #dc2626);
+    margin: 10px auto;
+    border-radius: 2px;
+  }
+  
+  .about-features {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+  }
+  
+  .feature-card {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 15px;
+    padding: 20px;
+    text-align: center;
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(255, 75, 75, 0.2);
+  }
+  
+  .feature-card:hover {
+    transform: scale(1.1);
+    box-shadow: 0 4px 20px rgba(255, 75, 75, 0.5);
+  }
+  
+  .feature-card span {
+    font-size: 3rem;
+    color: #ff416c;
+    transition: transform 0.3s ease-in-out;
+  }
+  
+  .feature-card:hover span {
+    transform: scale(1.2);
+  }
+  
+  .feature-title {
+    font-size: 1.5rem;
+    font-weight: bold;
+    background: linear-gradient(90deg, #ff416c, #ff4b2b);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    letter-spacing: 1px;
+    text-shadow: 1px 1px 10px rgba(255, 75, 75, 0.5);
+    font-family: 'Open Sans', sans-serif; 
+  }
+  
+  
+
+  .feature-card:hover p {
+    color: white; /* Brightens text on hover */
+  }
+  
+  .text-gray-300 {
+    --tw-text-opacity: 1;
+    color: rgba(209, 213, 219, var(--tw-text-opacity));
+    font-size: 0.9rem; /* Slightly larger for better readability */
+    opacity: 0.85; /* Increased visibility */
+    letter-spacing: 0.5px;
+    transition: color 0.3s ease-in-out, opacity 0.3s ease-in-out;
+  }
+  
+  /* Make Small Texts More Visible on Hover */
+  .text-gray-300:hover {
+    color: rgba(255, 255, 255, 1);
+    opacity: 1;
+  }
+  
+  /* Improve Readability for Feature Card Text */
+  .feature-card p {
+    color: #E0E0E0;
+    font-size: 1.05rem;
+    line-height: 1.6;
+    text-align: center;
+    min-height: 80px;
+    font-family: 'Open Sans', sans-serif; /* Feature descriptions use Open Sans */
+  }
+  .feature-card:hover p {
+    color: rgba(255, 255, 255, 1);
+  }
+  
+
+  /* Enhanced About Title */
+  .dynamic-gradient-text {
+    font-size: 2.5rem;
+    font-weight: bold;
+    background: linear-gradient(90deg, #ff416c, #ff4b2b, #ff416c);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-shadow: 2px 2px 10px rgba(255, 75, 75, 0.6);
+    animation: glowingTitle 3s infinite alternate;
+    transition: transform 0.3s ease-in-out;
+  }
+  
+  .dynamic-gradient-text:hover {
+    transform: scale(1.1);
+  }
+  
+
+  /* Contact Us Section */
+/* Contact Us Section */
+.contact-section {
+  margin-top: 80px; /* Add more margin-top */
+  padding: 40px 20px; /* Reduced padding */
+  background: linear-gradient(to bottom, #000, #7f1d1d1a);
+  position: relative;
+  overflow: hidden;
+  font-family: 'Open Sans', sans-serif; /* Same font as About Us */
+}
+
+.contact-content {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.contact-title {
+  font-size: 2.5rem; /* Adjust size as needed */
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 20px;
+  font-family: 'Open Sans', sans-serif; /* Same font as About Us */
+  color: #ffffff; /* White font color */
+}
+
+.contact-title .gradient-text {
+  background: linear-gradient(to right, #ff416c, #ff4b2b); /* Gradient colors */
+  -webkit-background-clip: text; /* Clip text to the gradient */
+  -webkit-text-fill-color: transparent; /* Make text transparent */
+  text-shadow: 2px 2px 10px rgba(255, 75, 75, 0.6); /* Add a subtle shadow */
+  animation: glowingTitle 3s infinite alternate; /* Glowing animation */
+}
+@keyframes glowingTitle {
+  0% {
+    text-shadow: 2px 2px 10px rgba(255, 75, 75, 0.6);
+  }
+  100% {
+    text-shadow: 2px 2px 25px rgba(255, 75, 75, 1);
+  }
+}
+.contact-title .title-underline {
+  width: 80px; /* Width of the underline */
+  height: 4px; /* Height of the underline */
+  background: linear-gradient(to right, #ff416c, #ff4b2b); /* Gradient underline */
+  margin: 10px auto; /* Center the underline */
+  border-radius: 2px; /* Rounded corners */
+}
+
+.contact-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px; /* Reduced gap */
+}
+
+.contact-info {
+  //flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 15px; /* Reduced gap */
+}
+
+
+/* Adjust the width and alignment of info cards */
+.info-card {
+  background: rgba(0, 0, 0, 0.3);
+  padding: 15px 20px;
+  border-radius: 20px;
+  border: 1px solid rgba(127, 29, 29, 0.3);
+  transition: all 0.3s ease;
+  width: 100%;
+  max-width: 500px;
+  min-height: 100px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  text-align: left;
+  box-shadow: 0 4px 10px rgba(255, 75, 75, 0.2);
+  font-family: 'Open Sans', sans-serif; /* Same font as About Us */
+}
+
+/* Hover effect: Move box to the right */
+.info-card:hover {
+  transform: translateX(10px); /* Move box to the right on hover */
+  border-color: rgba(220, 38, 38, 0.5); /* Change border color on hover */
+  box-shadow: 0 4px 20px rgba(255, 75, 75, 0.5); /* Add shadow for depth */
+}
+/* Container for icon and heading */
+.info-heading {
+  display: flex;
+  align-items: center; /* Align icon and heading in the same line */
+  gap: 10px; /* Space between icon and heading */
+}
+
+/* Adjust the icon size and alignment */
+.info-card span {
+  font-size: 2rem;  /* Larger icon size */
+  color: #ff5252;
+}
+
+/* Adjust the heading size and alignment */
+.info-card h3 {
+  font-size: 1.25rem; /* Bigger heading */
+  margin: 0; /* Remove default margin */
+  text-align: left; /* Ensure heading is left-aligned */
+  font-weight: 600; /* Make heading bolder */
+}
+
+/* Adjust the description alignment */
+.info-card p {
+  font-size: 0.9rem; /* Adjusted text size */
+  line-height: 1.6; /* Better readability */
+  text-align: left; /* Left-align description */
+  margin: 0; /* Remove default margin */
+  padding-left: 40px; /* Add padding to align text below the heading */
+}
+input::placeholder,
+textarea::placeholder {
+  font-family: 'Open Sans', sans-serif; /* Same font as About Us */
+  color: rgba(255, 255, 255, 0.7); /* Light gray placeholder text */
+}
+
+.social-links {
+  display: flex;
+  gap: 10px;
+  margin-top: 15px; 
+}
+
+.social-link {
+  width: 35px;
+  height: 40px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  transition: all 0.3s ease;
+}
+
+.social-link:hover {
+  background: #ef4444;
+  transform: scale(1.1);
+}
+
+.contact-form {
+  background: rgba(0, 0, 0, 0.2);
+  padding: 20px;
+  border-radius: 10px;
+  //border: 1px solid rgba(127, 29, 29, 0.3);
+  border: 1px solid rgba(134, 33, 33, 0.4);
+  box-shadow: 0 0 10px rgba(85, 21, 21, 0.5), 0 0 20px rgba(52, 12, 12, 0.3);
+  font-family: 'Open Sans', sans-serif; /* Same font as About Us */
+}
+.contact-form:hover {
+  box-shadow: 0 4px 20px rgba(255, 75, 75, 0.5);
+  transform: translateY(-2px);
+}
+.contact-box {
+  background: rgba(255, 255, 255, 0.1);
+  padding: 20px;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: space-between;
+  flex: 1;
+  min-height: 100%; /* Ensure same height as form */
+}
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  font-size: 1rem;
+  margin-bottom: 5px;
+  display: block;
+}
+
+
+/* Ensure consistent width and padding for all input fields */
+.form-group input,
+.form-group select,
+.form-group textarea {
+  padding: 10px 20px; /* Consistent padding */
+  padding-left: 20px; /* Explicit left padding */
+  width: 100%; /* Full width */
+  border: 1px solid rgba(255, 75, 75, 0.5); /* Milder red border */
+  background: rgba(0, 0, 0, 0.5);
+  color: #fff;
+  border-radius: 25px;
+  transition: all 0.3s ease;
+  outline: none; /* Remove default outline */
+  box-sizing: border-box; /* Include padding and border in the width */
+}
+
+/* Custom dropdown arrow for select */
+.form-group select {
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23ff416c'%3e%3cpath d='M7 10l5 5 5-5z'/%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right 15px center;
+  background-size: 12px;
+  padding-right: 40px; /* Space for the arrow */
+}
+
+/* Style for dropdown options */
+.form-group select option {
+  background: #333; /* Grey background */
+  color: #fff; /* White text */
+}
+
+/* Hover effect for dropdown options */
+.form-group select option:hover {
+  background: #ff416c; /* Red background on hover */
+  color: #fff; /* White text on hover */
+}
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+  border-color: #ef4444;
+  outline: none;
+} 
+
+input:focus, select:focus, textarea:focus {
+  border-color: #ff416c;
+  box-shadow: 0 0 10px rgba(255, 75, 75, 0.5);
+}
+option {
+  background: #333;
+  color: #fff;
+}
+
+option:hover {
+  background: #ff416c !important;
+  color: #fff !important;
+}
+.contact-form .submit-button {
+  font-family: 'Open Sans', sans-serif;
+  border-radius: 25px;
+  padding: 12px 20px;
+  background: #8B0000; /* Dark blood red */
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  transition: background 0.3s ease; /* Smooth transition for background color */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Hover effect to match the Login button in the navbar */
+.contact-form .submit-button:hover {
+  background: #600000; /* Darker red on hover */
+}
+@media (max-width: 768px) {
+  .contact-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: stretch; /* Ensures all children take full height */
+    gap: 20px;
+    padding: 40px;
+    flex-wrap: wrap;
+}
+  .contact-info, .contact-form {
+    width: 100%;
+    
+  }
+  .contact-grid {
+    grid-template-columns: 1fr;
+  }
+  .contact-section {
+    margin-top: 40px; /* Smaller margin-top for mobile */
+  }
+
+}
+
+/* Custom dropdown arrow for select */
+select {
+  appearance: none; /* Hide default arrow */
+  background-image: url('data:image/svg+xml;charset=UTF-8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%23ff416c"><path d="M7 10l5 5 5-5z"/></svg>') !important; /* Custom red arrow with !important */
+  background-repeat: no-repeat !important;
+  background-position: right 15px center !important; /* Position the arrow */
+  background-size: 12px !important; /* Size of the arrow */
+  padding-right: 40px !important; /* Space for the arrow */
+  border: 1px solid rgba(255, 75, 75, 0.5) !important; /* Red border */
+  border-radius: 25px !important; /* Rounded corners */
+  background-color: rgba(0, 0, 0, 0.5) !important; /* Background color */
+  color: #fff !important; /* Text color */
+  width: 100% !important; /* Full width */
+  padding: 10px 20px !important; /* Padding */
+  outline: none !important; /* Remove default outline */
+  transition: all 0.3s ease !important; /* Smooth transition */
+}
