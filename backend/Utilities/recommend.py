@@ -88,19 +88,25 @@ class Recommend():
         return recommendations["title"].tolist()
 
     @staticmethod
-    def hybrid_recommend(mood_input, top_n=20, weights=(0.5, 0.25, 0.25)):
+    def hybrid_recommend(user_id, mood_input, top_n=20, weights=(0.5, 0.25, 0.25)):
         recommendations = {
             "Mood-Based": Recommend.get_mood_based_recommendations(Recommend.df, Recommend.tfidf_matrix, Recommend.tfidf_vectorizer, mood_input, top_n),
             "User-Based": [],
             "Item-Based": []
         }
 
-        if not Recommend.user_item_matrix.empty:
-            user_id = Recommend.user_item_matrix.sum(axis=1).idxmax()
+        # Get User-Based CF recommendations
+        if user_id in Recommend.user_item_matrix.index:
             recommendations["User-Based"] = Recommend.get_user_cf_recommendations(user_id, top_n)
+        
+        # Get Item-Based CF recommendations
+        if user_id in Recommend.user_item_matrix.index:
+            user_ratings = Recommend.user_item_matrix.loc[user_id]
+            highest_rated_movie_id = user_ratings.idxmax()
+        else:
+            highest_rated_movie_id = None
 
-        if not Recommend.df.empty:
-            most_common_movie_id = Recommend.df['show_id'].value_counts().idxmax()
-            recommendations["Item-Based"] = Recommend.get_item_cf_recommendations(most_common_movie_id, top_n)
+        if highest_rated_movie_id:
+            recommendations["Item-Based"] = Recommend.get_item_cf_recommendations(highest_rated_movie_id, top_n)
 
         return recommendations
