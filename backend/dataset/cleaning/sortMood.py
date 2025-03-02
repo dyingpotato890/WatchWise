@@ -1,6 +1,6 @@
 import pandas as pd
 
-df = pd.read_csv("netflix_mood_with_predictions.csv", encoding="ISO-8859-1")
+df = pd.read_csv("netflix_mood_with_predictions.csv")
 
 df['mood'] = df['mood'].apply(lambda x: ", ".join(sorted(x.split(", "))))
 
