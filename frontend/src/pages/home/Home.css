@@ -179,6 +179,7 @@ body, html {
   text-align: center;
   font-family: 'Open Sans', sans-serif; /* Open Sans for description */
   font-weight: 400;
+  margin-bottom: 32px;
 }
 
 /* Feature Card Text - More Visible */
