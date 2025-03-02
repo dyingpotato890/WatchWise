@@ -15,6 +15,7 @@ client = pymongo.MongoClient("mongodb://localhost:27017/")
 db = client["WatchWise"]
 
 collections = db.list_collection_names()
+
 if "login" not in collections or "users" not in collections:
     with open("backend/database/login.json", "r") as login_file:
         login_data = json.load(login_file)["login"]
@@ -39,11 +40,21 @@ if "login" not in collections or "users" not in collections:
             else:
                 print(f"User record for user_id: {user_record['user_id']} already exists. Skipping insertion.")
 
+    # Inserting ratings data
     if "ratings" not in collections:
         df = pd.read_csv("backend/dataset/Netflix_Dataset_Rating.csv")
-        data = df.to_dict(orient = "records")
+        data = df.to_dict(orient="records")
         db["ratings"].insert_many(data)
         print("Inserted Ratings Into Database")
+
+    # Inserting movies data
+    if "movies" not in collections:
+        df_movies = pd.read_csv("backend/dataset/netflix_mood_recommender_test.csv", encoding='latin-1')
+        data_movies = df_movies.to_dict(orient="records")
+        db["moviesDB"].insert_many(data_movies)
+        print("Inserted Movies Into Database")
+        
+    print("Data inserted successfully into MongoDB!")
 
 else:
     print("Database and collections already exist. No action needed.")
