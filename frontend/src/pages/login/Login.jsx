@@ -1,5 +1,13 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Container, TextField, Button, Typography, Box, Link, Paper } from "@mui/material";
+import {
+    Container,
+    TextField,
+    Button,
+    Typography,
+    Box,
+    Link,
+    Paper,
+} from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import Navbar from "../../components/Navbar";
@@ -7,7 +15,7 @@ import "./Login.css"; // Import the CSS file
 
 const Login = () => {
     const navigate = useNavigate();
-    
+
     const [vantaEffect, setVantaEffect] = useState(null);
     const vantaRef = useRef(null);
 
@@ -25,7 +33,7 @@ const Login = () => {
                     scaleMobile: 1.0,
                     color: 0xdb0000,
                     backgroundColor: 0x000000,
-                })
+                }),
             );
         }
 
@@ -37,7 +45,17 @@ const Login = () => {
     return (
         <>
             <Navbar />
-            <div ref={vantaRef} style={{ position: "absolute", width: "100vw", height: "100vh", top: 0, left: 0, zIndex: -1 }}></div>
+            <div
+                ref={vantaRef}
+                style={{
+                    position: "absolute",
+                    width: "100vw",
+                    height: "100vh",
+                    top: 0,
+                    left: 0,
+                    zIndex: -1,
+                }}
+            ></div>
             <Container
                 component="main"
                 maxWidth="xs"
@@ -65,18 +83,22 @@ const Login = () => {
                     </Typography>
 
                     <form
-                        onSubmit={(e) => {
+                        onSubmit={async (e) => {
                             e.preventDefault();
                             const email = e.target.email.value;
                             const password = e.target.password.value;
-                            axios
-                                .post("http://localhost:5010/api/login", { email, password })
-                                .then(() => {
-                                    alert("Logged in Successfully!");
-                                    localStorage.setItem("isLoggedIn",true);
-                                    navigate("/home");
-                                })
-                                .catch(() => alert("Login Failed!"));
+                            try {
+                                const response =await axios.post("http://localhost:5010/api/login", {
+                                    email,
+                                    password,
+                                });
+                                console.log(response.data);
+                                localStorage.setItem("accessToken", response.data.token);
+                                alert("Login successful!");
+                                navigate("/home");
+                            } catch (error) {
+                                alert("Unsuccessful login");
+                            }
                         }}
                     >
                         <TextField
@@ -101,7 +123,12 @@ const Login = () => {
                             InputProps={{ style: { color: "white" } }}
                             style={{ marginBottom: "1rem" }}
                         />
-                        <Button type="submit" fullWidth variant="contained" style={{ backgroundColor: "red", color: "white" }}>
+                        <Button
+                            type="submit"
+                            fullWidth
+                            variant="contained"
+                            style={{ backgroundColor: "red", color: "white" }}
+                        >
                             Login
                         </Button>
                     </form>
