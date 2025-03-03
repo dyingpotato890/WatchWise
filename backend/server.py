@@ -10,8 +10,10 @@ from flask_session import Session
 from flask_cors import CORS
 from flask_login import (LoginManager, current_user, login_required,
                          login_user, logout_user)
+
 from Utilities.chatbot import Chatbot
 from Utilities.User import User
+from Utilities.recommend import Recommend
 
 # Initialize AI Extractor
 chatbot = Chatbot()
@@ -96,7 +98,6 @@ def register():
 
 chat_history = {}
 
-
 @app.route("/api/chat", methods=["POST"])
 def chat():
     data = request.get_json()
@@ -105,6 +106,21 @@ def chat():
 
     return chatbot.process_input(user_id, user_input)
 
+@app.route("/api/movies", methods = ['GET'])
+def movies():
+    recommended_shows = Recommend.hybrid_recommend(user_id=2473170, mood_input="fear", top_n=20)
+    print(recommended_shows)
+
+    all_movies = []
+
+    for category, movies in recommended_shows.items():
+        if isinstance(movies, list):
+            all_movies.extend(set(movies))
+
+    if not all_movies:
+        return jsonify({"error": "No recommendations found"}), 204
+
+    return jsonify(all_movies), 200
 
 if __name__ == "__main__":
     app.run(debug = True, port=5010)
