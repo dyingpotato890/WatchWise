@@ -31,12 +31,6 @@ login_manager.init_app(app)
 login_manager.login_view = "login"
 frontend_path = os.path.join(os.getcwd(), "frontend", "dist")
 
-# Load environment variables for model
-load_dotenv()
-gemini_api_key = os.getenv("GEMINI_API_KEY")
-genai.configure(api_key=gemini_api_key)
-
-
 @app.route("/", defaults={"filename": ""})
 @app.route("/<path:filename>")
 def index(filename):
@@ -113,4 +107,4 @@ def chat():
 
 
 if __name__ == "__main__":
-    app.run(debug=True, port=5010)
+    app.run(debug = True, port=5010)
