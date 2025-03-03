@@ -5,7 +5,7 @@ import re
 import google.generativeai as genai
 import pymongo
 from dotenv import load_dotenv
-from flask import (Flask, jsonify, redirect, request, send_from_directory,
+from flask import (Flask, jsonify, redirect, request, send_from_directory, make_response,
                    session)
 from flask_cors import CORS
 from flask_login import (LoginManager, current_user, login_required,
@@ -13,8 +13,10 @@ from flask_login import (LoginManager, current_user, login_required,
 from Utilities.chatbot import Chatbot
 from Utilities.recommend import Recommend
 from Utilities.User import User
-
+from functools import wraps
 from flask_session import Session
+import jwt
+import datetime
 
 client = pymongo.MongoClient("mongodb://localhost:27017/")
 db = client["WatchWise"]
@@ -25,15 +27,12 @@ chatbot = Chatbot()
 app = Flask(__name__)
 CORS(app, resources={r"/api/*": {"origins": "*"}}, supports_credentials=True)
 app.config["SECRET_KEY"] = os.getenv("SECRET_KEY", "meowmeowmeow")
-app.config["SESSION_TYPE"] = "filesystem"  # Store session on disk, not cookies
-app.config["SESSION_COOKIE_SAMESITE"] = "None"
-Session(app)
-
+# app.config["SESSION_TYPE"] = "filesystem"  # Store session on disk, not cookies
+# app.config["SESSION_COOKIE_SAMESITE"] = "None"
+# Session(app)
+#
 
 # Flask-Login Setup
-login_manager = LoginManager()
-login_manager.init_app(app)
-login_manager.login_view = "login"
 frontend_path = os.path.join(os.getcwd(), "frontend", "dist")
 
 
@@ -45,16 +44,33 @@ def index(filename):
     return send_from_directory(frontend_path, filename)
 
 
-@login_manager.user_loader
-def load_user(user_id):
-    print(f"Loading user: {user_id}")
-    return User.get(int(user_id))
 
-
-@login_manager.unauthorized_handler
-def unauthorize():
-    return jsonify({"message": "Unauthorize"}), 401
-
+def token_required(f):
+    @wraps(f)
+    def decorated(*args, **kwargs):
+        token = None
+        # jwt is passed in the request header
+        if 'x-access-token' in request.headers:
+            token = request.headers['x-access-token']
+            print(token)
+        # return 401 if token is not passed
+        if not token:
+            return jsonify({'message' : 'Token is missing !!'}), 401
+  
+        try:
+            # decoding the payload to fetch the stored details
+            print(token)
+            data = jwt.decode(token,app.config['SECRET_KEY'],verify=True,algorithms=["HS256"])
+            print(data)
+            current_user = User.get(data['user_id'])
+        except:
+            return jsonify({
+                'message' : 'Token is invalid !!'
+            }), 401
+        # returns the current logged in users context to the routes
+        return  f(current_user, *args, **kwargs)
+  
+    return decorated
 
 @app.route("/api/login", methods=["POST"])
 def login():
@@ -65,19 +81,21 @@ def login():
     user = User.get_user(email)
 
     if user and user.verify_password(password):
-        session["user_id"] = user.id
-        login_user(user, remember=True)
-        print(f"User {user.id} logged in")
-        print(dict(session))
-        return jsonify({"message": "Login Successful"})
+        token = jwt.encode({
+            'user_id': user.id,
+            'exp' : datetime.datetime.now(datetime.timezone.utc) + datetime.timedelta(minutes = 60)
+        }, app.config['SECRET_KEY'], algorithm="HS256")
+        print(token)
+  
+        return make_response(jsonify({'token' : token}), 201)
     else:
         return jsonify({"message": "Login Failed"}), 401
 
 
 @app.route("/api/check", methods=["GET", "POST"])
-def check_login():
-    print(dict(session))
-    return "User is logged in"
+@token_required
+def check_login(user):
+    return f"User {user.id} is logged in"
 
 
 @app.route("/api/register", methods=["OPTIONS", "POST"])
