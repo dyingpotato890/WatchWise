@@ -31,7 +31,7 @@ class Recommend():
                 if movie_name.size > 0:
                     recommendations.add(movie_name[0])
                 else:
-                    recommendations.add(str(movie_id))  # Use ID if title is missing
+                    recommendations.add(str(movie_id))
 
         return list(recommendations)[:top_n]
 
@@ -51,7 +51,7 @@ class Recommend():
                 Recommend.tfidf_matrix
             ).flatten()
         except IndexError:
-            return []  # Movie ID not found in index
+            return []
 
         similar_movies = np.argsort(item_similarities)[::-1][1:top_n+1]
 

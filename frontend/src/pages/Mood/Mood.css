@@ -10,6 +10,22 @@ body {
   .container {
     padding: 20px;
   }
+  .dynamic-gradient-text {
+    font-size: 2.0rem;
+    font-weight: 700;
+    background: linear-gradient(90deg, #ff416c, #ff4b2b, #ff416c);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-shadow: 2px 2px 15px rgba(255, 75, 75, 0.6);
+    animation: glowingTitle 3s infinite alternate;
+    transition: transform 0.3s ease-in-out;
+    font-family: 'Open Sans', sans-serif; /* Ensures title uses Open Sans */
+  }
+    
+    .dynamic-gradient-text:hover {
+      transform: scale(1.1);
+    }
+    
   
   .title {
     text-align: center;
