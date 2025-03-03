@@ -1,6 +1,5 @@
 import os
 from dotenv import load_dotenv
-import re
 import google.generativeai as genai
 from flask import jsonify
 
@@ -20,16 +19,15 @@ class Chatbot:
         user_session = self.session_data.setdefault(user_id, {"mood": None, "genre": None, "language": None})
 
         prompt = f"""
-        1) You are an AI that extracts a user's mood, genre preference, and language preference.
-        2) The mood should be extracted exactly as written from the following list: relaxed, curious, tense, excited, lonely, scared, annoyed, anger, disgust, fear, joy, sadness, romantic, surprise. Do not convert or simplify the mood.
-        3) Identify only one genre preference if mentioned (e.g., romance, horror, comedy, action, drama, sci-fi, fantasy, etc.).
-        4) Retain previously extracted values unless the user changes them.
-        5) Current preferences:
-        - Mood: {user_session['mood'] if user_session['mood'] else 'Not specified'}
-        - Genre: {user_session['genre'] if user_session['genre'] else 'Not specified'}
-        - Language: {user_session['language'] if user_session['language'] else 'Not specified'}
+        1) You are an AI that identifies the desired emotional response a user seeks from a movie.
+        2) The desired emotional response (mood) should be extracted exactly as written from the following list: relaxed, curious, tense, excited, lonely, scared, annoyed, anger, disgust, fear, joy, sadness, romantic, surprise.
+        3) Do not simplify the mood—return it as mentioned by the user.
+        4) Retain the previous desired movie mood unless the user specifies a new one.
+        5) Current desired movie mood: {user_session['mood'] if user_session['mood'] else 'Not specified'}
         6) User's latest input: "{user_input}"
-        7) Identify changes and update only the relevant fields.
+        7) Identify and update the desired movie mood if a new one is mentioned or inferred.
+        8) If the user asks for movies that make them "happy," infer that the desired movie mood is "joy."
+        9) Only give the mood, no other extracteed text.
         """
 
         extracted_data = self.get_extracted_data(prompt)
@@ -68,23 +66,17 @@ class Chatbot:
     def get_extracted_data(self, prompt):
         try:
             response = self.model.generate_content(prompt)
-            cleaned_response = response.text.strip()
+            mood = response.text.strip()
 
-            print("AI Response:\n", cleaned_response)
-
-            # Improved regex to match variations in AI response
-            mood_match = re.search(r"(?i)Mood\s*:\s*(.+)", cleaned_response)
-            genre_match = re.search(r"(?i)Genre\s*:\s*(.+)|Genre Preference\s*:\s*(.+)", cleaned_response)
-            language_match = re.search(r"(?i)Language\s*:\s*(.+)|Language Preference\s*:\s*(.+)", cleaned_response)
-
+            print("AI Response:\n", mood)
             mood_mapping = {"sad": "sadness", "angry": "anger", "romance": "romantic"}
-            mood = mood_match.group(1).strip('* ') if mood_match else None
+            # mood = cleaned_response if cleaned_response else None
             mood = mood_mapping.get(mood, mood)
 
             return {
                 "mood": mood,
-                "genre": (genre_match.group(1) or genre_match.group(2)).strip('* ') if genre_match else None,
-                "language": (language_match.group(1) or language_match.group(2)).strip('* ') if language_match else None
+                "genre": None,
+                "language": None
             }
 
         except Exception as e:
