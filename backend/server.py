@@ -25,6 +25,7 @@ chatbot = Chatbot()
 
 # Flask App
 app = Flask(__name__)
+
 CORS(app, resources={r"/api/*": {"origins": "*"}}, supports_credentials=True)
 app.config["SECRET_KEY"] = os.getenv("SECRET_KEY", "meowmeowmeow")
 # app.config["SESSION_TYPE"] = "filesystem"  # Store session on disk, not cookies
@@ -35,6 +36,11 @@ app.config["SECRET_KEY"] = os.getenv("SECRET_KEY", "meowmeowmeow")
 # Flask-Login Setup
 frontend_path = os.path.join(os.getcwd(), "frontend", "dist")
 
+@app.before_request
+def handle_preflight():
+    """Automatically respond to OPTIONS requests for CORS"""
+    if request.method == "OPTIONS":
+        return '', 200  # Empty response with 200 status for preflight requests
 
 @app.route("/", defaults={"filename": ""})
 @app.route("/<path:filename>")
@@ -95,7 +101,15 @@ def login():
 @app.route("/api/check", methods=["GET", "POST"])
 @token_required
 def check_login(user):
-    return f"User {user.id} is logged in"
+    if request.method == "OPTIONS" or request.method == "POST":  # Handle CORS preflight request
+        response = jsonify({"message": "CORS preflight successful"})
+        response.headers.add("Access-Control-Allow-Origin", "*")
+        response.headers.add("Access-Control-Allow-Methods", "POST, OPTIONS")
+        response.headers.add(
+            "Access-Control-Allow-Headers", "Content-Type, Authorization"
+        )
+        return response, 200
+    return jsonify({'user':user.id}), 200
 
 
 @app.route("/api/register", methods=["OPTIONS", "POST"])
