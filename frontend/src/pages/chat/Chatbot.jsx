@@ -59,14 +59,14 @@ const Chatbot = () => {
                 setMessages((prev) => [
                     ...prev,
                     { text: botMessage, sender: "bot" },
-                    { text: "Is this correct? If not, please specify your mood, genre, or language.", sender: "bot" }
+                    { text: "Is this correct? If YES then hit 'END', else, please specify your mood, genre, or language.", sender: "bot" }
                 ]);
 
             } catch (error) {
                 setMessages((prev) => [...prev, { text: "Error connecting to server!", sender: "bot" }]);
             }
         }
-    };    
+    };
 
     // Fetch the first AI message when the page loads
     useEffect(() => {
@@ -166,7 +166,7 @@ const Chatbot = () => {
                                 borderRadius: "8px",
                                 fontWeight: "bold",
                             }}
-                            onClick={() => alert("Chat ended!")} // Replace with actual function
+                            onClick={() => alert("Chat ended!")}
                         >
                             End
                         </Button>
