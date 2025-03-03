@@ -3,16 +3,21 @@ import os
 import re
 
 import google.generativeai as genai
+import pymongo
 from dotenv import load_dotenv
 from flask import (Flask, jsonify, redirect, request, send_from_directory,
                    session)
-from flask_session import Session
 from flask_cors import CORS
 from flask_login import (LoginManager, current_user, login_required,
                          login_user, logout_user)
 from Utilities.chatbot import Chatbot
+from Utilities.recommend import Recommend
 from Utilities.User import User
 
+from flask_session import Session
+
+client = pymongo.MongoClient("mongodb://localhost:27017/")
+db = client["WatchWise"]
 # Initialize AI Extractor
 chatbot = Chatbot()
 
@@ -21,7 +26,7 @@ app = Flask(__name__)
 CORS(app, resources={r"/api/*": {"origins": "*"}}, supports_credentials=True)
 app.config["SECRET_KEY"] = os.getenv("SECRET_KEY", "meowmeowmeow")
 app.config["SESSION_TYPE"] = "filesystem"  # Store session on disk, not cookies
-app.config['SESSION_COOKIE_SAMESITE'] = 'None'
+app.config["SESSION_COOKIE_SAMESITE"] = "None"
 Session(app)
 
 
@@ -30,6 +35,7 @@ login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = "login"
 frontend_path = os.path.join(os.getcwd(), "frontend", "dist")
+
 
 @app.route("/", defaults={"filename": ""})
 @app.route("/<path:filename>")
@@ -68,7 +74,7 @@ def login():
         return jsonify({"message": "Login Failed"}), 401
 
 
-@app.route("/api/check", methods=["GET","POST"])
+@app.route("/api/check", methods=["GET", "POST"])
 def check_login():
     print(dict(session))
     return "User is logged in"
@@ -106,5 +112,31 @@ def chat():
     return chatbot.process_input(user_id, user_input)
 
 
+@app.route("/api/movies", methods=["GET"])
+def movies():
+    recommended_shows = Recommend.hybrid_recommend(
+        user_id=2473170, mood_input="fear", top_n=20
+    )
+    print(recommended_shows)
+    movie_collection = db["moviesDB"]
+    all_movies = []
+    movie_data = []
+    for category, movies in recommended_shows.items():
+        if isinstance(movies, list):
+            all_movies.extend(set(movies))
+
+    print(all_movies)
+    for movie in all_movies:
+        poster_path = movie_collection.find_one({"title": movie})["poster_path"]
+        if poster_path == "Not Found":
+            poster_path = "https://motivatevalmorgan.com/wp-content/uploads/2016/06/default-movie-768x1129.jpg"
+        movie_data.append({"title": movie, "poster": poster_path})
+
+    if not all_movies:
+        return jsonify({"error": "No recommendations found"}), 204
+
+    return jsonify({"movies": movie_data}), 200
+
+
 if __name__ == "__main__":
-    app.run(debug = True, port=5010)
+    app.run(debug=True, port=5010)

@@ -1,7 +1,6 @@
-
 import React, { useState, useEffect } from "react";
 import { AppBar, Toolbar, Box, Button, Menu, MenuItem, Snackbar, Alert } from "@mui/material";
-import { Link, useNavigate, useLocation } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import logo from "../assets/logo.png";
 
 const Navbar = () => {
@@ -51,15 +50,32 @@ const Navbar = () => {
     }
   };
 
-  // Function to handle smooth scrolling to a section
-  const scrollToSection = (sectionId) => {
-    console.log(`Scrolling to section with id: ${sectionId}`); // Debugging log
-    const section = document.getElementById(sectionId);
-    if (section) {
-      console.log("Section found:", section); // Debugging log
-      section.scrollIntoView({ behavior: "smooth", block: "start" });
+  const handleScrollToSection = (sectionId) => {
+    if (location.pathname !== "/") {
+      navigate("/");
+      setTimeout(() => {
+        setTimeout(() => {
+          const section = document.getElementById(sectionId);
+          if (section) {
+            section.scrollIntoView({ behavior: "smooth", block: "start" });
+          }
+        }, 300);
+      }, 500);
     } else {
-      console.error("Section not found!"); // Debugging log
+      setTimeout(() => {
+        const section = document.getElementById(sectionId);
+        if (section) {
+          section.scrollIntoView({ behavior: "smooth", block: "start" });
+        }
+      }, 100);
+    }
+  };
+
+  const handleLogoClick = () => {
+    if (location.pathname !== "/") {
+      navigate("/");
+    } else {
+      window.scrollTo({ top: 0, behavior: "smooth" });
     }
   };
 
@@ -69,47 +85,55 @@ const Navbar = () => {
       sx={{
         backgroundColor: "rgba(255, 255, 255, 0)",
         backdropFilter: "blur(10px)",
-        top: "10px", // Moved navbar slightly up
+        top: "10px",
         left: "50%",
         transform: "translateX(-50%)",
-        width: "98%", // Decreased the size slightly
+        width: "98%",
         zIndex: 1000,
-        padding: "8px 0", // Reduced padding
+        padding: "8px 0",
       }}
     >
       <Toolbar sx={{ display: "flex", justifyContent: "space-between", minHeight: "48px" }}>
-        {/* Logo */}
-        <Box sx={{ cursor: "pointer" }} onClick={() => navigate("/")}>
+        <Box sx={{ cursor: "pointer" }} onClick={handleLogoClick}> 
           <img src={logo} alt="WatchWise Logo" style={{ height: "28px" }} />
         </Box>
 
-        {/* Navigation Links */}
-        <Box sx={{ display: "flex", gap: "1.5rem" }}> {/* Reduced gap */}
-          {["Chat", "About Us", "Contact"].map((item) => (
-            <Button
-              key={item}
-              color="inherit"
-              sx={{ fontSize: "0.9rem", fontWeight: "500" }}
-              onClick={() => scrollToSection(item === "Contact" ? "contact-us" : item.toLowerCase().replace(" ", "-"))} // Scroll to section
-            >
-              {item}
-            </Button>
-          ))}
+        <Box sx={{ display: "flex", gap: "1.5rem" }}>
+          <Button
+            color="inherit"
+            sx={{ fontSize: "0.9rem", fontWeight: "500" }}
+            onClick={() => navigate("/chat")}
+          >
+            Chat
+          </Button>
+          
+          <Button
+            color="inherit"
+            sx={{ fontSize: "0.9rem", fontWeight: "500" }}
+            onClick={() => handleScrollToSection("about-us")}
+          >
+            About Us
+          </Button>
+          <Button
+            color="inherit"
+            sx={{ fontSize: "0.9rem", fontWeight: "500" }}
+            onClick={() => handleScrollToSection("contact-us")}
+          >
+            Contact
+          </Button>
 
-          {/* Recommend Button */}
           <Button color="inherit" onClick={handleRecommendClick} sx={{ fontSize: "0.9rem", fontWeight: "500" }}>
             Recommend
           </Button>
         </Box>
 
-        {/* Show Login Button if Not Logged In */}
         {!loggedIn && (
           <Button
             variant="contained"
             sx={{
               backgroundColor: "#8B0000",
-              borderRadius: "15px", // Adjusted for a sleeker look
-              padding: "4px 14px", // Reduced padding
+              borderRadius: "15px",
+              padding: "4px 14px",
               textTransform: "none",
               fontSize: "0.85rem",
               color: "#fff",
@@ -121,11 +145,10 @@ const Navbar = () => {
           </Button>
         )}
 
-        {/* Show Profile Picture if Logged In */}
         {loggedIn && (
           <Box
             sx={{
-              width: "30px", // Reduced profile picture size
+              width: "30px",
               height: "30px",
               borderRadius: "50%",
               overflow: "hidden",
@@ -142,7 +165,6 @@ const Navbar = () => {
           </Box>
         )}
 
-        {/* Dropdown Menu */}
         <Menu
           anchorEl={anchorEl}
           open={open}
@@ -162,7 +184,6 @@ const Navbar = () => {
         </Menu>
       </Toolbar>
 
-      {/* Snackbar for Login Alert */}
       <Snackbar open={openSnackbar} autoHideDuration={3000} onClose={() => setOpenSnackbar(false)} >
         <Alert onClose={() => setOpenSnackbar(false)} severity="warning" sx={{ width: "100%" }}>
           Login to continue!
