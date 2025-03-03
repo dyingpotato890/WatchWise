@@ -48,7 +48,7 @@ export default function Home() {
     if (!isLoggedIn) {
       setOpenSnackbar(true); // Show alert if not logged in
     } else {
-      navigate("/chat"); // Navigate to the mood page if logged in
+      navigate("/mood"); // Navigate to the mood page if logged in
     }
   };
 
