@@ -15,7 +15,6 @@ class Chatbot:
         if not user_input:
             return jsonify({"response": "Please provide an input."})
 
-        # Retrieve or initialize session data
         user_session = self.session_data.setdefault(user_id, {"mood": None, "genre": None, "language": None})
 
         prompt = f"""
@@ -33,7 +32,6 @@ class Chatbot:
         extracted_data = self.get_extracted_data(prompt)
         print("Extracted Data: ", extracted_data)
 
-        # Update only the fields that are detected in the new input
         user_session["mood"] = extracted_data["mood"] or user_session["mood"]
         user_session["genre"] = extracted_data["genre"] or user_session["genre"]
         user_session["language"] = extracted_data["language"] or user_session["language"]

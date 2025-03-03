@@ -1,7 +1,4 @@
-import json
 import os
-import re
-
 import google.generativeai as genai
 import pymongo
 from dotenv import load_dotenv
@@ -10,9 +7,12 @@ from flask import (Flask, jsonify, redirect, request, send_from_directory, make_
 from flask_cors import CORS
 from flask_login import (LoginManager, current_user, login_required,
                          login_user, logout_user)
+
 from Utilities.chatbot import Chatbot
 from Utilities.recommend import Recommend
 from Utilities.User import User
+from Utilities.movies import Movies
+
 from functools import wraps
 from flask_session import Session
 import jwt
@@ -20,8 +20,10 @@ import datetime
 
 client = pymongo.MongoClient("mongodb://localhost:27017/")
 db = client["WatchWise"]
+
 # Initialize AI Extractor
 chatbot = Chatbot()
+moviesObj = Movies()
 
 # Flask App
 app = Flask(__name__)
@@ -147,27 +149,18 @@ def chat():
 @app.route("/api/movies", methods=["GET"])
 def movies():
     recommended_shows = Recommend.hybrid_recommend(
-        user_id=2473170, mood_input="fear", top_n=20
+        user_id = 2473170, 
+        mood_input = "fear", 
+        top_n=20
     )
     print(recommended_shows)
-    movie_collection = db["moviesDB"]
-    all_movies = []
-    movie_data = []
-    for category, movies in recommended_shows.items():
-        if isinstance(movies, list):
-            all_movies.extend(set(movies))
 
-    print(all_movies)
-    for movie in all_movies:
-        poster_path = movie_collection.find_one({"title": movie})["poster_path"]
-        if poster_path == "Not Found":
-            poster_path = "https://motivatevalmorgan.com/wp-content/uploads/2016/06/default-movie-768x1129.jpg"
-        movie_data.append({"title": movie, "poster": poster_path})
+    all_movies = moviesObj.fetch_movies(recommended_shows = recommended_shows)
 
     if not all_movies:
         return jsonify({"error": "No recommendations found"}), 204
 
-    return jsonify({"movies": movie_data}), 200
+    return jsonify({"movies": all_movies}), 200
 
 
 if __name__ == "__main__":
