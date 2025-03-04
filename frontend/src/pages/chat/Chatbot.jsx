@@ -2,15 +2,23 @@ import { useEffect, useRef, useState } from "react";
 import { Container, TextField, Button, Paper, Box, Typography, IconButton } from "@mui/material";
 import { Send } from "@mui/icons-material";
 import Navbar from "../../components/Navbar";
-import "./Chatbot.css"; // Import the CSS file for animations
+import "./Chatbot.css";
 
 const Chatbot = () => {
     const [vantaEffect, setVantaEffect] = useState(null);
     const vantaRef = useRef(null);
     const [messages, setMessages] = useState([]);
     const [input, setInput] = useState("");
+    const [mood, setMood] = useState(null);
+    const [moodConfirmed, setMoodConfirmed] = useState(false);
+    const [selectedGenre, setSelectedGenre] = useState(null);
+    const [selectedLanguage, setSelectedLanguage] = useState(null);
+    const [awaitingGenre, setAwaitingGenre] = useState(false);
+    const [awaitingLanguage, setAwaitingLanguage] = useState(false);
 
-    // Establish the Vanta.js background effect
+    const genres = ["Action", "Romance", "Comedy", "Horror", "Drama"];
+    const languages = ["English", "Thai", "Korean", "Japanese", "Spanish"];
+
     useEffect(() => {
         if (!vantaEffect && window.VANTA) {
             setVantaEffect(
@@ -18,57 +26,109 @@ const Chatbot = () => {
                     el: vantaRef.current,
                     mouseControls: true,
                     touchControls: true,
-                    gyroControls: false,
-                    minHeight: 200.0,
-                    minWidth: 200.0,
-                    scale: 1.0,
-                    scaleMobile: 1.0,
-                    color: 0xdb0000,
                     backgroundColor: 0x000000,
+                    color: 0xdb0000,
                 })
             );
         }
-
-        return () => {
-            if (vantaEffect) vantaEffect.destroy();
-        };
+        return () => { if (vantaEffect) vantaEffect.destroy(); };
     }, [vantaEffect]);
 
-    // Function to send message to backend
-    const handleSendMessage = async () => {
-        if (input.trim()) {
-            const userMessage = { text: input, sender: "user" };
-            setMessages((prev) => [...prev, userMessage]);
-            setInput("");
+    const handleGenreSelection = (genre) => {
+        setSelectedGenre(genre);
+        setAwaitingGenre(false);
+        setAwaitingLanguage(true);
+        setMessages((prev) => [
+            ...prev,
+            { text: `Genre: ${genre}`, sender: "bot" },
+            { text: "Choose your language:", sender: "bot" }
+        ]);
+    };
     
+    const handleLanguageSelection = (language) => {
+        setSelectedLanguage(language);
+        setAwaitingLanguage(false);
+        setMessages((prev) => [
+            ...prev,
+            { text: `Language: ${language}`, sender: "bot" },
+            { text: `Mood: ${mood}\nGenre: ${selectedGenre}\nLanguage: ${language}\nPress 'End' if done.`, sender: "bot" }
+        ]);
+    };
+    
+
+    const handleSendMessage = async () => {
+        if (!input.trim()) return;
+
+        const userMessage = { text: input, sender: "user" };
+        setMessages((prev) => [...prev, userMessage]);
+
+        if (mood && !moodConfirmed) {
+            if (input.toLowerCase() === "yes") {
+                setMoodConfirmed(true);
+                setAwaitingGenre(true);
+                setMessages((prev) => [...prev, { text: "Choose your genre:", sender: "bot" }]);
+            } else {
+                setMessages((prev) => [...prev, { text: "Please type 'yes' to confirm your mood.", sender: "bot" }]);
+            }
+            setInput("");
+            return;
+        }
+
+        if (awaitingGenre) {
+            if (genres.includes(input)) {
+                setSelectedGenre(input);
+                setAwaitingGenre(false);
+                setAwaitingLanguage(true);
+                setMessages((prev) => [...prev, { text: "Choose your language:", sender: "bot" }]);
+            } else {
+                setMessages((prev) => [...prev, { text: "Invalid genre. Please choose from: " + genres.join(", "), sender: "bot" }]);
+            }
+            setInput("");
+            return;
+        }
+
+        if (awaitingLanguage) {
+            if (languages.includes(input)) {
+                setSelectedLanguage(input);
+                setAwaitingLanguage(false);
+                setMessages((prev) => [
+                    ...prev,
+                    { text: `Mood: ${mood}\nGenre: ${selectedGenre}\nLanguage: ${input}\nPress 'End' if done.`, sender: "bot" }
+                ]);
+            } else {
+                setMessages((prev) => [...prev, { text: "Invalid language. Please choose from: " + languages.join(", "), sender: "bot" }]);
+            }
+            setInput("");
+            return;
+        }
+
+        if (!mood) {
             try {
                 const response = await fetch("http://localhost:5010/api/chat", {
                     method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                    body: JSON.stringify({ user_input: input }),
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ user_input: input })
                 });
-    
                 const data = await response.json();
 
-                // Extract and format bot response
-                const botMessage = `Mood: ${data.mood || "Not detected"}\nGenre: ${data.genre || "Not specified"}\nLanguage: ${data.language || "Not specified"}`;
-
-                // Update chat messages
-                setMessages((prev) => [
-                    ...prev,
-                    { text: botMessage, sender: "bot" },
-                    { text: "Is this correct? If YES then hit 'END', else, please specify your mood, genre, or language.", sender: "bot" }
-                ]);
-
+                if (data.mood) {
+                    setMood(data.mood);
+                    setMessages((prev) => [
+                        ...prev,
+                        { text: `Mood: ${data.mood}`, sender: "bot" },
+                        { text: "Is this correct? Type 'yes' to proceed.", sender: "bot" }
+                    ]);
+                } else {
+                    setMessages((prev) => [...prev, { text: "Couldn't determine mood. Please describe again.", sender: "bot" }]);
+                }
             } catch (error) {
                 setMessages((prev) => [...prev, { text: "Error connecting to server!", sender: "bot" }]);
             }
         }
+
+        setInput("");
     };
 
-    // Fetch the first AI message when the page loads
     useEffect(() => {
         setMessages([{ text: "Describe how you're feeling.", sender: "bot" }]);
     }, []);
@@ -76,129 +136,70 @@ const Chatbot = () => {
     return (
         <>
             <Navbar />
-            <div
-                ref={vantaRef}
-                style={{
-                    position: "absolute",
-                    width: "100vw",
-                    height: "100vh",
-                    top: 0,
-                    left: 0,
-                    zIndex: -1,
-                }}
-            ></div>
-            <Container
-                component="main"
-                maxWidth="lg"
-                style={{
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    height: "500px",
-                    width: "100vw",
-                    marginTop: "130px",
-                    marginBottom: "70px",
-                }}
-            >
-                <Paper
-                    elevation={10}
-                    className="chat-window"
-                    style={{
-                        marginTop: "40px",
-                        padding: "2rem",
-                        backgroundColor: "rgba(0, 0, 0, 0.29)",
-                        color: "white",
-                        borderRadius: "12px",
-                        boxShadow: "0 4px 20px rgba(0, 0, 0, 0.8)",
-                        width: "90%",
-                        height: "500px",
-                        display: "flex",
-                        flexDirection: "column",
-                        justifyContent: "space-between",
-                        overflow: "hidden",
-                    }}
-                >
-                    {/* Chat Messages */}
-                    <Box
-                        sx={{
-                            flexGrow: 1,
-                            overflowY: "auto",
-                            padding: "1rem",
-                            display: "flex",
-                            flexDirection: "column",
-                        }}
-                    >
+            <div ref={vantaRef} style={{ position: "absolute", width: "100vw", height: "100vh", zIndex: -1 }}></div>
+            <Container maxWidth="lg" style={{ display: "flex", justifyContent: "center", height: "500px", marginTop: "130px" }}>
+                <Paper elevation={10} className="chat-window" style={{ padding: "2rem", backgroundColor: "rgba(0,0,0,0.29)", color: "white", borderRadius: "12px", width: "90%", height: "500px", display: "flex", flexDirection: "column" }}>
+                    <Box sx={{ flexGrow: 1, overflowY: "auto", padding: "1rem", display: "flex", flexDirection: "column" }}>
                         {messages.map((msg, index) => (
-                            <Box
-                                key={index}
-                                sx={{
-                                    display: "flex",
-                                    justifyContent: msg.sender === "user" ? "flex-end" : "flex-start",
-                                    marginBottom: "8px", // Adds spacing between messages
-                                }}
-                            >
-                                <Typography
-                                    sx={{
-                                        maxWidth: "70%",
-                                        wordWrap: "break-word",
-                                        padding: "10px",
-                                        borderRadius: "12px",
-                                        backgroundColor: msg.sender === "user" ? "rgba(255, 77, 77, 0.2)" : "rgba(255, 255, 255, 0.1)",
-                                        color: msg.sender === "user" ? "#ff4d4d" : "#ffffff",
-                                        boxShadow: msg.sender === "user" ? "0 0 10px rgba(255, 77, 77, 0.8)" : "none",
-                                        textAlign: "left",
-                                    }}
-                                >
+                            <Box key={index} sx={{ display: "flex", justifyContent: msg.sender === "user" ? "flex-end" : "flex-start", marginBottom: "8px" }}>
+                                <Typography sx={{ maxWidth: "70%", padding: "10px", borderRadius: "12px", backgroundColor: msg.sender === "user" ? "rgba(255,77,77,0.2)" : "rgba(255,255,255,0.1)", color: msg.sender === "user" ? "#ff4d4d" : "#ffffff" }}>
                                     {msg.text}
                                 </Typography>
                             </Box>
                         ))}
+                      {awaitingGenre && (
+    <Box sx={{ width: "100%", display: "grid", gridTemplateColumns: "repeat(5, 1fr)", gap: 1 }}>
+        {genres.map((g) => (
+            <Button 
+                key={g} 
+                onClick={() => handleGenreSelection(g)}  
+                sx={{
+                    backgroundColor: "#a52929",
+                    color: "white",
+                    padding: "10px",
+                    fontSize: "14px",
+                    fontWeight: "bold",
+                    borderRadius: "6px",
+                    textTransform: "none",
+                    "&:hover": { backgroundColor: "#881818" },
+                }}
+            >
+                {g}
+            </Button>
+        ))}
+    </Box>
+)}
+
+{awaitingLanguage && (
+    <Box sx={{ width: "100%", display: "grid", gridTemplateColumns: "repeat(5, 1fr)", gap: 1 }}>
+        {languages.map((l) => (
+            <Button 
+                key={l} 
+                onClick={() => handleLanguageSelection(l)}  
+                sx={{
+                    backgroundColor: "#a52929",
+                    color: "white",
+                    padding: "10px",
+                    fontSize: "14px",
+                    fontWeight: "bold",
+                    borderRadius: "6px",
+                    textTransform: "none",
+                    "&:hover": { backgroundColor: "#881818" },
+                }}
+            >
+                {l}
+            </Button>
+        ))}
+    </Box>
+)}
+
+
+
                     </Box>
-
-                    {/* Input and Send Button */}
                     <Box display="flex" alignItems="center" mt={2} gap={1}>
-                        <Button
-                            variant="contained"
-                            style={{
-                                backgroundColor: "#a52929",
-                                color: "white",
-                                padding: "10px 20px",
-                                borderRadius: "8px",
-                                fontWeight: "bold",
-                            }}
-                            onClick={() => alert("Chat ended!")}
-                        >
-                            End
-                        </Button>
-
-                        <TextField
-                            fullWidth
-                            variant="outlined"
-                            placeholder="Type a message..."
-                            value={input}
-                            onChange={(e) => setInput(e.target.value)}
-                            onKeyDown={(e) => {
-                                if (e.key === "Enter" && !e.shiftKey) { // Send message on Enter, but allow Shift+Enter for new line
-                                    e.preventDefault(); // Prevents adding a new line
-                                    handleSendMessage(); // Calls the function to send the message
-                                }
-                            }}
-                            InputLabelProps={{ style: { color: "white" } }}
-                            InputProps={{ style: { color: "white" } }}
-                        />
-
-                        <IconButton
-                            onClick={handleSendMessage}
-                            style={{
-                                backgroundColor: "red",
-                                color: "white",
-                                padding: "10px",
-                                borderRadius: "20px",
-                                transition: "0.3s ease-in-out",
-                            }}
-                        >
-                            <Send style={{ fontSize: "24px" }} />
-                        </IconButton>
+                        <Button variant="contained" style={{ backgroundColor: "#a52929", color: "white" }} onClick={() => alert("Chat ended!")}>End</Button>
+                        <TextField fullWidth variant="outlined" placeholder="Type a message..." value={input} onChange={(e) => setInput(e.target.value)} onKeyDown={(e) => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); handleSendMessage(); } }} />
+                        <IconButton onClick={handleSendMessage} style={{ backgroundColor: "red", color: "white" }}><Send /></IconButton>
                     </Box>
                 </Paper>
             </Container>
