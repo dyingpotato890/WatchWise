@@ -53,13 +53,14 @@ const Chatbot = () => {
                 const data = await response.json();
 
                 // Extract and format bot response
-                const botMessage = `Mood: ${data.mood || "Not detected"}\nGenre: ${data.genre || "Not specified"}\nLanguage: ${data.language || "Not specified"}`;
+                const botMessage = `Mood: ${data.mood || "Not detected"}\n`;
+                // Genre: ${data.genre || "Not specified"}\nLanguage: ${data.language || "Not specified"}
 
                 // Update chat messages
                 setMessages((prev) => [
                     ...prev,
                     { text: botMessage, sender: "bot" },
-                    { text: "Is this correct? If YES then hit 'END', else, please specify your mood, genre, or language.", sender: "bot" }
+                    { text: "Is this correct? If YES then enter 'yes', else, please specify your mood again.", sender: "bot" }
                 ]);
 
             } catch (error) {
