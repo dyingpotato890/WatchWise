@@ -151,9 +151,8 @@ def movies():
     recommended_shows = Recommend.hybrid_recommend(
         user_id = 2473170, 
         mood_input = "fear", 
-        top_n=20
+        top_n = 20
     )
-    print(recommended_shows)
 
     all_movies = moviesObj.fetch_movies(recommended_shows = recommended_shows)
 
