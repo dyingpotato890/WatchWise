@@ -54,6 +54,39 @@ const Chatbot = () => {
             { text: `Mood: ${mood}\nGenre: ${selectedGenre}\nLanguage: ${language}\nPress 'End' if done.`, sender: "bot" }
         ]);
     };
+
+    const handleEndChat = async () => {
+        if (!mood || !selectedGenre || !selectedLanguage) {
+            alert("Please complete the selection before ending the chat.");
+            return;
+        }
+    
+        const userPreferences = {
+            mood,
+            genre: selectedGenre,
+            language: selectedLanguage,
+        };
+    
+        try {
+            const response = await fetch("http://localhost:5010/api/movies", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(userPreferences),
+            });
+    
+            const data = await response.json();
+    
+            if (response.ok) {
+                alert("Preferences sent successfully!");
+                console.log("Response:", data);
+            } else {
+                alert("Error sending preferences: " + (data.error || "Unknown error"));
+            }
+        } catch (error) {
+            alert("Failed to connect to server!");
+            console.error("API error:", error);
+        }
+    };
     
 
     const handleSendMessage = async () => {
@@ -197,7 +230,7 @@ const Chatbot = () => {
 
                     </Box>
                     <Box display="flex" alignItems="center" mt={2} gap={1}>
-                        <Button variant="contained" style={{ backgroundColor: "#a52929", color: "white" }} onClick={() => alert("Chat ended!")}>End</Button>
+                        <Button variant="contained" style={{ backgroundColor: "#a52929", color: "white" }} onClick={handleEndChat}>End</Button>
                         <TextField fullWidth variant="outlined" placeholder="Type a message..." value={input} onChange={(e) => setInput(e.target.value)} onKeyDown={(e) => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); handleSendMessage(); } }} />
                         <IconButton onClick={handleSendMessage} style={{ backgroundColor: "red", color: "white" }}><Send /></IconButton>
                     </Box>
