@@ -1,7 +1,6 @@
 import os
 import google.generativeai as genai
 import pymongo
-from dotenv import load_dotenv
 from flask import (Flask, jsonify, redirect, request, send_from_directory, make_response,
                    session)
 from flask_cors import CORS
@@ -134,9 +133,6 @@ def register():
         return jsonify({"message": "Registration unsuccessful"}), 401
 
 
-chat_history = {}
-
-
 @app.route("/api/chat", methods=["POST"])
 def chat():
     data = request.get_json()
@@ -146,20 +142,34 @@ def chat():
     return chatbot.process_input(user_id, user_input)
 
 
-@app.route("/api/movies", methods=["GET"])
+@app.route("/api/movies", methods=["GET", "POST"])
 def movies():
-    recommended_shows = Recommend.hybrid_recommend(
-        user_id = 2473170, 
-        mood_input = "fear", 
-        top_n = 20
-    )
+    if request.method == "GET":
+        recommended_shows = Recommend.hybrid_recommend(
+            user_id = 2473170, # session.get("user_id", 2473170)
+            mood_input = "fear", # session.get("mood", "fear")
+            top_n = 50
+        )
 
-    all_movies = moviesObj.fetch_movies(recommended_shows = recommended_shows)
+        all_movies = moviesObj.fetch_movies(recommended_shows = recommended_shows)
 
-    if not all_movies:
-        return jsonify({"error": "No recommendations found"}), 204
+        if not all_movies:
+            return jsonify({"error": "No recommendations found"}), 204
 
-    return jsonify({"movies": all_movies}), 200
+        return jsonify({"movies": all_movies}), 200
+    
+    elif request.method == "POST":
+        user_preferences = request.get_json()
+        if not user_preferences:
+            return jsonify({"error": "Invalid or missing JSON data"}), 400
+        
+        # session["mood"] = user_preferences.get("mood", "fear")
+
+        print("User Mood: ", user_preferences["mood"])
+        print("User Language: ", user_preferences["language"])
+        print("User Genre: ", user_preferences["genre"])
+            
+        return jsonify({"message": "Data received successfully", "data": user_preferences}), 200
 
 
 if __name__ == "__main__":
