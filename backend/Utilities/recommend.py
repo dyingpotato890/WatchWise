@@ -10,7 +10,7 @@ class Recommend():
     tfidf_vectorizer = joblib.load('backend/models/tfidf_vectorizer.joblib')
 
     @staticmethod
-    def get_user_cf_recommendations(user_id, top_n=20):
+    def get_user_cf_recommendations(user_id, top_n = 20):
         if user_id not in Recommend.user_item_matrix.index:
             return []
         
@@ -20,23 +20,26 @@ class Recommend():
         ).flatten()
 
         similar_users = np.argsort(user_similarities)[::-1][1:top_n+1]
-        recommendations = set()
+        recommendations = []
 
         for similar_user in similar_users:
             movie_ids = Recommend.user_item_matrix.iloc[similar_user].nlargest(top_n).index.tolist()
+
             for movie_id in movie_ids:
-                movie_name = Recommend.df.loc[
-                    Recommend.df['show_id'] == movie_id, 'title'
-                ].values
-                if movie_name.size > 0:
-                    recommendations.add(movie_name[0])
+                movie_info = Recommend.df.loc[
+                    Recommend.df['show_id'] == movie_id, ['show_id', 'title']
+                ]
+                if not movie_info.empty:
+                    recommendations.append(
+                        {'show_id': movie_info.iloc[0]['show_id'], 'title': movie_info.iloc[0]['title']}
+                    )
                 else:
-                    recommendations.add(str(movie_id))
+                    recommendations.append({'show_id': movie_id, 'title': "Unknown Title"})
 
         return list(recommendations)[:top_n]
 
     @staticmethod
-    def get_item_cf_recommendations(movie_id, top_n=10, mood_filter=True):
+    def get_item_cf_recommendations(movie_id, top_n = 10):
         if movie_id not in Recommend.df['show_id'].values:
             return []
 
@@ -55,7 +58,7 @@ class Recommend():
 
         similar_movies = np.argsort(item_similarities)[::-1][1:top_n+1]
 
-        if mood_filter and movie_mood:
+        if movie_mood:
             filtered_movies = [
                 Recommend.df.iloc[idx]['show_id'] for idx in similar_movies
                 if 0 <= idx < len(Recommend.df) and mood_dict.get(Recommend.df.iloc[idx]['show_id']) == movie_mood
@@ -65,7 +68,12 @@ class Recommend():
                 Recommend.df.iloc[idx]['show_id'] for idx in similar_movies if 0 <= idx < len(Recommend.df)
             ]
 
-        return [movie_titles_dict.get(mid, str(mid)) for mid in filtered_movies][:top_n]
+        item_recs = [
+            {'show_id': mid, 'title': movie_titles_dict.get(mid, "Unknown Title")}
+            for mid in filtered_movies
+        ]
+
+        return item_recs[:top_n]
 
     @staticmethod
     def get_mood_based_recommendations(df, tfidf_matrix, tfidf_vectorizer, user_mood, num_recommendations = 10):
@@ -85,10 +93,10 @@ class Recommend():
         if recommendations.empty:
             return f"No shows found for the mood '{user_mood}'."
         
-        return recommendations["title"].tolist()
+        return recommendations[['show_id', 'title']].to_dict(orient='records')
 
     @staticmethod
-    def hybrid_recommend(user_id, mood_input, top_n=20, weights=(0.5, 0.25, 0.25)):
+    def hybrid_recommend(user_id, mood_input, top_n = 20, weights=(0.5, 0.25, 0.25)):
         recommendations = {
             "Mood-Based": Recommend.get_mood_based_recommendations(Recommend.df, Recommend.tfidf_matrix, Recommend.tfidf_vectorizer, mood_input, top_n),
             "User-Based": [],

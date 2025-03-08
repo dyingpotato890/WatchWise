@@ -1,4 +1,3 @@
-from recommend import Recommend
 # from transformers import AutoTokenizer
 # from transformers import AutoModelForSequenceClassification
 
@@ -43,6 +42,8 @@ from recommend import Recommend
 # predicted_emotion = moodIdentifier(input_question)
 # predicted_emotion = ", ".join(predicted_emotion)
 
+from recommend import Recommend
+
 predicted_emotion = input("Enter A Mood: ")
 print(f"Predicted Mood: {predicted_emotion}")
 
@@ -51,6 +52,11 @@ print(recommended_shows)
 
 print("\nHybrid Recommendations:")
 for catg in recommended_shows:
-  movies = list(set(recommended_shows[catg]))
+  movies = {}
+  for movie in recommended_shows[catg]:
+    movies[movie["show_id"]] = movie
+
+  movies = movies.values()
+
   for movie in movies:
     print(f"- {movie}")
