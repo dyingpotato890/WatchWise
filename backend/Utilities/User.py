@@ -8,7 +8,8 @@ from flask_login import UserMixin
 client = pymongo.MongoClient("mongodb://localhost:27017/")
 db = client["WatchWise"]
 
-users_collection = db["users"] # For user_id generation
+users_collection = db["users"]  # For user_id generation
+
 
 class User(UserMixin):
     def __init__(self, user_id, password):
@@ -20,12 +21,13 @@ class User(UserMixin):
         salt = bcrypt.gensalt()
         hashed_password = bcrypt.hashpw(password.encode("utf-8"), salt)
         return hashed_password
+
     @staticmethod
     def get(user_id):
         login_collection = db["login"]
-        user_data = login_collection.find_one({"user_id":user_id})
+        user_data = login_collection.find_one({"user_id": user_id})
         if user_data:
-            return User(user_data["user_id"],user_data["password"])
+            return User(user_data["user_id"], user_data["password"])
         return None
 
     @staticmethod
@@ -49,7 +51,7 @@ class User(UserMixin):
         else:
             print("Incorrect password!")
             return False
-    
+
     @staticmethod
     def is_user_id_exists(user_id):
         return users_collection.find_one({"user_id": user_id}) is not None
@@ -67,12 +69,10 @@ class User(UserMixin):
         hashed_pwd = User.hashPassword(password)
         login_collection = db["login"]
         user_collection = db["users"]
-        if login_collection.find_one({'email':email}):
+        if login_collection.find_one({"email": email}):
             print("User already exists")
             return False
-        login_data = {"user_id": user_id,
-                      "password": hashed_pwd,
-                      "email": email}
+        login_data = {"user_id": user_id, "password": hashed_pwd, "email": email}
 
         current_time = datetime.datetime.now()
         isotime = current_time.isoformat()
@@ -89,3 +89,19 @@ class User(UserMixin):
         except:
             print("Error occurred in insertion")
             return False
+
+    def addRating(self, showid, rating):
+        ratings = db["ratings"]
+
+        ratings.insert_one({"User_ID": self.id, "Rating": rating, "show_id": showid})
+        filter_query = {"user_id": self.id}
+        update_query = {
+            "$push": {"watch_history": {"show_id": showid, "rating": rating}}
+        }
+        users_collection.update_one(filter_query, update_query)
+
+    def addToWatchlist(self, showid):
+        filter_query = {"user_id": self.id}
+        update_query = {"$push": {"watchlist": showid}}
+        users_collection.update_one(filter_query, update_query)
+
