@@ -81,9 +81,9 @@ useEffect(() => {
 
     const handleRecommendClick = () => {
         if (!loggedIn) {
-            setOpenSnackbar(true);
+            setOpenSnackbar(true); // Show Snackbar warning if not logged in
         } else {
-            navigate("/mood");
+            navigate("/mood"); // Redirect to /mood if logged in
         }
     };
 
