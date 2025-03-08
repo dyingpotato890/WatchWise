@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Container, TextField, Button, Paper, Box, Typography, IconButton } from "@mui/material";
 import { Send } from "@mui/icons-material";
+import { useNavigate } from "react-router-dom";
 import Navbar from "../../components/Navbar";
 import "./Chatbot.css";
 
@@ -16,7 +17,9 @@ const Chatbot = () => {
     const [awaitingGenre, setAwaitingGenre] = useState(false);
     const [awaitingLanguage, setAwaitingLanguage] = useState(false);
 
-    const genres = ["Action", "Romance", "Comedy", "Horror", "Drama"];
+    const navigate = useNavigate();
+
+    const genres = ["Action & Adventure", "Romantic", "Comedy", "Horror", "Thrillers"];
     const languages = ["English", "Thai", "Korean", "Japanese", "Spanish"];
 
     useEffect(() => {
@@ -79,6 +82,7 @@ const Chatbot = () => {
             if (response.ok) {
                 alert("Preferences sent successfully!");
                 console.log("Response:", data);
+                navigate("/recommendation");
             } else {
                 alert("Error sending preferences: " + (data.error || "Unknown error"));
             }
