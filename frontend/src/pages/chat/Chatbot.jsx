@@ -54,6 +54,39 @@ const Chatbot = () => {
             { text: `Mood: ${mood}\nGenre: ${selectedGenre}\nLanguage: ${language}\nPress 'End' if done.`, sender: "bot" }
         ]);
     };
+
+    const handleEndChat = async () => {
+        if (!mood || !selectedGenre || !selectedLanguage) {
+            alert("Please complete the selection before ending the chat.");
+            return;
+        }
+    
+        const userPreferences = {
+            mood,
+            genre: selectedGenre,
+            language: selectedLanguage,
+        };
+    
+        try {
+            const response = await fetch("http://localhost:5010/api/movies", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(userPreferences),
+            });
+    
+            const data = await response.json();
+    
+            if (response.ok) {
+                alert("Preferences sent successfully!");
+                console.log("Response:", data);
+            } else {
+                alert("Error sending preferences: " + (data.error || "Unknown error"));
+            }
+        } catch (error) {
+            alert("Failed to connect to server!");
+            console.error("API error:", error);
+        }
+    };
     
 
     const handleSendMessage = async () => {
