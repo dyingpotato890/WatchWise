@@ -13,7 +13,6 @@ from Utilities.User import User
 from Utilities.movies import Movies
 
 from functools import wraps
-from flask_session import Session
 import jwt
 import datetime
 

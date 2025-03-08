@@ -170,7 +170,7 @@ const Chatbot = () => {
         <>
             <Navbar />
             <div ref={vantaRef} style={{ position: "absolute", width: "100vw", height: "100vh", zIndex: -1 }}></div>
-            <Container maxWidth="lg" style={{ display: "flex", justifyContent: "center", height: "500px", marginTop: "130px" }}>
+            <Container maxWidth="lg" style={{ display: "flex", justifyContent: "center", height: "600px", marginTop: "130px" }}>
                 <Paper elevation={10} className="chat-window" style={{ padding: "2rem", backgroundColor: "rgba(0,0,0,0.29)", color: "white", borderRadius: "12px", width: "90%", height: "500px", display: "flex", flexDirection: "column" }}>
                     <Box sx={{ flexGrow: 1, overflowY: "auto", padding: "1rem", display: "flex", flexDirection: "column" }}>
                         {messages.map((msg, index) => (
@@ -230,8 +230,17 @@ const Chatbot = () => {
 
                     </Box>
                     <Box display="flex" alignItems="center" mt={2} gap={1}>
-                        <Button variant="contained" style={{ backgroundColor: "#a52929", color: "white" }} onClick={handleEndChat}>End</Button>
-                        <TextField fullWidth variant="outlined" placeholder="Type a message..." value={input} onChange={(e) => setInput(e.target.value)} onKeyDown={(e) => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); handleSendMessage(); } }} />
+                        <Button variant="contained" style={{ backgroundColor: "#a52929", color: "white" }} onClick={() => alert("Chat ended!")}>End</Button>
+                        <TextField fullWidth variant="outlined" placeholder="Type a message..." value={input} onChange={(e) => setInput(e.target.value)} onKeyDown={(e) => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); handleSendMessage(); } }}  sx={{
+        input: { color: "white" }, // Makes input text white
+        "& .MuiOutlinedInput-root": {
+            
+            
+            "&.Mui-focused fieldset": {
+                borderColor: "red", // Border color when focused (selected)
+            },
+        },
+    }} />
                         <IconButton onClick={handleSendMessage} style={{ backgroundColor: "red", color: "white" }}><Send /></IconButton>
                     </Box>
                 </Paper>
