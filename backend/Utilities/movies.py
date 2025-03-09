@@ -4,8 +4,19 @@ class Movies:
     def __init__(self):
         self.client = pymongo.MongoClient("mongodb://localhost:27017/")
         self.db = self.client["WatchWise"]
+        
+    def filter_movies(self, movie, lanaguage, genre):
+        if lanaguage != "None":
+            if lanaguage.lower() not in movie['language'].lower():
+                return False
+        
+        if genre != "None":
+            if genre.lower() not in movie['genre'].lower():
+                return False
+            
+        return True
 
-    def fetch_movies(self, recommended_shows):
+    def fetch_movies(self, recommended_shows, filterLanguage, filterGenre):
         movie_collection = self.db["moviesDB"]
         all_movies = []
         movie_data = []
@@ -13,8 +24,6 @@ class Movies:
         for category, movies in recommended_shows.items():
             if isinstance(movies, list):
                 all_movies.extend(movies)
-
-        print(all_movies)
 
         for movie in all_movies:
             poster_path = movie_collection.find_one({"show_id": movie["show_id"]})["poster_path"]
@@ -29,13 +38,18 @@ class Movies:
             year = movie_collection.find_one({"show_id": movie["show_id"]})["release_year"]
             duration = movie_collection.find_one({"show_id": movie["show_id"]})["duration"]
             
-            movie_data.append({"title": movie["title"], 
-                               "genre" : genre, 
-                               "language" : language, 
-                               "description" : description, 
-                               "poster": poster_path, 
-                               "trailer" : trailer_link,
-                               "year" : int(year),
-                               "duration" : duration})
+            temp = {"title": movie["title"],
+                    "genre" : genre, 
+                    "language" : language, 
+                    "description" : description, 
+                    "poster": poster_path, 
+                    "trailer" : trailer_link,
+                    "year" : str(int(year)),
+                    "duration" : duration}
+            
+            if self.filter_movies(movie = temp, lanaguage = filterLanguage, genre = filterGenre):
+                movie_data.append(temp)
+        
+        print(movie_data)
 
         return movie_data

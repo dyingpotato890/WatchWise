@@ -1,204 +1,150 @@
 import React, { useState, useEffect, useRef } from "react";
 import "./Recommendation.css";
 import Navbar from "../../components/Navbar";
+import NET from "vanta/dist/vanta.net.min";
 
-const initialMovies = [
-  {
-    title: "Krish Trish and Baltiboy: Face Your Fears",
-    year: 2017,
-    duration: "65 min",
-    language: "Hindi, English",
-    description:
-      "In three tales about fear, a baby elephant gets captured by a circus, two boys enter a haunted house and a parrot faces his fear of flying.",
-    trailer: "https://www.youtube.com/watch?v=bUmnmWt3W2A&pp=ygUxS3Jpc2ggVHJpc2ggYW5kIEJhbHRpYm95OiBGYWNlIFlvdXIgRmVhcnMgdHJhaWxlcg%3D%3D",
-    poster: "https://motivatevalmorgan.com/wp-content/uploads/2016/06/default-movie-768x1129.jpg",
-  },
-  {
-    title: "My Own Man",
-    year: 2015,
-    duration: "82 min",
-    language: "English",
-    description:
-      "When a man discovers he will be the father to a boy, his fear and insecurities send him on an emotional, humorous quest for his own manhood.",
-    trailer: "https://www.youtube.com/watch?v=DKfiK-wCgFA&pp=ygUSTXkgT3duIE1hbiB0cmFpbGVy",
-    poster: "https://motivatevalmorgan.com/wp-content/uploads/2016/06/default-movie-768x1129.jpg",
-  },
-  {
-    title: "9",
-    year: 2009,
-    duration: "80 min",
-    language: "English",
-    description:
-      "In a postapocalyptic world, rag-doll robots hide in fear from dangerous machines out to exterminate them, until a brave newcomer joins the group.",
-    trailer: "https://www.youtube.com/watch?v=_qApXdc1WPY&pp=ygUJOSB0cmFpbGVy",
-    poster: "https://image.tmdb.org/t/p/w500//zASChgUKBSqlqjN7CnYVyzRVMT8.jpg",
-  },
-  {
-    title: "Shattered Memories",
-    year: 2018,
-    duration: "86 min",
-    language: "English",
-    description:
-      "When her former lover's mysteriously murdered, a woman must clear her name – and avoid the killer.",
-    trailer: "https://www.youtube.com/watch?v=vFcoezCYOaQ&pp=ygUaU2hhdHRlcmVkIE1lbW9yaWVzIHRyYWlsZXI%3D",
-    poster: "https://m.media-amazon.com/images/M/MV5BNGQyOTUwOTgtNGMzYy00OGUwLTk1NWMtZTIwNGEyNTRlNzQxXkEyXkFqcGdeQXVyNzg5MzIyOA@@._V1_SX300.jpg",
-  },
-  {
-    title: "Kahaani",
-    year: 2012,
-    duration: "122 min",
-    language: "Hindi",
-    description:
-      "Pregnant and alone in the city of Kolkata, a woman begins a relentless search for her missing husband, only to find that nothing is what it seems.",
-    trailer: "https://www.youtube.com/watch?v=rsjamVgPoI8&pp=ygUPS2FoYWFuaSB0cmFpbGVy",
-    poster: "https://image.tmdb.org/t/p/w500//shsN1B7IPAQG1NLF6WVVi3X89lM.jpg",
-  },
-];
-const convertToEmbedUrl = (url) => {
-  // Extract the video ID from the URL
-  const videoId = url.split('v=')[1];
-  const ampersandPosition = videoId.indexOf('&');
-  if (ampersandPosition !== -1) {
-    return `https://www.youtube.com/embed/${videoId.substring(0, ampersandPosition)}`;
+const initialMovies = [];
+
+const fetchMovies = async (setMovies) => {
+  console.log("fetchMovies function called!"); // Debugging Log
+  try {
+    const response = await fetch("http://localhost:5010/api/movies");
+    console.log("API Response Status:", response.status);
+    if (response.status === 204) {
+      console.log("No recommendations found.");
+      return;
+    }
+    const data = await response.json();
+    console.log("Raw Movies Data:", data);
+
+    // Validate the movies array
+    const validMovies = data.movies.map(movie => ({
+      ...movie,
+      poster: typeof movie.poster === "string" && movie.poster.trim() !== "" ? movie.poster : "default-poster.jpg", // Fallback image
+      trailer: typeof movie.trailer === "string" ? movie.trailer : "",
+      title: movie.title || "Unknown Title",
+      description: movie.description || "No description available",
+      year: movie.year || "N/A",
+      duration: movie.duration || "N/A",
+      language: movie.language || "Unknown",
+    }));
+
+    console.log("Validated Movies:", validMovies);
+    setMovies(validMovies);
+  } catch (error) {
+    console.error("Error fetching movies:", error);
   }
-  return `https://www.youtube.com/embed/${videoId}`;
+};
+
+const convertToEmbedUrl = (url) => {
+  try {
+    const urlObj = new URL(url);
+    const videoId = urlObj.searchParams.get("v");
+    return videoId ? `https://www.youtube.com/embed/${videoId}` : url;
+  } catch (error) {
+    console.error("Invalid YouTube URL:", url);
+    return url;
+  }
 };
 
 const Recommendation = () => {
   const [movies, setMovies] = useState(initialMovies);
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [watchLaterList, setWatchLaterList] = useState([]); // Watch Later list
+  const [watchLaterList, setWatchLaterList] = useState([]);
+  const vantaRef = useRef(null);
+  const [vantaEffect, setVantaEffect] = useState(null);
 
-// Vanta.js background effect
-const [vantaEffect, setVantaEffect] = useState(null);
-const vantaRef = useRef(null);
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      fetchMovies(setMovies);
+    }, 3000);
+    return () => clearTimeout(timer);
+  }, []);
 
-useEffect(() => {
-  if (!vantaEffect && window.VANTA) {
-    setVantaEffect(
-      window.VANTA.NET({
-        el: vantaRef.current,
-        mouseControls: true,
-        touchControls: true,
-        gyroControls: false,
-        minHeight: 200.0,
-        minWidth: 200.0,
-        scale: 1.0,
-        scaleMobile: 1.0,
-        color: 0xdb0000, // Red color for the net effect
-        backgroundColor: 0x000000, // Black background
-      })
-    );
-  }
-
-  return () => {
-    if (vantaEffect) vantaEffect.destroy();
-  };
-}, [vantaEffect]);
-
-
-
+  useEffect(() => {
+    if (!vantaRef.current) return;
+    if (!vantaEffect) {
+      setVantaEffect(
+        NET({
+          el: vantaRef.current,
+          mouseControls: true,
+          touchControls: true,
+          gyroControls: false,
+          minHeight: 200.0,
+          minWidth: 200.0,
+          scale: 1.0,
+          scaleMobile: 1.0,
+          color: 0xdb0000,
+          backgroundColor: 0x000000,
+        })
+      );
+    }
+    return () => {
+      if (vantaEffect) vantaEffect.destroy();
+    };
+  }, [vantaEffect]);
 
   const handleNext = () => {
     setCurrentIndex((prevIndex) => (prevIndex + 1) % movies.length);
   };
 
   const handleHide = () => {
-    setMovies((prevMovies) => prevMovies.filter((_, index) => index !== currentIndex));
+    setMovies((prevMovies) => {
+      const updatedMovies = prevMovies.filter((_, index) => index !== currentIndex);
+      return updatedMovies;
+    });
     setCurrentIndex((prevIndex) => (prevIndex >= movies.length - 1 ? 0 : prevIndex));
   };
 
   const handleAccept = () => {
-    const currentMovie = movies[currentIndex];
-    setWatchLaterList((prevList) => [...prevList, currentMovie]); // Add to Watch Later list
-    handleNext(); // Move to the next movie
+    if (movies.length > 0) {
+      const currentMovie = movies[currentIndex];
+      setWatchLaterList((prevList) => [...prevList, currentMovie]);
+      handleNext();
+    }
   };
 
   if (movies.length === 0) {
     return (
       <div>
         <Navbar />
-        <div className="no-recommendations">
-          No more recommendations are available.
-        </div>
+        <div className="no-recommendations">No more recommendations are available.</div>
       </div>
     );
   }
-  const movie = movies[currentIndex];
-  const embedUrl = convertToEmbedUrl(movie.trailer);
+
+  const movie = movies[currentIndex] || {};
+  const embedUrl = convertToEmbedUrl(movie.trailer || "");
 
   return (
     <div>
       <Navbar />
-      {/* Vanta.js Background */}
-      <div
-        ref={vantaRef}
-        style={{
-          position: "absolute",
-          width: "100vw",
-          height: "100vh",
-          top: 0,
-          left: 0,
-          zIndex: -1,
-        }}
-      ></div>
+      <div ref={vantaRef} style={{ position: "absolute", width: "100vw", height: "100vh", top: 0, left: 0, zIndex: -1 }}></div>
       <div className="recommendation-container">
         <div className="content-box fade-in">
-          {/* Trailer Section */}
           <div className="trailer-container">
-            <iframe
-              className="trailer"
-              src={embedUrl}
-              title="YouTube trailer"
-              frameBorder="0"
-              allowFullScreen
-            ></iframe>
+            <iframe className="trailer" src={embedUrl} title="YouTube trailer" frameBorder="0" allowFullScreen></iframe>
           </div>
-
-          {/* Movie Info + Poster Section */}
-          <div className="movie-card" style={{paddingTop: '0px'}}>
-            <div className="movie-title-info" style={{ paddingTop: '0px' }}>
-              <h2 style={{ marginBottom: '5px' }}>{movie.title}</h2>
-              <p className="movie-info" style={{ textAlign: 'left' }}>
-                {movie.year} • {movie.duration}
-              </p>
+          <div className="movie-card" style={{ paddingTop: "0px" }}>
+            <div className="movie-title-info" style={{ paddingTop: "0px" }}>
+              <h2 style={{ marginBottom: "5px" }}>{movie.title || "Unknown Title"}</h2>
+              <p className="movie-info" style={{ textAlign: "left" }}>{movie.year || "Unknown Year"} • {movie.duration || "Unknown Duration"}</p>
             </div>
             <div className="movie-details">
-              {/* Movie Info */}
               <div className="info-section">
-                <p className="language">
-                  <strong>Language:</strong> {movie.language}
-                </p>
-                <p className="description">{movie.description}</p>
+                <p className="language"><strong>Language:</strong> {movie.language || "Unknown"}</p>
+                <p className="description">{movie.description || "No description available."}</p>
               </div>
-
-              {/* Movie Poster */}
               <div className="poster-section">
-                <img src={movie.poster} alt={`${movie.title} Poster`} className="movie-poster" />
+                <img src={movie.poster || "placeholder.jpg"} alt={`${movie.title} Poster`} className="movie-poster" />
               </div>
             </div>
-            {/* Action Buttons */}
             <div className="button-container flex justify-center gap-6 mt-4">
-              {/* Reject Button */}
-              <button
-                className="group flex items-center justify-center w-16 h-16 bg-gray-800 rounded-full border-4 border-red-600 hover:bg-red-600 transition-all duration-300 transform hover:scale-110 hover:rotate-12 shadow-xl"
-                aria-label="Reject Recommendation"
-                onClick={handleHide}
-              >
-                <span className="material-symbols-outlined text-4xl group-hover:text-white">
-                  close
-                </span>
+              <button className="group flex items-center justify-center w-16 h-16 bg-gray-800 rounded-full border-4 border-red-600 hover:bg-red-600 transition-all duration-300 transform hover:scale-110 hover:rotate-12 shadow-xl" aria-label="Reject Recommendation" onClick={handleHide}>
+                <span className="material-symbols-outlined text-4xl group-hover:text-white">close</span>
               </button>
-
-              {/* Accept Button */}
-              <button
-                className="group flex items-center justify-center w-16 h-16 bg-gray-800 rounded-full border-4 border-green-500 hover:bg-green-500 transition-all duration-300 transform hover:scale-110 hover:rotate-12 shadow-xl"
-                aria-label="Accept Recommendation"
-                onClick={handleAccept} // Use handleAccept instead of handleNext
-              >
-                <span className="material-symbols-outlined text-4xl group-hover:text-white">
-                  check
-                </span>
+              <button className="group flex items-center justify-center w-16 h-16 bg-gray-800 rounded-full border-4 border-green-500 hover:bg-green-500 transition-all duration-300 transform hover:scale-110 hover:rotate-12 shadow-xl" aria-label="Accept Recommendation" onClick={handleAccept}>
+                <span className="material-symbols-outlined text-4xl group-hover:text-white">check</span>
               </button>
             </div>
           </div>

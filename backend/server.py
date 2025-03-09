@@ -140,34 +140,40 @@ def chat():
 
     return chatbot.process_input(user_id, user_input)
 
+user_preferences = {}
 
-@app.route("/api/movies", methods=["GET", "POST"])
+@app.route("/api/movies", methods=["GET"])
 def movies():
-    if request.method == "GET":
-        recommended_shows = Recommend.hybrid_recommend(
-            user_id = 2473170,
-            mood_input = "fear", # user_preferences["mood"]
-            top_n = 50
-        )
-        # print(f"\nMovies Fetched for mood: {user_preferences["mood"]}\n")
+    recommended_shows = Recommend.hybrid_recommend(
+        user_id = 2473170,
+        mood_input = user_preferences.get("mood", "fear"),
+        top_n = 50
+    )
+    print(f"\nMovies Fetched for mood: {user_preferences["mood"]}\n")
 
-        all_movies = moviesObj.fetch_movies(recommended_shows = recommended_shows)
+    all_movies = moviesObj.fetch_movies(recommended_shows = recommended_shows,
+                                        filterLanguage = user_preferences["language"],
+                                        filterGenre = user_preferences["genre"])
 
-        if not all_movies:
-            return jsonify({"error": "No recommendations found"}), 204
+    if not all_movies:
+        return jsonify({"error": "No recommendations found"}), 204
 
-        return jsonify({"movies": all_movies}), 200
-    
-    elif request.method == "POST":
-        user_preferences = request.get_json()
-        if not user_preferences:
-            return jsonify({"error": "Invalid or missing JSON data"}), 400
+    return jsonify({"movies": all_movies}), 200
         
-        print("User Mood: ", user_preferences["mood"])
-        print("User Language: ", user_preferences["language"])
-        print("User Genre: ", user_preferences["genre"])
+    
+@app.route("/api/preference", methods=["POST"])
+def preference():
+    global user_preferences
+    
+    user_preferences = request.get_json()
+    if not user_preferences:
+        return jsonify({"error": "Invalid or missing JSON data"}), 400
+        
+    print("User Mood: ", user_preferences["mood"])
+    print("User Language: ", user_preferences["language"])
+    print("User Genre: ", user_preferences["genre"])
             
-        return jsonify({"message": "Data received successfully", "data": user_preferences}), 200
+    return jsonify({"message": "Data received successfully", "data": user_preferences}), 200
 
 
 if __name__ == "__main__":
