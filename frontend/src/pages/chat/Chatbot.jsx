@@ -234,7 +234,7 @@ const Chatbot = () => {
 
                     </Box>
                     <Box display="flex" alignItems="center" mt={2} gap={1}>
-                        <Button variant="contained" style={{ backgroundColor: "#a52929", color: "white" }} onClick={() => alert("Chat ended!")}>End</Button>
+                        <Button variant="contained" style={{ backgroundColor: "#a52929", color: "white" }} onClick={handleEndChat}>End</Button>
                         <TextField fullWidth variant="outlined" placeholder="Type a message..." value={input} onChange={(e) => setInput(e.target.value)} onKeyDown={(e) => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); handleSendMessage(); } }}  sx={{
         input: { color: "white" }, // Makes input text white
         "& .MuiOutlinedInput-root": {

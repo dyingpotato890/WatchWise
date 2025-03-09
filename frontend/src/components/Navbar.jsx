@@ -83,7 +83,7 @@ useEffect(() => {
         if (!loggedIn) {
             setOpenSnackbar(true); // Show Snackbar warning if not logged in
         } else {
-            navigate("/mood"); // Redirect to /mood if logged in
+            navigate("/chat"); // Redirect to /chat if logged in
         }
     };
 
