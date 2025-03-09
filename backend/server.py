@@ -223,6 +223,26 @@ def fetch_history(user):
 
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+    
+@app.route("/api/addRating", methods=["POST"])
+@token_required
+def add_rating(user):
+    try:
+        data = request.json
+        user_id = user.id
+        show_id = data.get("show_id")
+        title = data.get("title")
+        rating = data.rating
+
+        if not user_id or not show_id or not title:
+            return jsonify({"error": "Missing required fields"}), 400
+
+        user.addRating(show_id, rating)
+
+        return jsonify({"message": f"Removed '{title}' from watchlist"}), 200
+
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
 if __name__ == "__main__":
     app.run(debug=True, port=5010)

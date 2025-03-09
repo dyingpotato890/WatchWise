@@ -50,10 +50,37 @@ const Watchlist = () => {
         setOpen(true);
     };
 
-    const handleConfirmDelete = () => {
+    const handleConfirmDelete = async () => {
         if (rating !== "" && selectedMovie) {
-            setMovies(movies.filter((m) => m.id !== selectedMovie.id));
+            try {
+                const token = localStorage.getItem("accessToken");
+    
+                const response = await fetch("http://localhost:5010/api/addRating", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "x-access-token": token,
+                    },
+                    body: JSON.stringify({
+                        show_id: selectedMovie.id,  // Assuming 'id' is the show ID
+                        rating: rating,
+                    }),
+                });
+    
+                if (!response.ok) {
+                    throw new Error("Failed to submit rating");
+                }
+    
+                // Remove the movie from the watchlist after successful submission
+                setMovies(movies.filter((m) => m.id !== selectedMovie.id));
+                console.log("Rating submitted successfully!");
+    
+            } catch (error) {
+                console.error("Error submitting rating:", error);
+            }
         }
+    
+        // Close dialog and reset
         setOpen(false);
         setRating("");
         setSelectedMovie(null);
@@ -87,8 +114,8 @@ const Watchlist = () => {
                 Watchlist
             </Typography>
             <Grid container spacing={2} justifyContent="center">
-                {movies.map((movie) => (
-                    <Grid item xs={12} sm={6} md={4} lg={3} key={movie.id}>
+                {movies.map((movie, index) => (
+                    <Grid item xs={12} sm={6} md={4} lg={3} key={movie.id || index}>
                         <Box
                             sx={{
                                 backgroundColor: "black",
