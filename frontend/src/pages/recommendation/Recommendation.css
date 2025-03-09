@@ -66,6 +66,7 @@ body, html {
   padding: 15px;
   border-radius: 0 0 15px 15px;
   text-align: left;
+  padding-bottom: 10px; /* Reduce padding at the bottom */
 
   margin-top:0px;
   width: 85.2%; /* Reduce width */
