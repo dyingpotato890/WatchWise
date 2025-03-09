@@ -31,6 +31,8 @@ class Movies:
                 poster_path = "https://motivatevalmorgan.com/wp-content/uploads/2016/06/default-movie-768x1129.jpg"
 
             trailer_link = movie_collection.find_one({"show_id": movie["show_id"]})["trailer_link"]
+            
+            show_id = movie["show_id"]
 
             language = movie_collection.find_one({"show_id": movie["show_id"]})["languages"]
             description = movie_collection.find_one({"show_id": movie["show_id"]})["description"]
@@ -38,7 +40,8 @@ class Movies:
             year = movie_collection.find_one({"show_id": movie["show_id"]})["release_year"]
             duration = movie_collection.find_one({"show_id": movie["show_id"]})["duration"]
             
-            temp = {"title": movie["title"],
+            temp = {"show_id": show_id,
+                    "title": movie["title"],
                     "genre" : genre, 
                     "language" : language, 
                     "description" : description, 

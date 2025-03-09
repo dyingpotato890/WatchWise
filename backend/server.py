@@ -175,6 +175,24 @@ def preference():
             
     return jsonify({"message": "Data received successfully", "data": user_preferences}), 200
 
+@app.route("/api/watchlater", methods=["POST"])
+@token_required
+def add_to_watchlist(user):
+    try:
+        data = request.json
+        user_id = user.id
+        show_id = data.get("show_id")
+        title = data.get("title")
+
+        if not user_id or not show_id or not title:
+            return jsonify({"error": "Missing required fields"}), 400
+
+        user.addToWatchlist(show_id)
+
+        return jsonify({"message": f"Added '{title}' to watchlist"}), 200
+
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
 if __name__ == "__main__":
     app.run(debug=True, port=5010)

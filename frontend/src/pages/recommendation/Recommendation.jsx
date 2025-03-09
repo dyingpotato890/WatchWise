@@ -29,6 +29,7 @@ const fetchMovies = async (setMovies) => {
       year: movie.year || "N/A",
       duration: movie.duration || "N/A",
       language: movie.language || "Unknown",
+      show_id: movie.show_id,
     }));
 
     console.log("Validated Movies:", validMovies);
@@ -105,13 +106,41 @@ const Recommendation = () => {
   };
 
   // Function to add a movie to the watch later list and move to the next movie
-  const handleAccept = () => {
+  const handleAccept = async () => {
     if (movies.length > 0) {
-      const currentMovie = movies[currentIndex];
-      setWatchLaterList((prevList) => [...prevList, currentMovie]);
-      handleNext();
+        const currentMovie = movies[currentIndex];
+        const token = localStorage.getItem("accessToken");
+
+        if (!token) {
+            console.error("No token found, user not authenticated.");
+            return;
+        }
+
+        try {
+            const response = await fetch("http://localhost:5010/api/watchlater", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "x-access-token": token,
+                },
+                body: JSON.stringify({
+                    show_id: currentMovie.show_id,
+                    title: currentMovie.title,
+                }),
+            });
+
+            if (!response.ok) {
+                console.error("Failed to add movie to watch later:", response.status);
+            } else {
+                console.log("Movie added to watch later successfully!");
+            }
+        } catch (error) {
+            console.error("Error adding movie to watch later:", error);
+        }
+
+        handleNext();
     }
-  };
+};
 
   // If no movies are available, show a message
   if (movies.length === 0) {
@@ -132,7 +161,7 @@ const Recommendation = () => {
     <div>
       <Navbar />
       {/* Vanta.js background effect */}
-      <div ref={vantaRef} style={{ position: "absolute", width: "100vw", height: "100vh", top: 0, left: 0, zIndex: -1 }}></div>
+      <div ref={vantaRef} style={{ position: "absolute", width: "100vw", height: "100vh", top: 0, left: 0, zIndex: -10 }}></div>
       <div className="recommendation-container">
         <div className="content-box fade-in">
           {/* Trailer Section */}
