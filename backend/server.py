@@ -145,10 +145,11 @@ def chat():
 def movies():
     if request.method == "GET":
         recommended_shows = Recommend.hybrid_recommend(
-            user_id = 2473170, # session.get("user_id", 2473170)
-            mood_input = "fear", # session.get("mood", "fear")
+            user_id = 2473170,
+            mood_input = "fear", # user_preferences["mood"]
             top_n = 50
         )
+        # print(f"\nMovies Fetched for mood: {user_preferences["mood"]}\n")
 
         all_movies = moviesObj.fetch_movies(recommended_shows = recommended_shows)
 
@@ -162,8 +163,6 @@ def movies():
         if not user_preferences:
             return jsonify({"error": "Invalid or missing JSON data"}), 400
         
-        # session["mood"] = user_preferences.get("mood", "fear")
-
         print("User Mood: ", user_preferences["mood"])
         print("User Language: ", user_preferences["language"])
         print("User Genre: ", user_preferences["genre"])

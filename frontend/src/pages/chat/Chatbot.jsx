@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Container, TextField, Button, Paper, Box, Typography, IconButton } from "@mui/material";
 import { Send } from "@mui/icons-material";
+import { useNavigate } from "react-router-dom";
 import Navbar from "../../components/Navbar";
 import "./Chatbot.css";
 
@@ -16,7 +17,9 @@ const Chatbot = () => {
     const [awaitingGenre, setAwaitingGenre] = useState(false);
     const [awaitingLanguage, setAwaitingLanguage] = useState(false);
 
-    const genres = ["Action", "Romance", "Comedy", "Horror", "Drama"];
+    const navigate = useNavigate();
+
+    const genres = ["Action & Adventure", "Romantic", "Comedy", "Horror", "Thrillers"];
     const languages = ["English", "Thai", "Korean", "Japanese", "Spanish"];
 
     useEffect(() => {
@@ -79,6 +82,7 @@ const Chatbot = () => {
             if (response.ok) {
                 alert("Preferences sent successfully!");
                 console.log("Response:", data);
+                navigate("/recommendation");
             } else {
                 alert("Error sending preferences: " + (data.error || "Unknown error"));
             }
@@ -230,7 +234,7 @@ const Chatbot = () => {
 
                     </Box>
                     <Box display="flex" alignItems="center" mt={2} gap={1}>
-                        <Button variant="contained" style={{ backgroundColor: "#a52929", color: "white" }} onClick={() => alert("Chat ended!")}>End</Button>
+                        <Button variant="contained" style={{ backgroundColor: "#a52929", color: "white" }} onClick={handleEndChat}>End</Button>
                         <TextField fullWidth variant="outlined" placeholder="Type a message..." value={input} onChange={(e) => setInput(e.target.value)} onKeyDown={(e) => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); handleSendMessage(); } }}  sx={{
         input: { color: "white" }, // Makes input text white
         "& .MuiOutlinedInput-root": {

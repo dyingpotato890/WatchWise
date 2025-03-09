@@ -26,12 +26,16 @@ class Movies:
             language = movie_collection.find_one({"show_id": movie["show_id"]})["languages"]
             description = movie_collection.find_one({"show_id": movie["show_id"]})["description"]
             genre = movie_collection.find_one({"show_id": movie["show_id"]})["listed_in"]
+            year = movie_collection.find_one({"show_id": movie["show_id"]})["release_year"]
+            duration = movie_collection.find_one({"show_id": movie["show_id"]})["duration"]
             
             movie_data.append({"title": movie["title"], 
                                "genre" : genre, 
                                "language" : language, 
                                "description" : description, 
                                "poster": poster_path, 
-                               "trailer" : trailer_link})
+                               "trailer" : trailer_link,
+                               "year" : int(year),
+                               "duration" : duration})
 
         return movie_data
