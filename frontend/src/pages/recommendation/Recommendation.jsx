@@ -54,6 +54,15 @@ const initialMovies = [
     poster: "https://image.tmdb.org/t/p/w500//shsN1B7IPAQG1NLF6WVVi3X89lM.jpg",
   },
 ];
+const convertToEmbedUrl = (url) => {
+  // Extract the video ID from the URL
+  const videoId = url.split('v=')[1];
+  const ampersandPosition = videoId.indexOf('&');
+  if (ampersandPosition !== -1) {
+    return `https://www.youtube.com/embed/${videoId.substring(0, ampersandPosition)}`;
+  }
+  return `https://www.youtube.com/embed/${videoId}`;
+};
 
 const Recommendation = () => {
   const [movies, setMovies] = useState(initialMovies);
@@ -116,6 +125,7 @@ useEffect(() => {
     );
   }
   const movie = movies[currentIndex];
+  const embedUrl = convertToEmbedUrl(movie.trailer);
 
   return (
     <div>
@@ -138,7 +148,7 @@ useEffect(() => {
           <div className="trailer-container">
             <iframe
               className="trailer"
-              src={movie.trailer}
+              src={embedUrl}
               title="YouTube trailer"
               frameBorder="0"
               allowFullScreen
