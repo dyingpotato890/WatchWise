@@ -117,6 +117,7 @@ const Recommendation = () => {
   if (movies.length === 0) {
     return (
       <div>
+         <div ref={vantaRef} style={{ position: "absolute", width: "100vw", height: "100vh", top: 0, left: 0, zIndex: -1 }}></div>
         <Navbar />
         <div className="no-recommendations">No more recommendations are available.</div>
       </div>

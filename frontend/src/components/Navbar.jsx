@@ -225,7 +225,14 @@ useEffect(() => {
                         },
                     }}
                 >
-                    <MenuItem onClick={handleClose}>Profile</MenuItem>
+                    <MenuItem
+                        onClick={() => {
+                            handleClose();
+                            navigate("/profile"); // Navigate to profile page
+                        }}
+                    >
+                        Profile
+                    </MenuItem>
                     <MenuItem onClick={handleClose}>Settings</MenuItem>
                     <MenuItem onClick={handleLogout}>Logout</MenuItem>
                 </Menu>
