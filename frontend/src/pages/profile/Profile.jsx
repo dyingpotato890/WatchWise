@@ -60,6 +60,7 @@ const UserProfile = () => {
                     display: "flex",
                     height: "calc(100vh - 100px)",
                     marginTop: "100px",
+                    overflow: "hidden",
                 }}
             >
                 {/* Sidebar Dashboard (Left Side) */}
@@ -70,6 +71,7 @@ const UserProfile = () => {
                         backgroundColor: "rgba(47, 25, 25, 0.15)",
                         backdropFilter: "blur(10px)",
                         padding: "20px",
+                        overflow: "hidden",
                         display: "flex",
                         flexDirection: "column",
                         gap: "15px",
