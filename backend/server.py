@@ -208,6 +208,21 @@ def fetch_watchlist(user):
 
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+    
+@app.route("/api/fetchHistory", methods=["GET"])
+@token_required
+def fetch_history(user):
+    try:
+        user_id = user.id
+        if not user_id:
+            return jsonify({"error": "Missing required fields"}), 400
+
+        watchList = user.fetchHistory()
+
+        return jsonify({"watchlist": watchList}), 200
+
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
 if __name__ == "__main__":
     app.run(debug=True, port=5010)

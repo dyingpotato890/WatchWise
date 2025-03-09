@@ -120,3 +120,17 @@ class User(UserMixin):
             return data
 
         return []
+    
+    def fetchHistory(self):
+        filter_query = {"user_id": str(self.id)}
+        projection = {"watch_history": 1, "_id": 0}  # Fetch only the 'watch_history' field
+
+        user_data = users_collection.find_one(filter_query, projection)
+
+        if user_data and "watch_history" in user_data:
+            # print(user_data["watch_history"])
+            
+            data = moviesObj.fetch_details(user_data["watch_history"])
+            return data
+
+        return []
