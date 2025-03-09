@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
     Box,
     Typography,
@@ -12,22 +12,38 @@ import {
 } from "@mui/material";
 
 const Watchlist = () => {
-    const [movies, setMovies] = useState([
-        { id: 1, title: "Mars Attacks!", poster: "https://image.tmdb.org/t/p/w500//bGxhc8Cd908XbDxg5baDvbiVzUI.jpg" },
-        { id: 2, title: "Mystery Men", poster: "https://image.tmdb.org/t/p/w500//ciVSbFmDecOIwlxl9F6GhHVgCVJ.jpg" },
-        { id: 3, title: "Almost Love", poster: "https://image.tmdb.org/t/p/w500//zLWthIm1tPEaahni2KlVSW4YaJR.jpg" },
-        { id: 4, title: "Klaus", poster: "https://image.tmdb.org/t/p/w500//q125RHUDgR4gjwh1QkfYuJLYkL.jpg" },
-        { id: 5, title: "Internet Famous", poster: "https://image.tmdb.org/t/p/w500//9HZ4gaNBP7Dc3TdFgCIh8BbgZ8Q.jpg" },
-        { id: 6, title: "Lady Dynamite", poster: "https://m.media-amazon.com/images/M/MV5BMTU2OTM0NjkzNF5BMl5BanBnXkFtZTgwOTc2MDU5MzI@._V1_SX300.jpg" },
-        { id: 7, title: "Brews Brothers", poster: "https://m.media-amazon.com/images/M/MV5BZGE0MWMxOWQtZTFhZC00NzU0LWEzYWEtNTkxMjBkYTliZWY5XkEyXkFqcGc@._V1_SX300.jpg" },
-        { id: 8, title: "50 First Dates", poster: "https://image.tmdb.org/t/p/w500//sQM9OKpj876pDWFbkfRIrpQG6fZ.jpg" },
-        { id: 9, title: "Something's Gotta Give", poster: "https://image.tmdb.org/t/p/w500//jwwVNuGRUBXcudG6wOKP9U60BzU.jpg" },
-        { id: 10, title: "Beverly Hills Ninja", poster: "https://image.tmdb.org/t/p/w500//kAUtHecWe0KS54jNggapnbHBGTI.jpg" },
-    ]);
-
+    const [movies, setMovies] = useState([]);
     const [open, setOpen] = useState(false);
     const [selectedMovie, setSelectedMovie] = useState(null);
     const [rating, setRating] = useState("");
+
+    useEffect(() => {
+        fetchWatchlist();
+    }, []);
+
+    const fetchWatchlist = async () => {
+        try {
+            const token = localStorage.getItem("accessToken");
+            const response = await fetch("http://localhost:5010/api/fetchWatchlater", {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                    "x-access-token": token,
+                },
+            });
+
+            if (!response.ok) {
+                throw new Error("Failed to fetch watchlist");
+            }
+
+            const data = await response.json();
+            if (data && data.watchlist) {
+                setMovies(data.watchlist);
+            }
+        } catch (error) {
+            console.error("Error fetching watchlist:", error);
+        }
+    };
 
     const handleDeleteClick = (movie) => {
         setSelectedMovie(movie);
@@ -48,22 +64,22 @@ const Watchlist = () => {
             sx={{
                 padding: "20px",
                 textAlign: "center",
-                overflowY: "auto", // Enables scrolling
-                maxHeight: "calc(100vh - 80px)", // Limits height
-                scrollbarWidth: "thin", // Firefox support
-                scrollbarColor: "darkred black", // Firefox scrollbar color
+                overflowY: "auto",
+                maxHeight: "calc(100vh - 80px)",
+                scrollbarWidth: "thin",
+                scrollbarColor: "darkred black",
                 "&::-webkit-scrollbar": {
-                    width: "8px", // Adjust width of scrollbar
+                    width: "8px",
                 },
                 "&::-webkit-scrollbar-track": {
-                    background: "black", // Background of scrollbar
+                    background: "black",
                 },
                 "&::-webkit-scrollbar-thumb": {
-                    background: "darkred", // Scroller color
+                    background: "darkred",
                     borderRadius: "4px",
                 },
                 "&::-webkit-scrollbar-thumb:hover": {
-                    background: "#8B0000", // Darker red on hover
+                    background: "#8B0000",
                 },
             }}
         >
@@ -88,8 +104,8 @@ const Watchlist = () => {
                                 src={movie.poster}
                                 alt={movie.title}
                                 style={{
-                                    width: "150px", // Fixed width
-                                    height: "180px", // Fixed height
+                                    width: "150px",
+                                    height: "180px",
                                     objectFit: "cover",
                                     borderRadius: "8px",
                                 }}
@@ -104,7 +120,7 @@ const Watchlist = () => {
                                 sx={{
                                     marginTop: "5px",
                                     opacity: 0.7,
-                                    fontSize: "12px", // Makes it subtle
+                                    fontSize: "12px",
                                     padding: "3px 8px",
                                     transition: "opacity 0.3s",
                                     "&:hover": { opacity: 1, backgroundColor: "#ff9800" },

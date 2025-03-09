@@ -5,6 +5,27 @@ class Movies:
         self.client = pymongo.MongoClient("mongodb://localhost:27017/")
         self.db = self.client["WatchWise"]
         
+    def fetch_details(self, showsids):
+        movie_collection = self.db["moviesDB"]
+        watchList = []
+        
+        for showid in showsids:
+            poster_path = movie_collection.find_one({"show_id": showid})["poster_path"]
+            if poster_path == "Not Found":
+                poster_path = "https://motivatevalmorgan.com/wp-content/uploads/2016/06/default-movie-768x1129.jpg"
+
+            title = movie_collection.find_one({"show_id": showid})["title"]
+
+            temp = {"show_id": showid,
+                    "title": title,
+                    "poster": poster_path}
+            
+            watchList.append(temp)
+        
+        print(watchList)
+
+        return watchList
+        
     def filter_movies(self, movie, lanaguage, genre):
         if lanaguage != "None":
             if lanaguage.lower() not in movie['language'].lower():

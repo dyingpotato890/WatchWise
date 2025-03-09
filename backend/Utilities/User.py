@@ -5,12 +5,14 @@ import bcrypt
 import pymongo
 from flask_login import UserMixin
 
+from Utilities.movies import Movies
+
 client = pymongo.MongoClient("mongodb://localhost:27017/")
 db = client["WatchWise"]
 
 users_collection = db["users"]  # For user_id generation
 
-
+moviesObj = Movies()
 class User(UserMixin):
     def __init__(self, user_id, password):
         self.id = user_id  # Flask-Login requires .id
@@ -104,4 +106,17 @@ class User(UserMixin):
         filter_query = {"user_id": self.id}
         update_query = {"$push": {"watchlist": showid}}
         users_collection.update_one(filter_query, update_query)
+        
+    def fetchWatchList(self):
+        filter_query = {"user_id": str(self.id)}
+        projection = {"watchlist": 1, "_id": 0}  # Fetch only the 'watchlist' field
 
+        user_data = users_collection.find_one(filter_query, projection)
+
+        if user_data and "watchlist" in user_data:
+            # print(user_data["watchlist"])
+            
+            data = moviesObj.fetch_details(user_data["watchlist"])
+            return data
+
+        return []
