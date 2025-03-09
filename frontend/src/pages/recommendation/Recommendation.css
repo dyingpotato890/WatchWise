@@ -1,317 +1,240 @@
-/* Import Fonts */
-@import url('https://fonts.googleapis.com/css2?family=Lato&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Open+Sans&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200');
+/* Make the page scrollable */
 
-/* Scope Styles to Recommendation Page */
-.recommendation-page {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding-top: 4rem; /* Adjust based on navbar height */
-  justify-content: flex-start;
-  min-height: 100vh;
-  padding-top: 70px; 
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap');
+
+/* Apply Open Sans to all elements */
+* {
+  font-family: 'Open Sans', sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+body, html {
+  height: 100%;
+  overflow-y: auto;
+  
 }
 
 .recommendation-container {
   display: flex;
-  justify-content: center;
+  flex-direction: column;
   align-items: center;
-  margin-bottom:0;
+  
+  color: #fff;
+  padding: 75px 20px 20px; /* Added top padding to prevent navbar overlap */
+  min-height: 100vh;
 }
-.recommendation-page .recommendation-content main.p-4 {
- 
-  padding: 0.6rem; /* Adjust the padding as needed */
-
-}
-
-.recommendation-page .recommendation-content main h1 {
- 
-  margin-top:0.5rem;
-  font-size: 1.3rem; /* Further reduced font size */
-  margin-bottom: 0.5rem; 
-  text-align: center;
-}
-
-/* Navbar Fix */
-.recommendation-page .navbar {
+.navbar {
+  background: rgba(0, 0, 0, 0.9);
   position: fixed;
+  width: 100%;
   top: 0;
   left: 0;
-  width: 100%;
-  height: 4rem;
-  background-color: rgba(0, 0, 0, 0.8);
+  padding: 15px 20px;
   z-index: 1000;
-  backdrop-filter: blur(10px);
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
 }
-
-/* Movie Card Styles */
-.recommendation-page .movie-card {
-  margin-top: 20px; /* Reduce gap */
-  display: flex;
-  align-items: stretch;
-  background-color:rgb(2, 2, 2);
-  color: white;
-  border-radius: 5px;
-  overflow: hidden;
-  margin-bottom: 10px;
- width: 90%; /* Reduced card width */
- max-width: 1200px; 
- transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
-
-  
-}
-.recommendation-page .movie-card:hover {
-  transform: scale(1.05); /* Slightly enlarge the card */
-  box-shadow: 
-    0 -10px 20px rgba(255, 0, 0, 0.4), /* Top shadow with red glow */
-    0 10px 20px rgba(255, 0, 0, 0.4); /* Bottom shadow with red glow */
-
-}
-
-.recommendation-page .movie-image {
-  width: 15.5%; /* Further reduced image width */
-  height: auto;
-  object-fit: contain; /*or cover*/
-  margin-bottom: 0;
- 
-}
-
-.recommendation-page .movie-details {
-  padding: 10px 15px; /* Reduced top padding */
-  margin-top: 0; /* Reduce gap */
-  flex: 1;
-  
-}
-
-.recommendation-page .movie-title {
-  margin-right: 10px;
-  font-size: 1.4rem;/* Further reduced font size */
-  margin-bottom: 15px;
-  
-  text-align: center;
-  margin-top: 0px; /* Added top margin */
-  margin-top: 0; /* Removed top margin */
-}
-
-/* Info Sections */
-.recommendation-page .movie-info {
+.content-box {
   display: flex;
   flex-direction: column;
+  align-items: center;
+  width: 90%;
+  max-width: 600px; /* Reduced max width */
+
+  opacity: 1;
+  transition: opacity 0.5s ease-in-out;
 }
 
-.recommendation-page .info-section {
-  display: flex; /* Make info section a flex container */
-  align-items: center; /* Align items vertically */
-  margin-bottom: 5px; 
+.trailer-container {
+  margin-top: 20px;
+  border-radius: 15px 15px 0 0;
+  overflow: hidden;
+  width: 90%; /* Reduce width */
+  max-width: 550px; /* Set a smaller max-width */
+  box-shadow: 0 10px 20px rgba(255, 0, 0, 0.4), 0 6px 6px rgba(255, 0, 0, 0.3);
+  transition: all 0.3s ease; /* Smooth transition */
 }
 
-.recommendation-page .info-icon {
-  display:flex;
-  margin-right: 10px;
-  font-family: 'Material Symbols Outlined';
-  font-size: 1.5rem;
-  color:rgb(127, 11, 50);
+.trailer {
+  width: 100%;
+  height: 275px; /* Reduce height */
+  border-radius: 15px 15px 0 0;
+  
 }
 
-.recommendation-page .info-heading {
-  font-size: 1rem;
-  margin-bottom: 10px;
-  color:rgb(127, 11, 50);
-  padding: 10px; /* Reduced padding */
+.movie-card {
+  background-color: rgba(39, 41, 53, 0.9);
+
+  padding: 15px;
+  border-radius: 0 0 15px 15px;
+  text-align: left;
+
+  margin-top:0px;
+  width: 85.2%; /* Reduce width */
+  max-width: 550px; /* Set a smaller max-width */
+  height:auto;
+  box-shadow: 0 10px 20px rgba(255, 0, 0, 0.4), 0 6px 6px rgba(255, 0, 0, 0.3); /* Reddish shadow */
+  transition: all 0.3s ease; /* Smooth transition */
+}
+.trailer-container:hover {
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.6), 0 10px 10px rgba(0, 0, 0, 0.5);
+  transform: translateY(-2px); /* Slight lift */
+  transition: all 0.3s ease;
 }
 
-.recommendation-page .info-content {
-  padding: 10px; /* Reduced padding */
+/* Hover Effect for Movie Card */
+.movie-card:hover {
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.6), 0 10px 10px rgba(0, 0, 0, 0.5);
+  transform: translateY(-2px); /* Slight lift */
+  transition: all 0.3s ease;
+}
+
+.movie-info {
+  margin-top:0px;
   font-size: 0.9rem;
-  background-color: #282828;
-  border-radius: 5px;
-  transition: background-color 0.3s ease, border-color 0.3s ease;
-  border: 2px solid transparent; /* Initially no border */
+  margin: 4px 0;
 }
 
-.recommendation-page .info-content:hover {
-  border-width:3px;
-  background-color: #383838;
-  border-color: rgb(114, 1, 39); /* Red border on hover */
+.genres {
+  margin: 8px 0;
 }
+
+.genre-tag {
+  background: #d32f2f;
+  color: white;
+  padding: 4px 8px;
+  border-radius: 12px;
+  margin: 0 4px;
+  font-size: 0.8rem;
+}
+
+.description {
+  margin-top: 4px; /* Reduce the margin above the description */
+  font-size: 0.9rem;
+  color: #bbb;
+}
+.language {
+  margin-bottom: 8px; /* Reduce the margin below the language line */
+}
+
 
 /* Button Container */
-.recommendation-page .button-container {
-  margin-top: 5px;
+.button-container {
   display: flex;
   justify-content: center;
   gap: 80px;
- 
+  margin-top: 0 !important; /* Force override any other margin-top */
 }
 
-.recommendation-page .button-container button {
-  width: 3rem;
-  height: 3rem;
-  border-radius: 9999px;
+.button-container button {
+  width: 4rem;
+  height: 4rem;
+  border-radius: 50%;
   border-width: 4px;
   display: flex;
   align-items: center;
   justify-content: center;
   transition: all 0.3s ease;
-  margin-top: 13px;
-  transition: all 0.3s ease; /* Smooth transitions */
-  background-color: #282828; /* Initial background color */
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); /* Initial shadow */
+  background-color: #282828;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
 }
 
-.recommendation-page .button-container button:hover {
-  transform: scale(1.1) rotate(12deg); /* Added rotation */
-  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05); /* Enhanced shadow on hover */
+.button-container button:hover {
+  transform: scale(1.1) rotate(12deg);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
 }
 
-.recommendation-page .button-container button:first-child {
+.button-container button:first-child {
   border-color: #ef4444;
 }
 
-.recommendation-page .button-container button:first-child:hover {
+.button-container button:first-child:hover {
   background-color: #ef4444;
 }
 
-.recommendation-page .button-container button:last-child {
+.button-container button:last-child {
   border-color: #34d399;
 }
 
-.recommendation-page .button-container button:last-child:hover {
+.button-container button:last-child:hover {
   background-color: #34d399;
 }
 
-.recommendation-page .button-container button .material-symbols-outlined {
-  font-size: 2.5rem; /* Adjust icon size as needed */
-  color: white; /* Initial icon color */
-  transition: color 0.3s ease; /* Smooth color transition */
+.button-container button .material-symbols-outlined {
+  font-size: 2.5rem;
+  color: white;
+  transition: color 0.3s ease;
 }
 
-.recommendation-page .button-container button:hover .material-symbols-outlined {
-  color: white; /* White icon color on hover */
+.button-container button:hover .material-symbols-outlined {
+  color: white;
 }
-/* Trailer */
-.trailer-container {
-  
-  width: 100%; /* Full width */
-  margin: 5px 0; /* Reduced margin */
+.movie-details {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.info-section {
+  flex: 1;
+  padding-right: 15px;
+}
+
+.poster-section {
+  flex-shrink: 0;
+}
+
+
+.movie-title-info {
+  text-align: left; /* Align title and year/duration to the left */
+  margin-bottom: 5px; /* Reduced margin bottom */
+}
+
+.movie-details {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+.info-section {
+  flex: 1;
+  text-align: left;
+}
+
+.poster-section {
+  flex-shrink: 0;
+  margin-left: 15px; /* Add some space between info and poster */
+}
+
+.movie-poster {
+  width: 120px;
+  height: auto; /* Allow height to adjust */
+  object-fit: cover;
+  border-radius: 10px;
+}
+.movie-title-info h2 {
+  margin-top: 8px; /* Remove default margin from the h2 element */
+}
+
+@media (min-width: 768px) {
+  .movie-details {
+    flex-direction: row;
+    text-align: left;
+  }
+
+  .info-section {
+    flex: 1;
+    padding-right: 15px;
+  }
+}
+
+.no-recommendations {
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-bottom: 10px;
-}
-
-.trailer-container iframe {
-  width: 450px; /* Further reduced width */
-  height: 220px; /* Further reduced height */
-  border-radius: 12px;
-}
-
-
-
-
-
-/* Keep buttons the same size */
-.action-buttons {
-  display: flex;
-  justify-content: center;
-  gap: 10px;
-  margin-top: 15px;
-}
-
-
-/* Highlight Active Dot */
-.recommendation-page .indicator-container span:first-child {
-  background-color: #ef4444;
-}
-
-/* Running Gradient Border Animation */
-.recommendation-page .description-container {
- 
-  background-color: rgba(31, 41, 55, 0.4);
-  backdrop-filter: blur(10px);
-  border-radius: 0.75rem;
-  padding: 1rem; /* Reduced padding */
-  margin-top: 5px; /* Reduced margin-top */
-}
-
-.recommendation-page .description-container::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 4px;
-  background: linear-gradient(to right, #ef4444, transparent); /* Gradient border */
-  transform: scaleX(0); /* Initially hidden */
-  transform-origin: left;
-  transition: transform 0.3s ease;
-}
-
-.recommendation-page .description-container:hover::before {
-  transform: scaleX(1); /* Expand border on hover */
-}
-
-.recommendation-page .description-container::after {
-  content: '';
-  position: absolute;
-  bottom: -20px;
-  right: -20px;
-  width: 80px;
-  height: 80px;
-  background: radial-gradient(circle, rgba(239, 68, 68, 0.2), transparent 70%); /* Glow effect */
-  opacity: 0;
-  transition: opacity 0.5s ease;
-}
-
-.recommendation-page .description-container:hover::after {
-  opacity: 1; /* Show glow on hover */
-}
-
-.recommendation-page .description-container h2 {
-  font-size: 1.5rem;
-  font-weight: 700;
+  height: 100vh;
+  font-size: 1.7rem;
+  font-weight: bold;
+  color: #fff;
   text-align: center;
-  color: #ef4444;
-  margin-bottom: 1rem;
-}
-
-.recommendation-page .description-container p {
-  color: #d1d5db;
-  font-size: 0.875rem;
-  line-height: 1.625;
-}
-.recommendation-page .movie-title, /* Movie Name */
-.recommendation-page .info-heading, /* Description and Language Headings */
-.recommendation-page .info-icon { /* Icons */
-  background-clip: text;
-  -webkit-background-clip: text; /* For Safari compatibility */
-  color: transparent;
-  background-image: linear-gradient(to right, #ef4444, #f06292); /* Gradient */
-}
-
-@media (max-width: 768px) {
-  .recommendation-page .button-container button {
-    width: 2.5rem;
-    height: 2.5rem;
-  }
-}
-@media (max-width: 768px) {
-  .recommendation-page .movie-card {
-    flex-direction: column;
-    align-items: center;
-  }
-  .recommendation-page .movie-image {
-    width: 200px; /* Fixed width for the poster */
-    height: auto;
-    object-fit: cover; /* Ensure the image covers the area */
-  }
-  .trailer-container iframe {
-    width: 100%;
-    max-width: 400px;
-    height: auto;
-    aspect-ratio: 16 / 9;
-  }
+  padding: 20px;
+  font-family: 'Open Sans', sans-serif;
 }
