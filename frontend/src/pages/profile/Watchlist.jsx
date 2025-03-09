@@ -13,16 +13,16 @@ import {
 
 const Watchlist = () => {
     const [movies, setMovies] = useState([
-        { id: 1, title: "Movie 1", poster: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQUPIfiGgUML8G3ZqsNLHfaCnZK3I5g4tJabQ&s" },
-        { id: 2, title: "Movie 2", poster: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQUPIfiGgUML8G3ZqsNLHfaCnZK3I5g4tJabQ&sy" },
-        { id: 3, title: "Movie 3", poster: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQUPIfiGgUML8G3ZqsNLHfaCnZK3I5g4tJabQ&s" },
-        { id: 4, title: "Movie 4", poster: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQUPIfiGgUML8G3ZqsNLHfaCnZK3I5g4tJabQ&s" },
-        { id: 5, title: "Movie 5", poster: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQUPIfiGgUML8G3ZqsNLHfaCnZK3I5g4tJabQ&s" },
-        { id: 6, title: "Movie 6", poster: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQUPIfiGgUML8G3ZqsNLHfaCnZK3I5g4tJabQ&s" },
-        { id: 7, title: "Movie 7", poster: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQUPIfiGgUML8G3ZqsNLHfaCnZK3I5g4tJabQ&s" },
-        { id: 8, title: "Movie 8", poster: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQUPIfiGgUML8G3ZqsNLHfaCnZK3I5g4tJabQ&s" },
-        { id: 9, title: "Movie 9", poster: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQUPIfiGgUML8G3ZqsNLHfaCnZK3I5g4tJabQ&s" },
-        { id: 10, title: "Movie 10", poster: "https://static.vecteezy.com/vite/assets/photo-masthead-375-BoK_p8LG.webp" },
+        { id: 1, title: "Mars Attacks!", poster: "https://image.tmdb.org/t/p/w500//bGxhc8Cd908XbDxg5baDvbiVzUI.jpg" },
+        { id: 2, title: "Mystery Men", poster: "https://image.tmdb.org/t/p/w500//ciVSbFmDecOIwlxl9F6GhHVgCVJ.jpg" },
+        { id: 3, title: "Almost Love", poster: "https://image.tmdb.org/t/p/w500//zLWthIm1tPEaahni2KlVSW4YaJR.jpg" },
+        { id: 4, title: "Klaus", poster: "https://image.tmdb.org/t/p/w500//q125RHUDgR4gjwh1QkfYuJLYkL.jpg" },
+        { id: 5, title: "Internet Famous", poster: "https://image.tmdb.org/t/p/w500//9HZ4gaNBP7Dc3TdFgCIh8BbgZ8Q.jpg" },
+        { id: 6, title: "Lady Dynamite", poster: "https://m.media-amazon.com/images/M/MV5BMTU2OTM0NjkzNF5BMl5BanBnXkFtZTgwOTc2MDU5MzI@._V1_SX300.jpg" },
+        { id: 7, title: "Brews Brothers", poster: "https://m.media-amazon.com/images/M/MV5BZGE0MWMxOWQtZTFhZC00NzU0LWEzYWEtNTkxMjBkYTliZWY5XkEyXkFqcGc@._V1_SX300.jpg" },
+        { id: 8, title: "50 First Dates", poster: "https://image.tmdb.org/t/p/w500//sQM9OKpj876pDWFbkfRIrpQG6fZ.jpg" },
+        { id: 9, title: "Something's Gotta Give", poster: "https://image.tmdb.org/t/p/w500//jwwVNuGRUBXcudG6wOKP9U60BzU.jpg" },
+        { id: 10, title: "Beverly Hills Ninja", poster: "https://image.tmdb.org/t/p/w500//kAUtHecWe0KS54jNggapnbHBGTI.jpg" },
     ]);
 
     const [open, setOpen] = useState(false);
