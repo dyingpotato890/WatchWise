@@ -126,7 +126,7 @@ class User(UserMixin):
         if user_data and "watchlist" in user_data:
             # print(user_data["watchlist"])
             
-            data = moviesObj.fetch_details(user_data["watchlist"])
+            data = moviesObj.fetch_details(user_data["watchlist"], user_id = self.id)
             return data
 
         return []
@@ -139,8 +139,9 @@ class User(UserMixin):
 
         if user_data and "watch_history" in user_data:
             print(user_data["watch_history"])
-            show_ids=[show.get('show_id') for show in user_data["watch_history"]]
-            data = moviesObj.fetch_details(show_ids)
+            show_ids = [show.get('show_id') for show in user_data["watch_history"]]
+            
+            data = moviesObj.fetch_details(show_ids, user_id = self.id)
             return data
 
         return []

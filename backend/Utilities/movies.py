@@ -5,7 +5,25 @@ class Movies:
         self.client = pymongo.MongoClient("mongodb://localhost:27017/")
         self.db = self.client["WatchWise"]
         
-    def fetch_details(self, showsids):
+    def fetch_rating(self, user_id, show_id):
+        users_collection = self.db['users']
+        
+        query = {
+            "user_id": user_id,
+            "watch_history.show_id": show_id
+        }
+        projection = {
+            "_id": 0,
+            "watch_history.$": 1  # Use `$` to retrieve only the matching element inside the array
+        }
+        user = users_collection.find_one(query, projection)
+        
+        if user and "watch_history" in user:
+            return user["watch_history"][0].get("rating", None)
+        
+        return None
+        
+    def fetch_details(self, showsids, user_id):
         movie_collection = self.db["moviesDB"]
         watchList = []
         
@@ -15,10 +33,13 @@ class Movies:
                 poster_path = "https://motivatevalmorgan.com/wp-content/uploads/2016/06/default-movie-768x1129.jpg"
 
             title = movie_collection.find_one({"show_id": showid})["title"]
+            
+            rating = self.fetch_rating(show_id = showid, user_id = user_id)
 
             temp = {"show_id": showid,
                     "title": title,
-                    "poster": poster_path}
+                    "poster": poster_path,
+                    "rating": rating}
             
             watchList.append(temp)
         
