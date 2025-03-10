@@ -1,11 +1,7 @@
 import os
-import google.generativeai as genai
 import pymongo
-from flask import (Flask, jsonify, redirect, request, send_from_directory, make_response,
-                   session)
+from flask import (Flask, jsonify, request, send_from_directory, make_response)
 from flask_cors import CORS
-from flask_login import (LoginManager, current_user, login_required,
-                         login_user, logout_user)
 
 from Utilities.chatbot import Chatbot
 from Utilities.recommend import Recommend
@@ -143,9 +139,10 @@ def chat():
 user_preferences = {}
 
 @app.route("/api/movies", methods=["GET"])
-def movies():
+@token_required
+def movies(user):
     recommended_shows = Recommend.hybrid_recommend(
-        user_id = 2473170,
+        user_id = user.id,
         mood_input = user_preferences.get("mood", "fear"),
         top_n = 50
     )

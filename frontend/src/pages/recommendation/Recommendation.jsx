@@ -9,20 +9,45 @@ const initialMovies = [];
 // Function to fetch movies from the backend API
 const fetchMovies = async (setMovies) => {
   console.log("fetchMovies function called!"); // Debugging Log
+  
   try {
-    const response = await fetch("http://localhost:5010/api/movies");
+    const token = localStorage.getItem("accessToken"); // Get token from localStorage
+    
+    if (!token) {
+      console.warn("No access token found. User might not be logged in.");
+      return;
+    }
+
+    const response = await fetch("http://localhost:5010/api/movies", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        "x-access-token": token, // Send token for authentication
+      },
+    });
+
     console.log("API Response Status:", response.status);
+
+    if (response.status === 401) {
+      console.error("Unauthorized access. Token may be invalid or expired.");
+      return;
+    }
+
     if (response.status === 204) {
       console.log("No recommendations found.");
       return;
     }
+
     const data = await response.json();
     console.log("Raw Movies Data:", data);
 
     // Validate the movies array and provide fallback values
-    const validMovies = data.movies.map(movie => ({
+    const validMovies = data.movies.map((movie) => ({
       ...movie,
-      poster: typeof movie.poster === "string" && movie.poster.trim() !== "" ? movie.poster : "https://motivatevalmorgan.com/wp-content/uploads/2016/06/default-movie-768x1129.jpg",
+      poster:
+        typeof movie.poster === "string" && movie.poster.trim() !== ""
+          ? movie.poster
+          : "https://motivatevalmorgan.com/wp-content/uploads/2016/06/default-movie-768x1129.jpg",
       trailer: typeof movie.trailer === "string" ? movie.trailer : "",
       title: movie.title || "Unknown Title",
       description: movie.description || "No description available",
@@ -38,6 +63,7 @@ const fetchMovies = async (setMovies) => {
     console.error("Error fetching movies:", error);
   }
 };
+
 
 // Function to convert YouTube URLs to embed format
 const convertToEmbedUrl = (url) => {
