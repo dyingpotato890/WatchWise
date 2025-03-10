@@ -91,17 +91,27 @@ class User(UserMixin):
         except:
             print("Error occurred in insertion")
             return False
+        
+    def removeFromWatchList(self, showid):
+        remove_query = {"user_id": self.id}
+        remove_update = {"$pull": {"watchlist": showid}}
+        users_collection.update_one(remove_query, remove_update)
 
     def addRating(self, showid, rating):
         ratings = db["ratings"]
 
         ratings.insert_one({"User_ID": self.id, "Rating": rating, "show_id": showid})
+        print("Added Rating")
+
+        # Add the show to the watch history
         filter_query = {"user_id": self.id}
         update_query = {
             "$push": {"watch_history": {"show_id": showid, "rating": rating}}
         }
         users_collection.update_one(filter_query, update_query)
-
+        
+        self.removeFromWatchList(showid)
+        
     def addToWatchlist(self, showid):
         filter_query = {"user_id": self.id}
         update_query = {"$push": {"watchlist": showid}}
