@@ -229,17 +229,19 @@ def fetch_history(user):
 def add_rating(user):
     try:
         data = request.json
+        print(data)
         user_id = user.id
         show_id = data.get("show_id")
-        title = data.get("title")
-        rating = data.rating
+        rating = data.get("rating")
+        
+        print(show_id)
 
-        if not user_id or not show_id or not title:
+        if not show_id:
             return jsonify({"error": "Missing required fields"}), 400
 
         user.addRating(show_id, rating)
 
-        return jsonify({"message": f"Removed '{title}' from watchlist"}), 200
+        return jsonify({"message": f"Removed Movie from watchlist"}), 200
 
     except Exception as e:
         return jsonify({"error": str(e)}), 500

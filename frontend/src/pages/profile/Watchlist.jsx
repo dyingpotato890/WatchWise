@@ -47,9 +47,10 @@ const Watchlist = () => {
 
     const handleDeleteClick = (movie) => {
         setSelectedMovie(movie);
+        console.log("Selected movie:", movie); // Debugging log
         setOpen(true);
     };
-
+    
     const handleConfirmDelete = async () => {
         if (rating !== "" && selectedMovie) {
             try {
@@ -62,7 +63,7 @@ const Watchlist = () => {
                         "x-access-token": token,
                     },
                     body: JSON.stringify({
-                        show_id: selectedMovie.id,  // Assuming 'id' is the show ID
+                        show_id: selectedMovie.show_id,
                         rating: rating,
                     }),
                 });
@@ -72,7 +73,7 @@ const Watchlist = () => {
                 }
     
                 // Remove the movie from the watchlist after successful submission
-                setMovies(movies.filter((m) => m.id !== selectedMovie.id));
+                setMovies(movies.filter((m) => m.show_id !== selectedMovie.show_id));
                 console.log("Rating submitted successfully!");
     
             } catch (error) {
@@ -115,7 +116,7 @@ const Watchlist = () => {
             </Typography>
             <Grid container spacing={2} justifyContent="center">
                 {movies.map((movie, index) => (
-                    <Grid item xs={12} sm={6} md={4} lg={3} key={movie.id || index}>
+                    <Grid item xs={12} sm={6} md={4} lg={3} key={movie.show_id || index}>
                         <Box
                             sx={{
                                 backgroundColor: "black",
