@@ -214,12 +214,14 @@ def fetch_watchlist(user):
 def fetch_history(user):
     try:
         user_id = user.id
+        print("Getting User ID")
         if not user_id:
             return jsonify({"error": "Missing required fields"}), 400
 
-        watchList = user.fetchHistory()
+        history = user.fetchHistory()
+        print(history)
 
-        return jsonify({"watchlist": watchList}), 200
+        return jsonify({"history": history}), 200
 
     except Exception as e:
         return jsonify({"error": str(e)}), 500
@@ -230,7 +232,6 @@ def add_rating(user):
     try:
         data = request.json
         print(data)
-        user_id = user.id
         show_id = data.get("show_id")
         rating = data.get("rating")
         

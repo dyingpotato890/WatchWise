@@ -138,9 +138,9 @@ class User(UserMixin):
         user_data = users_collection.find_one(filter_query, projection)
 
         if user_data and "watch_history" in user_data:
-            # print(user_data["watch_history"])
-            
-            data = moviesObj.fetch_details(user_data["watch_history"])
+            print(user_data["watch_history"])
+            show_ids=[show.get('show_id') for show in user_data["watch_history"]]
+            data = moviesObj.fetch_details(show_ids)
             return data
 
         return []
