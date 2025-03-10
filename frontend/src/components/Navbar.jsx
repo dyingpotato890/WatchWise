@@ -142,13 +142,7 @@ useEffect(() => {
                 </Box>
 
                 <Box sx={{ display: "flex", gap: "1.5rem" }}>
-                    <Button
-                        color="inherit"
-                        sx={{ fontSize: "0.9rem", fontWeight: "500" }}
-                        onClick={() => navigate("/chat")}
-                    >
-                        Chat
-                    </Button>
+                    
 
                     <Button
                         color="inherit"
