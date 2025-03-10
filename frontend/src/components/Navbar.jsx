@@ -110,12 +110,22 @@ useEffect(() => {
 
     const handleLogoClick = () => {
         if (location.pathname !== "/") {
+            // Navigate to home first
             navigate("/");
+    
+            setTimeout(() => {
+                window.scrollTo({ top: 0, behavior: "smooth" });
+                document.documentElement.scrollTop = 0; // Fallback for some browsers
+                document.body.scrollTop = 0; // Ensures scrolling works on all devices
+            }, 300);
         } else {
+            // If already on home, scroll smoothly to the top
             window.scrollTo({ top: 0, behavior: "smooth" });
+            document.documentElement.scrollTop = 0;
+            document.body.scrollTop = 0;
         }
     };
-
+    
     return (
         <AppBar
             position="fixed"

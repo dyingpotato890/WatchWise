@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate,useLocation } from "react-router-dom";
 import "./Home.css";
 import Navbar from "../../components/Navbar";
 import { Button, Snackbar, Alert } from "@mui/material";
@@ -36,6 +36,14 @@ export default function Home() {
   const vantaRef = useRef(null);
   const [openSnackbar, setOpenSnackbar] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation(); // Use useLocation to get the current path
+
+    // Scroll to top when the component mounts or the path changes
+    useEffect(() => {
+        if (location.pathname === "/") {
+            window.scrollTo({ top: 0, behavior: "smooth" });
+        }
+    }, [location.pathname]);
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -118,17 +126,23 @@ export default function Home() {
   }, [vantaEffect]);
 
   return (
-    <div className="home" ref={vantaRef}>
+    <div className="home">
+      {/* Vanta.js background container */}
+      <div ref={vantaRef} style={{ position: "fixed", top: 0, left: 0, width: "100%", height: "100%", zIndex: -1 }}></div>
+
       <Navbar />
 
       <section className="hero">
-        <h1 className="neon-text">WatchWise</h1>
+        <h1 className="neon-text" onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}>
+          WatchWise
+        </h1>
         <p>Find Your Mood with Movies</p>
         <Button variant="contained" className="hero-btn" onClick={handleStartWatching}>
           Start Watching
         </Button>
       </section>
 
+      {/* Rest of your code remains unchanged */}
       <section className="carousel-container">
         <div className="carousel" ref={carouselRef}>
           {extendedPosters.map((poster, index) => (
