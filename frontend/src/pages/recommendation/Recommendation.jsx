@@ -86,6 +86,7 @@ const Recommendation = () => {
   const [vantaEffect, setVantaEffect] = useState(null);
 
   // Fetch movies after a delay when the component mounts
+
   useEffect(() => {
     const timer = setTimeout(() => {
       fetchMovies(setMovies);
@@ -95,11 +96,10 @@ const Recommendation = () => {
 
   // Initialize Vanta.js background effect
   useEffect(() => {
-    if (!vantaRef.current) return;
     if (!vantaEffect) {
       setVantaEffect(
         NET({
-          el: vantaRef.current,
+          el: vantaRef.current, // Attach to div
           mouseControls: true,
           touchControls: true,
           gyroControls: false,
@@ -107,16 +107,21 @@ const Recommendation = () => {
           minWidth: 200.0,
           scale: 1.0,
           scaleMobile: 1.0,
-          color: 0xdb0000,
-          backgroundColor: 0x000000,
+          color: 0xdb0000, // Red effect
+          backgroundColor: 0x000000, // Black background
         })
       );
     }
+  
     return () => {
-      if (vantaEffect) vantaEffect.destroy();
+      if (vantaEffect) {
+        vantaEffect.destroy(); // Cleanup on unmount
+        setVantaEffect(null); // Reset effect
+      }
     };
-  }, [vantaEffect]);
-
+  }, []); // ✅ Empty dependency array to run only once
+  
+  
   // Function to move to the next movie in the list
   const handleNext = () => {
     setCurrentIndex((prevIndex) => (prevIndex + 1) % movies.length);
@@ -172,8 +177,8 @@ const Recommendation = () => {
   if (movies.length === 0) {
     return (
       <div>
-         <div ref={vantaRef} style={{ position: "absolute", width: "100vw", height: "100vh", top: 0, left: 0, zIndex: -1 }}></div>
         <Navbar />
+        <div ref={vantaRef} style={{ position: "absolute", width: "100vw", height: "100vh", top: 0, left: 0, zIndex: -1 }}></div>
         <div className="no-recommendations">No more recommendations are available.</div>
       </div>
     );
