@@ -7,6 +7,7 @@ from Utilities.chatbot import Chatbot
 from Utilities.recommend import Recommend
 from Utilities.User import User
 from Utilities.movies import Movies
+from Utilities.profile import Profile
 
 from functools import wraps
 import jwt
@@ -243,6 +244,34 @@ def add_rating(user):
 
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+    
+    
+@app.route("/api/profile", methods=["GET"])
+@token_required
+def profile(user):
+    try:     
+        data = Profile.fetchUserInfo(user.id)
+        
+        # If an error occurred, return the error
+        if isinstance(data, dict) and data.get("status") == "error":
+            return jsonify({"error": data.get("message", "Unknown error")}), 500
+
+        # Prepare response data with fallback values
+        response_data = {
+            "name": data['data'].get("name", "Unknown User"),
+            "email": data['data'].get("email", "No email provided"),
+            "avatar": data['data'].get("avatar", "https://i.pravatar.cc/150?img=1"),
+            "bio": data['data'].get("bio", "No bio available"),
+        }
+
+        print("Response Data:", response_data)
+
+        return jsonify({"data": response_data}), 200
+
+    except Exception as e:
+        print(f"Error in profile route: {e}")
+        return jsonify({"error": str(e)}), 500
+
 
 if __name__ == "__main__":
     app.run(debug=True, port=5010)

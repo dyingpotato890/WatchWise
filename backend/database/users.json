@@ -2,101 +2,141 @@
   "users": [
     {
       "user_id": "2473170",
+      "name": "Aarav Sharma",
+      "bio": "Sci-fi fanatic who never misses a Christopher Nolan film.",
       "created_at": "2024-01-01T12:00:00Z",
       "watch_history": []
     },
     {
       "user_id": "900816",
+      "name": "Neha Verma",
+      "bio": "Loves psychological thrillers and plot twists that blow your mind.",
       "created_at": "2024-01-02T12:00:00Z",
       "watch_history": []
     },
     {
       "user_id": "1990901",
+      "name": "Rohan Iyer",
+      "bio": "Marvel and DC fan—superhero movies are my escape!",
       "created_at": "2024-01-03T12:00:00Z",
       "watch_history": []
     },
     {
       "user_id": "1402412",
+      "name": "Meera Nair",
+      "bio": "A sucker for heartfelt dramas and emotional rollercoasters.",
       "created_at": "2024-01-04T12:00:00Z",
       "watch_history": []
     },
     {
       "user_id": "1601783",
+      "name": "Vikram Sen",
+      "bio": "Horror movie addict—always searching for the next scare.",
       "created_at": "2024-01-05T12:00:00Z",
       "watch_history": []
     },
     {
       "user_id": "306466",
+      "name": "Ananya Das",
+      "bio": "Bollywood buff who loves a good masala entertainer!",
       "created_at": "2024-01-06T12:00:00Z",
       "watch_history": []
     },
     {
       "user_id": "1024794",
+      "name": "Kabir Malhotra",
+      "bio": "Loves indie films and hidden cinematic gems.",
       "created_at": "2024-01-07T12:00:00Z",
       "watch_history": []
     },
     {
       "user_id": "1331154",
+      "name": "Sanya Kapoor",
+      "bio": "Romantic comedy enthusiast who believes in happy endings.",
       "created_at": "2024-01-08T12:00:00Z",
       "watch_history": []
     },
     {
       "user_id": "1476213",
+      "name": "Arjun Menon",
+      "bio": "Documentary lover always on the lookout for real-life stories.",
       "created_at": "2024-01-09T12:00:00Z",
       "watch_history": []
     },
     {
       "user_id": "2201376",
+      "name": "Ishita Roy",
+      "bio": "Animated movies and Pixar classics bring out the kid in me.",
       "created_at": "2024-01-10T12:00:00Z",
       "watch_history": []
     },
     {
       "user_id": "740327",
+      "name": "Yash Gupta",
+      "bio": "Crime thriller junkie—nothing beats a good mystery!",
       "created_at": "2024-01-11T12:00:00Z",
       "watch_history": []
     },
     {
       "user_id": "1987434",
+      "name": "Tara Pillai",
+      "bio": "A big fan of musicals—singing along is a must!",
       "created_at": "2024-01-12T12:00:00Z",
       "watch_history": []
     },
     {
       "user_id": "1380819",
+      "name": "Amit Joshi",
+      "bio": "80s and 90s classics are my go-to comfort movies.",
       "created_at": "2024-01-13T12:00:00Z",
       "watch_history": []
     },
     {
       "user_id": "946164",
+      "name": "Suhani Rao",
+      "bio": "Foreign cinema enthusiast—subtitles don’t scare me!",
       "created_at": "2024-01-14T12:00:00Z",
       "watch_history": []
     },
     {
       "user_id": "1116671",
+      "name": "Rajiv Mishra",
+      "bio": "Always up for a mind-bending time travel movie.",
       "created_at": "2024-01-15T12:00:00Z",
       "watch_history": []
     },
     {
       "user_id": "120539",
+      "name": "Pooja Aggarwal",
+      "bio": "Biopic lover—history and cinema make a great combo!",
       "created_at": "2024-01-16T12:00:00Z",
       "watch_history": []
     },
     {
       "user_id": "66568",
+      "name": "Nikhil Saxena",
+      "bio": "Western movies and cowboy stories never get old!",
       "created_at": "2024-01-17T12:00:00Z",
       "watch_history": []
     },
     {
       "user_id": "1468812",
+      "name": "Simran Kaur",
+      "bio": "Fantasy movie addict—Hogwarts is my second home.",
       "created_at": "2024-01-18T12:00:00Z",
       "watch_history": []
     },
     {
       "user_id": "132390",
+      "name": "Aditya Prakash",
+      "bio": "Huge anime fan—nothing beats a Studio Ghibli classic!",
       "created_at": "2024-01-19T12:00:00Z",
       "watch_history": []
     },
     {
       "user_id": "1163218",
+      "name": "Sonia Mehta",
+      "bio": "Loves old-school black-and-white classics!",
       "created_at": "2024-01-20T12:00:00Z",
       "watch_history": []
     }
