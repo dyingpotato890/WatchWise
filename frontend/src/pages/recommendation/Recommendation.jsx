@@ -2,19 +2,22 @@ import React, { useState, useEffect, useRef } from "react";
 import "./Recommendation.css";
 import Navbar from "../../components/Navbar";
 import NET from "vanta/dist/vanta.net.min";
+import Loading from "../../components/Loading"; // ✅ Import Loading Page
 
 // Initial empty movie list
 const initialMovies = [];
 
 // Function to fetch movies from the backend API
-const fetchMovies = async (setMovies) => {
-  console.log("fetchMovies function called!"); // Debugging Log
+const fetchMovies = async (setMovies, setLoading) => {
+  console.log("fetchMovies function called!");
+  setLoading(true); // Start loading
   
   try {
-    const token = localStorage.getItem("accessToken"); // Get token from localStorage
+    const token = localStorage.getItem("accessToken");
     
     if (!token) {
       console.warn("No access token found. User might not be logged in.");
+      setLoading(false);
       return;
     }
 
@@ -22,7 +25,7 @@ const fetchMovies = async (setMovies) => {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
-        "x-access-token": token, // Send token for authentication
+        "x-access-token": token,
       },
     });
 
@@ -30,24 +33,24 @@ const fetchMovies = async (setMovies) => {
 
     if (response.status === 401) {
       console.error("Unauthorized access. Token may be invalid or expired.");
+      setLoading(false);
       return;
     }
 
     if (response.status === 204) {
       console.log("No recommendations found.");
+      setLoading(false);
       return;
     }
 
     const data = await response.json();
     console.log("Raw Movies Data:", data);
 
-    // Validate the movies array and provide fallback values
     const validMovies = data.movies.map((movie) => ({
       ...movie,
-      poster:
-        typeof movie.poster === "string" && movie.poster.trim() !== ""
-          ? movie.poster
-          : "https://motivatevalmorgan.com/wp-content/uploads/2016/06/default-movie-768x1129.jpg",
+      poster: typeof movie.poster === "string" && movie.poster.trim() !== ""
+        ? movie.poster
+        : "https://motivatevalmorgan.com/wp-content/uploads/2016/06/default-movie-768x1129.jpg",
       trailer: typeof movie.trailer === "string" ? movie.trailer : "",
       title: movie.title || "Unknown Title",
       description: movie.description || "No description available",
@@ -61,6 +64,8 @@ const fetchMovies = async (setMovies) => {
     setMovies(validMovies);
   } catch (error) {
     console.error("Error fetching movies:", error);
+  } finally {
+    setLoading(false); // Stop loading whether successful or not
   }
 };
 
@@ -81,6 +86,7 @@ const Recommendation = () => {
   // State hooks for managing movies and user actions
   const [movies, setMovies] = useState(initialMovies);
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [loading, setLoading] = useState(true); // Start with loading true
   const [watchLaterList, setWatchLaterList] = useState([]);
   const vantaRef = useRef(null);
   const [vantaEffect, setVantaEffect] = useState(null);
@@ -89,7 +95,7 @@ const Recommendation = () => {
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      fetchMovies(setMovies);
+      fetchMovies(setMovies, setLoading); // Pass setLoading to fetchMovies
     }, 3000);
     return () => clearTimeout(timer);
   }, []);
@@ -120,6 +126,7 @@ const Recommendation = () => {
       }
     };
   }, []); // ✅ Empty dependency array to run only once
+  
   
   
   // Function to move to the next movie in the list
@@ -173,16 +180,30 @@ const Recommendation = () => {
     }
 };
 
-  // If no movies are available, show a message
-  if (movies.length === 0) {
-    return (
-      <div>
-        <Navbar />
-        <div ref={vantaRef} style={{ position: "absolute", width: "100vw", height: "100vh", top: 0, left: 0, zIndex: -1 }}></div>
-        <div className="no-recommendations">No more recommendations are available.</div>
+ 
+// Replace your current conditional return with:
+if (loading) {
+  return (
+    <div className="loading-app-container">
+      <Navbar />
+      <div ref={vantaRef} className="vanta-background"></div>
+      <div className="vanta-overlay"></div>
+      <Loading />
+    </div>
+  );
+}
+
+if (!loading && movies.length === 0) {
+  return (
+    <div className="loading-app-container">
+      <Navbar />
+      <div ref={vantaRef} className="vanta-background"></div>
+      <div className="no-recommendations">
+        No recommendations are available. 
       </div>
-    );
-  }
+    </div>
+  );
+}
 
   // Get the current movie details
   const movie = movies[currentIndex] || {};

@@ -7,6 +7,7 @@ import Home from './pages/home/Home';
 import Chatbot from './pages/chat/Chatbot'
 import Recommendation from "./pages/recommendation/Recommendation";
 import Profile from "./pages/profile/Profile"
+import Loading from "./components/Loading";
 
 
 
@@ -23,6 +24,7 @@ const App = () => {
       <Route path ="/profile" element={<Profile />} />
        <Route path ="/home" element={<Home />} />
       <Route path="/mood" element={<MoodPage />} />
+      <Route path="/load" element={<Loading />} />
     </Routes>
   );
 };
