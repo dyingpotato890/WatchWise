@@ -466,8 +466,8 @@ const LanguagePage = ({ mood, selectedGenres, onBack, vantaRef }) => {
         
         const userPreferences = {
             mood,
-            genre: selectedGenres.join(","),
-            language: selectedLanguages.join(","),
+            genre: selectedGenres.join(", "),
+            language: selectedLanguages.join(", "),
         };
     
         try {
