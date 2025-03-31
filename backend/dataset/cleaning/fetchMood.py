@@ -22,7 +22,7 @@ api_keys = [
     os.getenv("GEMINI_API_KEY_9"),
     os.getenv("GEMINI_API_KEY_10"),
     os.getenv("GEMINI_API_KEY_11"),
-    os.getenv("GEMINI_API_KEY_12"),
+    os.getenv("GEMINI_API_KEY_12")
 
 ]
 used_keys = []  # Stores exhausted API keys to retry later
