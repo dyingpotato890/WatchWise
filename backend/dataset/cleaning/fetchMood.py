@@ -52,8 +52,7 @@ file_path = "./backend/dataset/netflix_mood_recommender_test.csv"
 df = pd.read_csv(file_path, encoding='latin-1')
 
 # Filter rows where the source is 'Disney+' or 'Amazon Prime'
-df_filtered = df[df["source"].isin(["Disney+", "Amazon Prime"])].copy()
-
+df_filtered = df[df["source"].isin(["Disney+", "Amazon Prime"]) & df["mood"].isna()].copy()
 model = genai.GenerativeModel("gemini-1.5-flash")
 
 
