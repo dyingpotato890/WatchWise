@@ -52,31 +52,21 @@ class Movies:
         all_movies = []
         movie_data = []
 
-        # Collect all movies from recommended shows
         for category, movies in recommended_shows.items():
             if isinstance(movies, list):
                 all_movies.extend(movies)
 
-        # Add uniqueness check to avoid duplicates
         processed_show_ids = set()
         
         filterLanguages = filterLanguages.split(", ")
         filterGenres = filterGenres.split(", ")
-            
-        print(filterLanguages)
-        print(filterGenres)
-        print(type(filterGenres))
-        print(type(filterLanguages))
         
-        # Process each movie
         for movie in all_movies:
-            # Skip if we've already processed this movie
             if movie["show_id"] in processed_show_ids:
                 continue
                 
             processed_show_ids.add(movie["show_id"])
             
-            # Fetch movie details from database
             movie_doc = movie_collection.find_one({"show_id": movie["show_id"]})
             if not movie_doc:
                 continue
@@ -86,7 +76,6 @@ class Movies:
             if poster_path == "Not Found":
                 poster_path = "https://motivatevalmorgan.com/wp-content/uploads/2016/06/default-movie-768x1129.jpg"
 
-            # Create movie object with all needed information
             temp = {
                 "show_id": movie["show_id"],
                 "title": movie["title"],
@@ -99,7 +88,6 @@ class Movies:
                 "duration": movie_doc["duration"]
             }
             
-            # Apply filtering logic
             langFlag = False
             genreFlag = False
             
