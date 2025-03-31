@@ -18,6 +18,10 @@ const UserProfile = () => {
         avatar: "https://i.pravatar.cc/150?img=1",
         bio: "",
     });
+    const [statsData, setStatsData] = useState({
+        watch_history: 0,
+        watch_list: 0
+    });
 
     const fetchUserData = async () => {
         console.log("Fetching user data...");
@@ -62,8 +66,51 @@ const UserProfile = () => {
         }
     };
 
+    const fetchStatsData = async () => {
+        console.log("Fetching stats data...");
+        try {
+            const token = localStorage.getItem("accessToken");
+
+            if (!token) {
+                console.warn("No access token found. User might not be logged in.");
+                return;
+            }
+
+            const response = await fetch("http://localhost:5010/api/count", {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                    "x-access-token": token,
+                },
+            });
+
+            console.log("Stats API Response Status:", response.status);
+
+            if (response.status === 401 || response.status === 403) {
+                console.error("Unauthorized access. Token may be invalid or expired.");
+                return;
+            }
+
+            if (!response.ok) {
+                throw new Error(`Error: ${response.statusText}`);
+            }
+
+            const data = await response.json();
+            console.log("Fetched Stats Data:", data);
+
+            setStatsData({
+                watch_history: data.data.watch_history || 0,
+                watch_list: data.data.watch_list || 0
+            });
+        } catch (error) {
+            console.error("Error fetching stats data:", error);
+        }
+    };
+
+
     useEffect(() => {
         fetchUserData();
+        fetchStatsData();
     }, []);
 
     useEffect(() => {
@@ -86,6 +133,21 @@ const UserProfile = () => {
         };
     }, [vantaEffect]);
 
+    const statsCards = [
+        { 
+            title: "Watchlist", 
+            value: statsData.watch_list.toString(), 
+            icon: "📋",
+            bgColor: "rgba(220, 20, 60, 0.2)"
+        },
+        { 
+            title: "History", 
+            value: statsData.watch_history.toString(), 
+            icon: "🕒",
+            bgColor: "rgba(255, 69, 0, 0.2)"
+        }
+    ];
+
     const recentHistory = [
         {
             title: "Movie Title 1",
@@ -105,21 +167,6 @@ const UserProfile = () => {
             rating: 4.7,
             genre: "Thriller"
         },
-    ];
-
-    const statsCards = [
-        { 
-            title: "Watchlist", 
-            value: "15", 
-            icon: "📋",
-            bgColor: "rgba(220, 20, 60, 0.2)"
-        },
-        { 
-            title: "History", 
-            value: "42", 
-            icon: "🕒",
-            bgColor: "rgba(255, 69, 0, 0.2)"
-        }
     ];
 
     return (

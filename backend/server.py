@@ -274,6 +274,17 @@ def profile(user):
         print(f"Error in profile route: {e}")
         return jsonify({"error": str(e)}), 500
 
+@app.route("/api/count", methods=["GET"])
+@token_required
+def count(user):
+    try:
+        counts = Profile.fetchCount(user.id)
+        print(counts)
+
+        return jsonify({"message": f"Got Count", "data": counts}), 200
+
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
 if __name__ == "__main__":
     app.run(debug=True, port=5010)

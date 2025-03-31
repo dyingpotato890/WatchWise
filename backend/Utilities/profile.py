@@ -37,3 +37,17 @@ class Profile:
 
         except Exception as e:
             return {"status": "error", "message": str(e)}
+        
+    @staticmethod
+    def fetchCount(user_id):
+        watch_list = users_collection.find_one({ "user_id": str(user_id) }, { "watchlist": 1 })
+        watch_history = users_collection.find_one({ "user_id": str(user_id) }, { "watch_history": 1 })
+        
+        counts = {
+            "watch_list" : len(watch_list["watchlist"]),
+            "watch_history" : len(watch_history["watch_history"])
+        }
+        
+        print(counts)
+        
+        return counts
