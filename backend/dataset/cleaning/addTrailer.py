@@ -4,7 +4,7 @@ import json
 with open("backend/dataset/cleaning/trailer_links_2.json", "r") as f:
     trailer_links = json.load(f)
 
-df = pd.read_csv("backend/dataset/netflix_mood_recommender_test.csv")
+df = pd.read_csv("backend/dataset/forTrailer.csv", encoding = 'latin-1')
 df['trailer_link'] = df['title'].map(trailer_links)
 
 df.to_csv("backend/dataset/netflix_mood_recommender_test_updated.csv", index = False)
