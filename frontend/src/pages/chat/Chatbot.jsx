@@ -13,7 +13,8 @@ const MoodPage = ({ onMoodSelect, vantaRef }) => {
     const [showConfirmation, setShowConfirmation] = useState(false);
     
     // Predefined moods
-    const predefinedMoods = ["Relaxed", "Curious", "Tense", "Excited", "Lonely", "Scared", "Annoyed", "Anger", "Disgust", "Fear", "Joy", "Sadness", "Romantic", "Surprise"];
+    const predefinedMoods = ["Anger", "Annoyed", "Curious", "Disgust", "Excited", "Fear", "Joy", "Lonely", "Relaxed", "Romantic", "Sadness", "Scared", "Surprise", "Tense"]
+    ;
 
     const handleSendMessage = async () => {
         if (!input.trim()) return;
@@ -340,8 +341,14 @@ const GenrePage = ({ onGenresSelect, onBack, vantaRef }) => {
     
     // Extended list of 20 genres
     const genres = [
-       "Action & Adventure", "Anime", "British TV Shows", "Children & Family Movies", "Classic", "Comedy", "Crime TV Shows", "Cult", "Documentary", "Drama", "Faith & Spirituality", "Horror", "Independent Movies", "International", "Kids' TV", "Korean TV Shows", "LGBTQ Movies", "Music & Musicals", "Movies", "Reality TV", "Romantic", "Sci-Fi & Fantasy", "Science & Nature TV", "Spanish-Language TV Shows", "Sports Movies", "Stand-Up Comedy & Talk Shows", "Teen TV Shows", "Thrillers", "Mysteries", "TV Shows"
-    ];
+        "Action & Adventure", "Anime", "British TV Shows", "Children & Family Movies", "Classic", 
+        "Comedy", "Crime TV Shows", "Cult", "Documentary", "Drama", "Faith & Spirituality", 
+        "Horror", "Independent Movies", "International", "Kids' TV", "Korean TV Shows", 
+        "LGBTQ Movies", "Movies", "Music & Musicals", "Mysteries", "Reality TV", "Romantic", 
+        "Sci-Fi & Fantasy", "Science & Nature TV", "Spanish-Language TV Shows", "Sports Movies", 
+        "Stand-Up Comedy & Talk Shows", "Teen TV Shows", "Thrillers", "TV Shows"
+    ]
+    
 
     const handleGenreToggle = (genre) => {
         setSelectedGenres(prev => 
@@ -497,7 +504,8 @@ const LanguagePage = ({ mood, selectedGenres, onBack, vantaRef }) => {
     const navigate = useNavigate();
     const [isLoading, setIsLoading] = useState(false);
     
-    const languages = ["Arabic","English","Malayalam","Hindi", "Thai", "Korean", "Japanese", "Spanish", "French", "German", "Italian", "Mandarin", "Russian"];
+    const languages = ["Arabic", "English", "French", "German", "Hindi", "Italian", "Japanese", "Korean", "Malayalam", "Mandarin", "Russian", "Spanish", "Thai"]
+    ;
 
     const handleLanguageToggle = (language) => {
         setSelectedLanguages(prev => 
