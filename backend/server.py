@@ -2,6 +2,7 @@ import os
 import pymongo
 from flask import (Flask, jsonify, request, send_from_directory, make_response)
 from flask_cors import CORS
+import random
 
 from Utilities.chatbot import Chatbot
 from Utilities.recommend import Recommend
@@ -159,8 +160,10 @@ def movies(user):
 
     if not all_movies:
         return jsonify({"error": "No recommendations found"}), 204
+    
+    shuffled_movie = random.sample(all_movies, len(all_movies))
 
-    return jsonify({"movies": all_movies}), 200
+    return jsonify({"movies": shuffled_movie}), 200
         
     
 @app.route("/api/preference", methods=["POST"])

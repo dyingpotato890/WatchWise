@@ -1,4 +1,3 @@
-import pymongo
 import joblib
 import numpy as np
 from sklearn.metrics.pairwise import cosine_similarity
@@ -10,7 +9,7 @@ class Recommend():
     tfidf_vectorizer = joblib.load('backend/models/tfidf_vectorizer.joblib')
 
     @staticmethod
-    def get_user_cf_recommendations(user_id, top_n = 20):
+    def get_user_cf_recommendations(user_id, top_n = 40):
         if user_id not in Recommend.user_item_matrix.index:
             return []
         
