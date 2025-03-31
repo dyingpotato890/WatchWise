@@ -3,10 +3,10 @@ from selenium.webdriver.common.by import By
 import time
 import json
 
-input_file = "backend/dataset/cleaning/alltitles.txt"
-output_file = "trailer_links.json"
+input_file = "backend/dataset/cleaning/alltitles2.txt"
+output_file = "trailer_links_2.json"
 
-with open(input_file, "r", encoding="utf-8") as f:
+with open(input_file, "r", encoding="latin-1") as f:
     movie_titles = [line.strip() for line in f.readlines()]
 
 try:
@@ -58,4 +58,4 @@ finally:
         json.dump(trailer_links, f, indent=4)
 
     driver.quit()
-    print("Done! Links saved to trailer_links.json")
+    print("Done! Links saved to trailer_links_2.json")
