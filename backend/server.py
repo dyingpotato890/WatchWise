@@ -123,7 +123,9 @@ def register():
     email = data.get("email")
     password = data.get("password")
     name = data.get("name")
-    if User.register_user(email, password, name):
+    bio = data.get("bio")
+    
+    if User.register_user(email, password, name, bio):
         return jsonify({"message": "Registered successfully"}), 200
     else:
         return jsonify({"message": "Registration unsuccessful"}), 401

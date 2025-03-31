@@ -85,6 +85,7 @@ const SignUp = () => {
                     email,
                     password,
                     name: fullName,
+                    bio
                 },
                 {
                     headers: {

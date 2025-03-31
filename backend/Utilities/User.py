@@ -1,4 +1,5 @@
 import datetime
+from datetime import datetime
 import random
 
 import bcrypt
@@ -66,7 +67,7 @@ class User(UserMixin):
                 return new_id
 
     @staticmethod
-    def register_user(email, password, name):
+    def register_user(email, password, name, bio):
         user_id = User.generate_user_id()
         hashed_pwd = User.hashPassword(password)
         login_collection = db["login"]
@@ -76,12 +77,12 @@ class User(UserMixin):
             return False
         login_data = {"user_id": user_id, "password": hashed_pwd, "email": email}
 
-        current_time = datetime.datetime.now()
-        isotime = current_time.isoformat()
+        current_date = datetime.today().date().isoformat()
         user_data = {
             "user_id": user_id,
             "name": name,
-            "created_at": isotime,
+            "bio": bio,
+            "created_at": current_date,
             "watch_history": [],
         }
         try:
