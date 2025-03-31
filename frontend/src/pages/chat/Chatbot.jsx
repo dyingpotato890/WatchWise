@@ -3,9 +3,7 @@ import { Container, TextField, Button, Paper, Box, Typography, IconButton, Chip,
 import { Send, ChevronRight, ArrowBack, Check } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 import Navbar from "../../components/Navbar";
-import "./Chatbot.css";
-
-// MoodPage Component
+import "./Chatbot.css"
 // MoodPage Component - Optimized UI
 const MoodPage = ({ onMoodSelect, vantaRef }) => {
     const [messages, setMessages] = useState([{ text: "Describe how you're feeling or select a mood below:", sender: "bot" }]);
@@ -15,7 +13,7 @@ const MoodPage = ({ onMoodSelect, vantaRef }) => {
     const [showConfirmation, setShowConfirmation] = useState(false);
     
     // Predefined moods
-    const predefinedMoods = ["relaxed", "curious", "tense", "excited", "lonely", "scared", "annoyed", "anger", "disgust", "fear", "joy", "sadness", "romantic", "surprise"];
+    const predefinedMoods = ["Relaxed", "Curious", "Tense", "Excited", "Lonely", "Scared", "Annoyed", "Anger", "Disgust", "Fear", "Joy", "Sadness", "Romantic", "Surprise"];
 
     const handleSendMessage = async () => {
         if (!input.trim()) return;
@@ -161,47 +159,95 @@ const MoodPage = ({ onMoodSelect, vantaRef }) => {
                     </Box>
                     
                     {/* Mood selection area - Compact chips with scrollable container */}
-                    <Typography variant="subtitle2" sx={{ mb: 0.5, fontWeight: "medium", textAlign: "center" }}>
-                        Choose your mood:
-                    </Typography>
-                    
-                    <Box 
-                        sx={{ 
-                            width: "100%",
-                            display: "flex",
-                            flexWrap: "wrap",
-                            justifyContent: "center",
-                            gap: 0.75,
-                            mb: 1.5,
-                            maxHeight: "80px",
-                            overflowY: "auto",
-                            padding: "0.5rem",
-                            backgroundColor: "rgba(0,0,0,0.2)",
-                            borderRadius: "8px"
-                        }}
-                    >
-                        {predefinedMoods.map((mood) => (
-                            <Chip 
-                                key={mood} 
-                                label={mood}
-                                onClick={() => handleMoodSelection(mood)}
-                                sx={{
-                                    backgroundColor: selectedMood === mood ? "#881818" : "#a52929",
-                                    color: "white",
-                                    margin: "2px",
-                                    borderRadius:"5px",
-                                    fontWeight: selectedMood === mood ? "bold" : "normal",
-                                    transition: "all 0.2s ease",
-                                    boxShadow: selectedMood === mood ? "0 2px 4px rgba(0,0,0,0.3)" : "none",
-                                    "&:hover": { 
-                                        backgroundColor: "#881818", 
-                                        transform: "translateY(-1px)",
-                                        boxShadow: "0 3px 6px rgba(0,0,0,0.3)"
-                                    },
-                                }}
-                            />
-                        ))}
-                    </Box>
+                 {/* Mood selection area - Updated to 2 lines with better spacing and styling */}
+<Typography variant="subtitle2" sx={{ mb: 1, fontWeight: "medium", textAlign: "center" }}>
+    Choose your mood:
+</Typography>
+
+<Box 
+    sx={{ 
+        width: "100%",
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        gap: 1.5,
+        mb: 2,
+        padding: "0.75rem",
+        backgroundColor: "rgba(0,0,0,0.2)",
+        borderRadius: "8px",
+        border: "1px solid rgba(255,255,255,0.05)"
+    }}
+>
+    {/* First row of moods */}
+    <Box 
+        sx={{
+            display: "flex",
+            flexWrap: "wrap",
+            justifyContent: "center",
+            gap: 1.5,
+            width: "100%"
+        }}
+    >
+        {predefinedMoods.slice(0, 7).map((mood) => (
+            <Chip 
+                key={mood} 
+                label={mood}
+                onClick={() => handleMoodSelection(mood)}
+                sx={{
+                    backgroundColor: selectedMood === mood ? "#881818" : "#a52929",
+                    color: "white",
+                    padding: "8px 4px",
+                    minWidth: "85px",
+                    height: "32px",
+                    borderRadius: "16px",
+                    fontWeight: selectedMood === mood ? "bold" : "normal",
+                    transition: "all 0.3s ease",
+                    boxShadow: selectedMood === mood ? "0 3px 5px rgba(0,0,0,0.4)" : "0 1px 3px rgba(0,0,0,0.2)",
+                    "&:hover": { 
+                        backgroundColor: "#881818", 
+                        transform: "translateY(-2px)",
+                        boxShadow: "0 4px 8px rgba(0,0,0,0.3)"
+                    },
+                }}
+            />
+        ))}
+    </Box>
+    
+    {/* Second row of moods */}
+    <Box 
+        sx={{
+            display: "flex",
+            flexWrap: "wrap",
+            justifyContent: "center",
+            gap: 1.5,
+            width: "100%"
+        }}
+    >
+        {predefinedMoods.slice(7).map((mood) => (
+            <Chip 
+                key={mood} 
+                label={mood}
+                onClick={() => handleMoodSelection(mood)}
+                sx={{
+                    backgroundColor: selectedMood === mood ? "#881818" : "#a52929",
+                    color: "white",
+                    padding: "8px 4px",
+                    minWidth: "85px",
+                    height: "32px",
+                    borderRadius: "16px",
+                    fontWeight: selectedMood === mood ? "bold" : "normal",
+                    transition: "all 0.3s ease",
+                    boxShadow: selectedMood === mood ? "0 3px 5px rgba(0,0,0,0.4)" : "0 1px 3px rgba(0,0,0,0.2)",
+                    "&:hover": { 
+                        backgroundColor: "#881818", 
+                        transform: "translateY(-2px)",
+                        boxShadow: "0 4px 8px rgba(0,0,0,0.3)"
+                    },
+                }}
+            />
+        ))}
+    </Box>
+</Box>
                     
                     {/* Text input area */}
                     <Box 
