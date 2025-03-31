@@ -7,7 +7,7 @@
     z-index: -1;
 }
 html, body {
-    overflow-y: hidden;
+    overflow: hidden;
   }
   
 
@@ -59,3 +59,46 @@ html, body {
     background-color: red !important;
     color: white !important;
 }
+/* Custom Scrollbar Styling */
+::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  
+  ::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.8);
+    border-radius: 5px;
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    background: #a52929;
+    border-radius: 5px;
+    border: 2px solid rgba(0, 0, 0, 0.8);
+  }
+  
+  ::-webkit-scrollbar-thumb:hover {
+    background: #881818;
+  }
+  
+  /* For Firefox */
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: #a52929 rgba(0, 0, 0, 0.8);
+  }
+  
+  /* For IE and Edge */
+  * {
+    -ms-overflow-style: none;
+  }
+  *::-ms-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  *::-ms-scrollbar-track {
+    background: rgba(0, 0, 0, 0.8);
+  }
+  *::-ms-scrollbar-thumb {
+    background: #a52929;
+    border-radius: 5px;
+  }
+  

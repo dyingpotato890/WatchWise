@@ -147,11 +147,13 @@ def movies(user):
         mood_input = user_preferences.get("mood", "fear"),
         top_n = 50
     )
-    print(f"\nMovies Fetched for mood: {user_preferences["mood"]}\n")
+    print(f"\nMovies Fetched for mood: {user_preferences['mood']}\n")
 
-    all_movies = moviesObj.fetch_movies(recommended_shows = recommended_shows,
-                                        filterLanguage = user_preferences["language"],
-                                        filterGenre = user_preferences["genre"])
+    all_movies = moviesObj.fetch_movies(
+        recommended_shows = recommended_shows,
+        filterLanguages = user_preferences["language"],
+        filterGenres = user_preferences["genre"]
+    )
 
     if not all_movies:
         return jsonify({"error": "No recommendations found"}), 204
@@ -168,8 +170,8 @@ def preference():
         return jsonify({"error": "Invalid or missing JSON data"}), 400
         
     print("User Mood: ", user_preferences["mood"])
-    print("User Language: ", user_preferences["language"])
-    print("User Genre: ", user_preferences["genre"])
+    print("User Language: ", user_preferences["language"].split(", "))
+    print("User Genre: ", user_preferences["genre"].split(", "))
             
     return jsonify({"message": "Data received successfully", "data": user_preferences}), 200
 

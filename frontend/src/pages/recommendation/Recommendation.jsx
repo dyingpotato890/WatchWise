@@ -90,6 +90,7 @@ const Recommendation = () => {
   const [watchLaterList, setWatchLaterList] = useState([]);
   const vantaRef = useRef(null);
   const [vantaEffect, setVantaEffect] = useState(null);
+  const [processedIds, setProcessedIds] = useState(new Set());
 
   // Fetch movies after a delay when the component mounts
 
@@ -131,54 +132,65 @@ const Recommendation = () => {
   
   // Function to move to the next movie in the list
   const handleNext = () => {
-    setCurrentIndex((prevIndex) => (prevIndex + 1) % movies.length);
-  };
-
-  // Function to remove the current movie from recommendations
-  const handleHide = () => {
-    setMovies((prevMovies) => {
-      const updatedMovies = prevMovies.filter((_, index) => index !== currentIndex);
-      return updatedMovies;
+    setCurrentIndex((prevIndex) => {
+      const nextIndex = (prevIndex + 1) % movies.length;
+      return nextIndex === currentIndex ? prevIndex : nextIndex;
     });
-    setCurrentIndex((prevIndex) => (prevIndex >= movies.length - 1 ? 0 : prevIndex));
   };
 
-  // Function to add a movie to the watch later list and move to the next movie
+  const handleHide = async () => {
+    if (movies.length > 0) {
+      const currentMovie = movies[currentIndex];
+      if (!processedIds.has(currentMovie.show_id)) {
+        setProcessedIds(prev => new Set(prev).add(currentMovie.show_id));
+        setMovies(prevMovies => prevMovies.filter(movie => movie.show_id !== currentMovie.show_id));
+      }
+      handleNext();
+    }
+  };
+
   const handleAccept = async () => {
     if (movies.length > 0) {
-        const currentMovie = movies[currentIndex];
-        const token = localStorage.getItem("accessToken");
-
-        if (!token) {
-            console.error("No token found, user not authenticated.");
-            return;
-        }
-
-        try {
-            const response = await fetch("http://localhost:5010/api/watchlater", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    "x-access-token": token,
-                },
-                body: JSON.stringify({
-                    show_id: currentMovie.show_id,
-                    title: currentMovie.title,
-                }),
-            });
-
-            if (!response.ok) {
-                console.error("Failed to add movie to watch later:", response.status);
-            } else {
-                console.log("Movie added to watch later successfully!");
-            }
-        } catch (error) {
-            console.error("Error adding movie to watch later:", error);
-        }
-
+      const currentMovie = movies[currentIndex];
+      
+      if (processedIds.has(currentMovie.show_id)) {
         handleNext();
+        return;
+      }
+
+      const token = localStorage.getItem("accessToken");
+
+      if (!token) {
+        console.error("No token found, user not authenticated.");
+        return;
+      }
+
+      try {
+        const response = await fetch("http://localhost:5010/api/watchlater", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "x-access-token": token,
+          },
+          body: JSON.stringify({
+            show_id: currentMovie.show_id,
+            title: currentMovie.title,
+          }),
+        });
+
+        if (!response.ok) {
+          console.error("Failed to add movie to watch later:", response.status);
+        } else {
+          console.log("Movie added to watch later successfully!");
+          setProcessedIds(prev => new Set(prev).add(currentMovie.show_id));
+        }
+      } catch (error) {
+        console.error("Error adding movie to watch later:", error);
+      }
+
+      handleNext();
     }
-};
+  };
 
  
 // Replace your current conditional return with:
