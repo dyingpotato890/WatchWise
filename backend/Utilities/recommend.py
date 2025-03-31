@@ -116,5 +116,7 @@ class Recommend():
 
         if highest_rated_movie_id:
             recommendations["Item-Based"] = Recommend.get_item_cf_recommendations(highest_rated_movie_id, top_n)
+            
+        print(recommendations)
 
         return recommendations

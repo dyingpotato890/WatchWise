@@ -46,55 +46,86 @@ class Movies:
         print(watchList)
 
         return watchList
-        
-    def filter_movies(self, movie, lanaguage, genre):
-        if lanaguage != "None":
-            if lanaguage.lower() not in movie['language'].lower():
-                return False
-        
-        if genre != "None":
-            if genre.lower() not in movie['genre'].lower():
-                return False
-            
-        return True
 
-    def fetch_movies(self, recommended_shows, filterLanguage, filterGenre):
+    def fetch_movies(self, recommended_shows, filterLanguages, filterGenres):
         movie_collection = self.db["moviesDB"]
         all_movies = []
         movie_data = []
 
+        # Collect all movies from recommended shows
         for category, movies in recommended_shows.items():
             if isinstance(movies, list):
                 all_movies.extend(movies)
 
+        # Add uniqueness check to avoid duplicates
+        processed_show_ids = set()
+        
+        filterLanguages = filterLanguages.split(", ")
+        filterGenres = filterGenres.split(", ")
+            
+        print(filterLanguages)
+        print(filterGenres)
+        print(type(filterGenres))
+        print(type(filterLanguages))
+        
+        # Process each movie
         for movie in all_movies:
-            poster_path = movie_collection.find_one({"show_id": movie["show_id"]})["poster_path"]
+            # Skip if we've already processed this movie
+            if movie["show_id"] in processed_show_ids:
+                continue
+                
+            processed_show_ids.add(movie["show_id"])
+            
+            # Fetch movie details from database
+            movie_doc = movie_collection.find_one({"show_id": movie["show_id"]})
+            if not movie_doc:
+                continue
+                
+            # Set default poster if not found
+            poster_path = movie_doc["poster_path"]
             if poster_path == "Not Found":
                 poster_path = "https://motivatevalmorgan.com/wp-content/uploads/2016/06/default-movie-768x1129.jpg"
 
-            trailer_link = movie_collection.find_one({"show_id": movie["show_id"]})["trailer_link"]
+            # Create movie object with all needed information
+            temp = {
+                "show_id": movie["show_id"],
+                "title": movie["title"],
+                "genre": movie_doc["listed_in"],
+                "language": movie_doc["languages"],
+                "description": movie_doc["description"],
+                "poster": poster_path,
+                "trailer": movie_doc["trailer_link"],
+                "year": str(int(movie_doc["release_year"])),
+                "duration": movie_doc["duration"]
+            }
             
-            show_id = movie["show_id"]
-
-            language = movie_collection.find_one({"show_id": movie["show_id"]})["languages"]
-            description = movie_collection.find_one({"show_id": movie["show_id"]})["description"]
-            genre = movie_collection.find_one({"show_id": movie["show_id"]})["listed_in"]
-            year = movie_collection.find_one({"show_id": movie["show_id"]})["release_year"]
-            duration = movie_collection.find_one({"show_id": movie["show_id"]})["duration"]
+            # Apply filtering logic
+            langFlag = False
+            genreFlag = False
             
-            temp = {"show_id": show_id,
-                    "title": movie["title"],
-                    "genre" : genre, 
-                    "language" : language, 
-                    "description" : description, 
-                    "poster": poster_path, 
-                    "trailer" : trailer_link,
-                    "year" : str(int(year)),
-                    "duration" : duration}
-            
-            if self.filter_movies(movie = temp, lanaguage = filterLanguage, genre = filterGenre):
+            if filterLanguages != ['']:
+                movie_languages = [lang.strip() for lang in temp['language'].split(', ')]
+                
+                for lang in filterLanguages:
+                    if lang in movie_languages:
+                        langFlag = True
+                        break
+            else:
+                langFlag = True
+                    
+            if filterGenres != ['']:
+                movie_genre = [lang.strip() for lang in temp['genre'].split(', ')]
+                
+                for gen in filterGenres:
+                    if gen in movie_genre:
+                        genreFlag = True
+                        break
+            else:
+                genreFlag = True
+                    
+            if langFlag and genreFlag:
                 movie_data.append(temp)
-        
+                
         print(movie_data)
-
+        
         return movie_data

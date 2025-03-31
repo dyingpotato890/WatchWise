@@ -404,9 +404,11 @@ const LanguagePage = ({ mood, selectedGenres, onBack, vantaRef }) => {
         
         const userPreferences = {
             mood,
-            genre: selectedGenres.join(","),
-            language: selectedLanguages.join(","),
+            genre: selectedGenres.join(", "),
+            language: selectedLanguages.join(", "),
         };
+
+        console.log(userPreferences)
     
         try {
             const response = await fetch("http://localhost:5010/api/preference", {
