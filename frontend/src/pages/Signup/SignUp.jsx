@@ -43,6 +43,7 @@ const SignUp = () => {
         };
     }, [vantaEffect]);
     const [fullName, setFullName] = useState("");
+    const [bio,setBio] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
@@ -157,6 +158,18 @@ const SignUp = () => {
                             required
                             value={fullName}
                             onChange={(e) => setFullName(e.target.value)}
+                            InputLabelProps={{ style: { color: "white" } }}
+                            InputProps={{ style: { color: "white" } }}
+                            style={{ marginBottom: "1rem" }}
+                            className="animated-input" // Add animation class
+                        />
+                        <TextField
+                            label="Bio"
+                            variant="outlined"
+                            fullWidth
+                            required
+                            value={bio}
+                            onChange={(e) => setBio(e.target.value)}
                             InputLabelProps={{ style: { color: "white" } }}
                             InputProps={{ style: { color: "white" } }}
                             style={{ marginBottom: "1rem" }}
