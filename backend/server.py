@@ -144,7 +144,7 @@ user_preferences = {}
 def movies(user):
     recommended_shows = Recommend.hybrid_recommend(
         user_id = user.id,
-        mood_input = user_preferences.get("mood", "fear"),
+        mood_input = user_preferences.get("mood", "fear").lower(),
         top_n = 50
     )
     print(f"\nMovies Fetched for mood: {user_preferences['mood']}\n")
