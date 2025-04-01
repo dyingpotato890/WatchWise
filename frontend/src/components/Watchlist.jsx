@@ -117,28 +117,58 @@ const Watchlist = () => {
             <Grid container spacing={2} justifyContent="center">
                 {movies.map((movie, index) => (
                     <Grid item xs={12} sm={6} md={4} lg={3} key={movie.show_id || index}>
-                        <Box
-                            sx={{
-                                backgroundColor: "black",
-                                color: "white",
-                                padding: "10px",
-                                borderRadius: "8px",
-                                boxShadow: "0px 4px 10px rgba(255,0,0,0.3)",
-                                textAlign: "center",
-                                position: "relative",
-                            }}
-                        >
-                            <img
-                                src={movie.poster}
-                                alt={movie.title}
-                                style={{
-                                    width: "150px",
-                                    height: "180px",
-                                    objectFit: "cover",
+                            <Box
+                                sx={{
+                                    backgroundColor: "black",
+                                    color: "white",
+                                    padding: "10px",
                                     borderRadius: "8px",
+                                    boxShadow: "0px 4px 10px rgba(255,0,0,0.3)",
+                                    textAlign: "center",
+                                    position: "relative",
+                                    height: "100%",
+                                    display: "flex",
+                                    flexDirection: "column",
+                                    paddingBottom: "20px", // Increased padding at the bottom
+                                    marginBottom: "10px",  // Added margin for extra spacing
                                 }}
-                            />
-                            <Typography variant="h6" mt={1}>
+                            >
+                            <Box
+                                sx={{
+                                    width: "100%",
+                                    paddingTop: "150%", // 2:3 aspect ratio typical for movie posters
+                                    position: "relative",
+                                    borderRadius: "8px",
+                                    overflow: "hidden",
+                                }}
+                            >
+                                <img
+                                    src={movie.poster}
+                                    alt={movie.title}
+                                    style={{
+                                        position: "absolute",
+                                        top: 0,
+                                        left: 0,
+                                        width: "100%",
+                                        height: "100%",
+                                        objectFit: "cover",
+                                        borderRadius: "8px",
+                                    }}
+                                />
+                            </Box>
+                            <Typography 
+                                variant="h6" 
+                                mt={1}
+                                sx={{
+                                    flexGrow: 1,
+                                    display: "-webkit-box",
+                                    WebkitLineClamp: 2,
+                                    WebkitBoxOrient: "vertical",
+                                    overflow: "hidden",
+                                    textOverflow: "ellipsis",
+                                    minHeight: "64px", // Ensures consistent space for title
+                                }}
+                            >
                                 {movie.title}
                             </Typography>
                             <Button

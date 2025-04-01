@@ -82,7 +82,7 @@ body, html {
     font-size: 1.2rem;
     padding: 10px 20px;
     border-radius: 20px;
-    transition: 0.5s;
+    transition: 0.1s;
     margin-top: 20px;
     display: inline-block;
   }

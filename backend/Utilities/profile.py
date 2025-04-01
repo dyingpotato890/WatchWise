@@ -1,5 +1,7 @@
 import pymongo
 
+from Utilities.movies import Movies
+
 client = pymongo.MongoClient("mongodb://localhost:27017/")
 db = client["WatchWise"]
 users_collection = db["users"]
@@ -51,3 +53,26 @@ class Profile:
         print(counts)
         
         return counts
+    
+    @staticmethod
+    def fetchRecentHistory(user_id):
+        watch_history = users_collection.find_one({ "user_id": str(user_id) }, { "watch_history": 1 })
+        watch_history = watch_history["watch_history"]
+        
+        moviesObj = Movies()
+        
+        recentlyWatched = []
+        
+        if (len(watch_history) < 4):
+            pass 
+        else:
+            watch_history = watch_history[-1:-4:-1]
+            
+        show_ids = []
+        for movie in watch_history:
+            show_ids.append(movie["show_id"])
+            
+        details = moviesObj.fetch_details(show_ids, user_id)        
+        recentlyWatched.append(details)
+            
+        return recentlyWatched

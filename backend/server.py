@@ -267,7 +267,7 @@ def profile(user):
         response_data = {
             "name": data['data'].get("name", "Unknown User"),
             "email": data['data'].get("email", "No email provided"),
-            "avatar": data['data'].get("avatar", "https://i.pravatar.cc/150?img=1"),
+            "avatar": data['data'].get("avatar", "https://wallpapers.com/images/featured/cool-profile-picture-87h46gcobjl5e4xu.jpg"),
             "bio": data['data'].get("bio", "No bio available"),
         }
 
@@ -290,6 +290,18 @@ def count(user):
 
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+    
+@app.route("/api/recentlyWatched", methods=["GET"])
+@token_required
+def recent(user):
+    try:
+        recentMovies = Profile.fetchRecentHistory(user.id)
+        print(recentMovies)
+
+        return jsonify({"message": f"Got Data", "data": recentMovies}), 200
+
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
 if __name__ == "__main__":
-    app.run(debug=True, port=5010)
+    app.run(debug = True, port = 5010)
