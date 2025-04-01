@@ -14,7 +14,8 @@ from functools import wraps
 import jwt
 import datetime
 
-client = pymongo.MongoClient("mongodb://localhost:27017/")
+conn=os.getenv("MONGO_CONN")
+client = pymongo.MongoClient(conn)
 db = client["WatchWise"]
 
 # Initialize AI Extractor
