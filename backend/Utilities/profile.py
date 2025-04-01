@@ -1,6 +1,6 @@
 import pymongo
-
-client = pymongo.MongoClient("mongodb://localhost:27017/")
+import os
+client = pymongo.MongoClient(os.getenv("MONGO_CONN"))
 db = client["WatchWise"]
 users_collection = db["users"]
 login_collection = db["login"]

@@ -1,6 +1,6 @@
-import datetime
 from datetime import datetime
 import random
+import os
 
 import bcrypt
 import pymongo
@@ -8,7 +8,7 @@ from flask_login import UserMixin
 
 from Utilities.movies import Movies
 
-client = pymongo.MongoClient("mongodb://localhost:27017/")
+client = pymongo.MongoClient(os.getenv("MONGO_CONN"))
 db = client["WatchWise"]
 
 users_collection = db["users"]  # For user_id generation

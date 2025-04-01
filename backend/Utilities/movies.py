@@ -1,8 +1,9 @@
 import pymongo
+import os
 
 class Movies:
     def __init__(self):
-        self.client = pymongo.MongoClient("mongodb://localhost:27017/")
+        self.client = pymongo.MongoClient(os.getenv("MONGO_CONN"))
         self.db = self.client["WatchWise"]
         
     def fetch_rating(self, user_id, show_id):
