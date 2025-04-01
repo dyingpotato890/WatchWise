@@ -3,10 +3,10 @@ import numpy as np
 from sklearn.metrics.pairwise import cosine_similarity
 
 class Recommend():
-    user_item_matrix = joblib.load('backend/models/user_item_matrix.joblib')
-    tfidf_matrix = joblib.load('backend/models/tfidf_matrix.joblib')
-    df = joblib.load('backend/models/movies_dataframe.joblib')
-    tfidf_vectorizer = joblib.load('backend/models/tfidf_vectorizer.joblib')
+    user_item_matrix = joblib.load('models/user_item_matrix.joblib')
+    tfidf_matrix = joblib.load('models/tfidf_matrix.joblib')
+    df = joblib.load('models/movies_dataframe.joblib')
+    tfidf_vectorizer = joblib.load('models/tfidf_vectorizer.joblib')
 
     @staticmethod
     def get_user_cf_recommendations(user_id, top_n = 40):
