@@ -140,8 +140,8 @@ const UserProfile = () => {
             const data = await response.json();
             console.log("Fetched Recently Watched Data:", data);
 
-            // Based on the provided API response structure
-            if (data.data && data.data.length > 0 && Array.isArray(data.data[0])) {
+            // Check if data exists, has the nested array structure, and has items
+            if (data && data.data && Array.isArray(data.data) && data.data.length > 0 && Array.isArray(data.data[0])) {
                 setRecentlyWatched(data.data[0]);
             } else {
                 setRecentlyWatched([]);
@@ -193,26 +193,13 @@ const UserProfile = () => {
         }
     ];
 
-    const recentHistory = [
-        {
-            title: "How to Train your Dragon",
-            poster: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ6NuHTYoXBIjh60tjK6fGWKCuRCbX6dP0AWg&s",
-            rating: 4.5,
-            genre: "Action"
-        },
-        {
-            title: "Titanic",
-            poster: "https://c.ndtvimg.com/gws/ms/movies-with-the-most-oscar-wins/assets/2.jpeg?1727706937",
-            rating: 4.2,
-            genre: "Drama"
-        },
-        {
-            title: "Hansan",
-            poster: "https://akamaividz2.zee5.com/image/upload/w_336,h_504,c_scale,f_webp,q_auto:eco/resources/0-0-1z5254199/portrait/1920x770f481a92fa3fe4029bc0e897803d0113a.jpg",
-            rating: 4.7,
-            genre: "Thriller"
-        },
-    ];
+    // Helper function to extract primary genre from genre string
+    const getPrimaryGenre = (genreString) => {
+        if (!genreString) return "Unknown";
+        // If genres are comma-separated, take the first one
+        const genres = genreString.split(',');
+        return genres[0].trim();
+    };
 
     return (
         <>
@@ -461,7 +448,7 @@ const UserProfile = () => {
                                                                 >
                                                                     <CardMedia
                                                                         component="img"
-                                                                        image={movie.poster}
+                                                                        image={movie.poster || "https://via.placeholder.com/300x450?text=No+Image"}
                                                                         alt={movie.title}
                                                                         sx={{ 
                                                                             position: 'absolute',
@@ -471,6 +458,10 @@ const UserProfile = () => {
                                                                             height: '100%',
                                                                             objectFit: 'cover',
                                                                             filter: 'brightness(0.8)'
+                                                                        }}
+                                                                        onError={(e) => {
+                                                                            e.target.onerror = null;
+                                                                            e.target.src = "https://via.placeholder.com/300x450?text=No+Image";
                                                                         }}
                                                                     />
                                                                 </Box>
@@ -489,7 +480,7 @@ const UserProfile = () => {
                                                                         {movie.title}
                                                                     </Typography>
                                                                     
-                                                                    {/* Display only the primary genre as a chip */}
+                                                                    {/* Display the primary genre as a chip */}
                                                                     <Box sx={{ my: 1 }}>
                                                                         <Chip 
                                                                             label={getPrimaryGenre(movie.genre)} 
@@ -504,7 +495,7 @@ const UserProfile = () => {
                                                                     </Box>
                                                                     
                                                                     <Typography variant="body2" sx={{ mt: 1 }}>
-                                                                        Rating: {movie.rating}/10
+                                                                        Rating: {movie.rating || "N/A"}/10
                                                                     </Typography>
                                                                 </Box>
                                                             </Card>
