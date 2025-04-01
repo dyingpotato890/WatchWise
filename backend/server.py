@@ -33,7 +33,7 @@ app.config["SECRET_KEY"] = os.getenv("SECRET_KEY", "meowmeowmeow")
 #
 
 # Flask-Login Setup
-frontend_path = os.path.join(os.getcwd(), "frontend", "dist")
+frontend_path = os.path.join(os.getcwd(), "..","frontend", "dist")
 
 @app.before_request
 def handle_preflight():
