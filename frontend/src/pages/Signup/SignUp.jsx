@@ -239,9 +239,12 @@ const SignUp = () => {
                     <Box mt={2} textAlign="center">
                         <Typography variant="body2">
                             Already have an account?{" "}
-                            <Link href="/login" style={{ color: "red" }}>
+                            <span
+                                style={{ color: "red", cursor: "pointer" }}
+                                onClick={() => navigate("/login")}
+                            >
                                 Login Here
-                            </Link>
+                            </span>
                         </Typography>
                     </Box>
                 </Paper>
