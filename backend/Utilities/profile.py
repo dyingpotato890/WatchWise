@@ -22,7 +22,7 @@ class Profile:
             if not user_data:
                 user_data = {
                     "name": "Unknown User",
-                    "avatar": "https://i.pravatar.cc/150?img=1",
+                    "avatar": "https://wallpapers.com/images/featured/cool-profile-picture-87h46gcobjl5e4xu.jpg",
                     "bio": "No bio available",
                     "created_at": None
                 }

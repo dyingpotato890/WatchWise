@@ -15,7 +15,7 @@ const UserProfile = () => {
     const [userData, setUserData] = useState({
         name: "Loading...",
         email: "",
-        avatar: "https://i.pravatar.cc/150?img=1",
+        avatar: "https://wallpapers.com/images/featured/cool-profile-picture-87h46gcobjl5e4xu.jpg",
         bio: "",
     });
     const [statsData, setStatsData] = useState({
@@ -59,7 +59,7 @@ const UserProfile = () => {
             setUserData({
                 name: data.data.name || "Unknown User",
                 email: data.data.email || "No email provided",
-                avatar: data.data.avatar || "https://i.pravatar.cc/150?img=1",
+                avatar: data.data.avatar || "https://wallpapers.com/images/featured/cool-profile-picture-87h46gcobjl5e4xu.jpg",
                 bio: data.data.bio || "No bio available",
             });
         } catch (error) {
