@@ -33,12 +33,14 @@ class Movies:
                 poster_path = "https://motivatevalmorgan.com/wp-content/uploads/2016/06/default-movie-768x1129.jpg"
 
             title = movie_collection.find_one({"show_id": showid})["title"]
+            genre = movie_collection.find_one({"show_id": showid})["listed_in"]
             
             rating = self.fetch_rating(show_id = showid, user_id = user_id)
 
             temp = {"show_id": showid,
                     "title": title,
                     "poster": poster_path,
+                    "genre": genre,
                     "rating": rating}
             
             watchList.append(temp)

@@ -290,6 +290,18 @@ def count(user):
 
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+    
+@app.route("/api/recentlyWatched", methods=["GET"])
+@token_required
+def recent(user):
+    try:
+        recentMovies = Profile.fetchRecentHistory(user.id)
+        print(recentMovies)
+
+        return jsonify({"message": f"Got Data", "data": recentMovies}), 200
+
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
 if __name__ == "__main__":
-    app.run(debug=True, port=5010)
+    app.run(debug = True, port = 5010)

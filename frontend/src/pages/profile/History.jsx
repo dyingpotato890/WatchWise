@@ -59,36 +59,64 @@ const History = () => {
             <Typography variant="h4" gutterBottom>
                 Watch History
             </Typography>
-            <Grid container spacing={2} justifyContent="center">
+            <Grid container spacing={3} justifyContent="center">
                 {movies.map((movie) => (
                     <Grid item xs={12} sm={6} md={4} lg={3} key={movie.id}>
                         <Box
                             sx={{
                                 backgroundColor: "black",
                                 color: "white",
-                                padding: "10px",
                                 borderRadius: "8px",
                                 boxShadow: "0px 4px 10px rgba(255,0,0,0.3)",
-                                textAlign: "center",
-                                position: "relative",
+                                height: "100%",
+                                display: "flex",
+                                flexDirection: "column",
+                                overflow: "hidden", // Prevent content from breaking the card design
                             }}
                         >
-                            <img
-                                src={movie.poster}
-                                alt={movie.title}
-                                style={{
-                                    width: "150px",
-                                    height: "180px",
-                                    objectFit: "cover",
-                                    borderRadius: "8px",
+                            <Box
+                                sx={{
+                                    position: "relative",
+                                    width: "100%",
+                                    paddingTop: "150%", // 2:3 aspect ratio (standard movie poster)
+                                    overflow: "hidden",
                                 }}
-                            />
-                            <Typography variant="h6" mt={1}>
-                                {movie.title}
-                            </Typography>
-                            <Typography variant="body2" color="gray">
-                                Rating: ⭐ {movie.rating} / 10
-                            </Typography>
+                            >
+                                <img
+                                    src={movie.poster}
+                                    alt={movie.title}
+                                    style={{
+                                        position: "absolute",
+                                        top: 0,
+                                        left: 0,
+                                        width: "100%",
+                                        height: "100%",
+                                        objectFit: "cover",
+                                    }}
+                                    loading="lazy" // Adds lazy loading for better performance
+                                />
+                            </Box>
+                            <Box sx={{ padding: "12px", flexGrow: 1 }}>
+                                <Typography 
+                                    variant="h6" 
+                                    sx={{ 
+                                        fontSize: "1rem", 
+                                        fontWeight: "bold",
+                                        overflow: "hidden",
+                                        textOverflow: "ellipsis",
+                                        whiteSpace: "nowrap"
+                                    }}
+                                >
+                                    {movie.title}
+                                </Typography>
+                                <Typography 
+                                    variant="body2" 
+                                    color="gray"
+                                    sx={{ marginTop: "4px" }}
+                                >
+                                    Rating: ⭐ {movie.rating} / 10
+                                </Typography>
+                            </Box>
                         </Box>
                     </Grid>
                 ))}
