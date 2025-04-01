@@ -11,3 +11,4 @@ google-generativeai
 bcrypt
 jwt
 PyJWT
+gunicorn
