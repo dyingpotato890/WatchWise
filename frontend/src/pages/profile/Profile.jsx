@@ -195,19 +195,19 @@ const UserProfile = () => {
 
     const recentHistory = [
         {
-            title: "Movie Title 1",
-            poster: "https://images.pexels.com/photos/674010/pexels-photo-674010.jpeg?auto=compress&cs=tinysrgb&w=600",
+            title: "How to Train your Dragon",
+            poster: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ6NuHTYoXBIjh60tjK6fGWKCuRCbX6dP0AWg&s",
             rating: 4.5,
             genre: "Action"
         },
         {
-            title: "Movie Title 2",
+            title: "Titanic",
             poster: "https://c.ndtvimg.com/gws/ms/movies-with-the-most-oscar-wins/assets/2.jpeg?1727706937",
             rating: 4.2,
             genre: "Drama"
         },
         {
-            title: "Movie Title 3",
+            title: "Hansan",
             poster: "https://akamaividz2.zee5.com/image/upload/w_336,h_504,c_scale,f_webp,q_auto:eco/resources/0-0-1z5254199/portrait/1920x770f481a92fa3fe4029bc0e897803d0113a.jpg",
             rating: 4.7,
             genre: "Thriller"
