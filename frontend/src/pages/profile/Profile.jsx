@@ -1,12 +1,12 @@
 import React, { useEffect, useState, useRef } from "react";
 import * as THREE from "three";
 import NET from "vanta/dist/vanta.net.min";
-import { Box, Typography, Avatar, Grid, Paper, Container, Card, CardMedia, Divider } from "@mui/material";
+import { Box, Typography, Avatar, Grid, Paper, Container, Card, CardMedia, Divider, Chip } from "@mui/material";
 import { motion, AnimatePresence } from "framer-motion";
 import Navbar from "../../components/Navbar";
-import Profile from "./UserProfile";
-import Watchlist from "./Watchlist";
-import History from "./History";
+import Profile from "../../components/UserProfile";
+import Watchlist from "../../components/Watchlist";
+import History from "../../components/History";
 
 const UserProfile = () => {
     const [vantaEffect, setVantaEffect] = useState(null);
@@ -15,13 +15,14 @@ const UserProfile = () => {
     const [userData, setUserData] = useState({
         name: "Loading...",
         email: "",
-        avatar: "https://i.pravatar.cc/150?img=1",
+        avatar: "https://wallpapers.com/images/featured/cool-profile-picture-87h46gcobjl5e4xu.jpg",
         bio: "",
     });
     const [statsData, setStatsData] = useState({
         watch_history: 0,
         watch_list: 0
     });
+    const [recentlyWatched, setRecentlyWatched] = useState([]);
 
     const fetchUserData = async () => {
         console.log("Fetching user data...");
@@ -58,7 +59,7 @@ const UserProfile = () => {
             setUserData({
                 name: data.data.name || "Unknown User",
                 email: data.data.email || "No email provided",
-                avatar: data.data.avatar || "https://i.pravatar.cc/150?img=1",
+                avatar: data.data.avatar || "https://wallpapers.com/images/featured/cool-profile-picture-87h46gcobjl5e4xu.jpg",
                 bio: data.data.bio || "No bio available",
             });
         } catch (error) {
@@ -107,10 +108,54 @@ const UserProfile = () => {
         }
     };
 
+    const fetchRecentlyWatched = async () => {
+        console.log("Fetching recently watched...");
+        try {
+            const token = localStorage.getItem("accessToken");
+
+            if (!token) {
+                console.warn("No access token found. User might not be logged in.");
+                return;
+            }
+
+            const response = await fetch("http://localhost:5010/api/recentlyWatched", {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                    "x-access-token": token,
+                },
+            });
+
+            console.log("Recently Watched API Response Status:", response.status);
+
+            if (response.status === 401 || response.status === 403) {
+                console.error("Unauthorized access. Token may be invalid or expired.");
+                return;
+            }
+
+            if (!response.ok) {
+                throw new Error(`Error: ${response.statusText}`);
+            }
+
+            const data = await response.json();
+            console.log("Fetched Recently Watched Data:", data);
+
+            // Check if data exists, has the nested array structure, and has items
+            if (data && data.data && Array.isArray(data.data) && data.data.length > 0 && Array.isArray(data.data[0])) {
+                setRecentlyWatched(data.data[0]);
+            } else {
+                setRecentlyWatched([]);
+            }
+        } catch (error) {
+            console.error("Error fetching recently watched:", error);
+            setRecentlyWatched([]);
+        }
+    };
 
     useEffect(() => {
         fetchUserData();
         fetchStatsData();
+        fetchRecentlyWatched();
     }, []);
 
     useEffect(() => {
@@ -148,26 +193,13 @@ const UserProfile = () => {
         }
     ];
 
-    const recentHistory = [
-        {
-            title: "Movie Title 1",
-            poster: "https://images.pexels.com/photos/674010/pexels-photo-674010.jpeg?auto=compress&cs=tinysrgb&w=600",
-            rating: 4.5,
-            genre: "Action"
-        },
-        {
-            title: "Movie Title 2",
-            poster: "https://c.ndtvimg.com/gws/ms/movies-with-the-most-oscar-wins/assets/2.jpeg?1727706937",
-            rating: 4.2,
-            genre: "Drama"
-        },
-        {
-            title: "Movie Title 3",
-            poster: "https://akamaividz2.zee5.com/image/upload/w_336,h_504,c_scale,f_webp,q_auto:eco/resources/0-0-1z5254199/portrait/1920x770f481a92fa3fe4029bc0e897803d0113a.jpg",
-            rating: 4.7,
-            genre: "Thriller"
-        },
-    ];
+    // Helper function to extract primary genre from genre string
+    const getPrimaryGenre = (genreString) => {
+        if (!genreString) return "Unknown";
+        // If genres are comma-separated, take the first one
+        const genres = genreString.split(',');
+        return genres[0].trim();
+    };
 
     return (
         <>
@@ -379,7 +411,7 @@ const UserProfile = () => {
                                                 </Grid>
                                             </Grid>
 
-                                            {/* Recent Watched Section */}
+                                            {/* Recently Watched Section */}
                                             <Typography 
                                                 variant="h5" 
                                                 sx={{ 
@@ -394,38 +426,101 @@ const UserProfile = () => {
                                             </Typography>
                                             
                                             <Grid container spacing={3}>
-                                                {recentHistory.map((movie) => (
-                                                    <Grid item xs={4} key={movie.title}>
-                                                        <Card 
-                                                            sx={{ 
-                                                                backgroundColor: 'rgba(0,0,0,0.5)', 
-                                                                border: '1px solid rgba(220, 20, 60, 0.3)'
+                                                {recentlyWatched.length > 0 ? (
+                                                    recentlyWatched.map((movie) => (
+                                                        <Grid item xs={12} sm={6} md={4} key={movie.show_id}>
+                                                            <Card 
+                                                                sx={{ 
+                                                                    backgroundColor: 'rgba(0,0,0,0.5)', 
+                                                                    border: '1px solid rgba(220, 20, 60, 0.3)',
+                                                                    height: '100%',
+                                                                    display: 'flex',
+                                                                    flexDirection: 'column'
+                                                                }}
+                                                            >
+                                                                <Box
+                                                                    sx={{
+                                                                        position: 'relative',
+                                                                        paddingTop: '150%', // This creates a 2:3 aspect ratio container (standard movie poster)
+                                                                        width: '100%',
+                                                                        overflow: 'hidden'
+                                                                    }}
+                                                                >
+                                                                    <CardMedia
+                                                                        component="img"
+                                                                        image={movie.poster || "https://via.placeholder.com/300x450?text=No+Image"}
+                                                                        alt={movie.title}
+                                                                        sx={{ 
+                                                                            position: 'absolute',
+                                                                            top: 0,
+                                                                            left: 0,
+                                                                            width: '100%',
+                                                                            height: '100%',
+                                                                            objectFit: 'cover',
+                                                                            filter: 'brightness(0.8)'
+                                                                        }}
+                                                                        onError={(e) => {
+                                                                            e.target.onerror = null;
+                                                                            e.target.src = "https://via.placeholder.com/300x450?text=No+Image";
+                                                                        }}
+                                                                    />
+                                                                </Box>
+                                                                <Box sx={{ p: 2, color: 'white', flexGrow: 1 }}>
+                                                                    <Typography 
+                                                                        variant="h6" 
+                                                                        sx={{ 
+                                                                            color: 'crimson',
+                                                                            overflow: 'hidden',
+                                                                            textOverflow: 'ellipsis',
+                                                                            display: '-webkit-box',
+                                                                            WebkitLineClamp: 2,
+                                                                            WebkitBoxOrient: 'vertical'
+                                                                        }}
+                                                                    >
+                                                                        {movie.title}
+                                                                    </Typography>
+                                                                    
+                                                                    {/* Display the primary genre as a chip */}
+                                                                    <Box sx={{ my: 1 }}>
+                                                                        <Chip 
+                                                                            label={getPrimaryGenre(movie.genre)} 
+                                                                            size="small"
+                                                                            sx={{ 
+                                                                                backgroundColor: 'rgba(220, 20, 60, 0.2)',
+                                                                                borderColor: 'rgba(220, 20, 60, 0.5)',
+                                                                                color: 'white',
+                                                                                fontSize: '0.75rem'
+                                                                            }}
+                                                                        />
+                                                                    </Box>
+                                                                    
+                                                                    <Typography variant="body2" sx={{ mt: 1 }}>
+                                                                        Rating: {movie.rating || "N/A"}/10
+                                                                    </Typography>
+                                                                </Box>
+                                                            </Card>
+                                                        </Grid>
+                                                    ))
+                                                ) : (
+                                                    <Grid item xs={12}>
+                                                        <Paper
+                                                            sx={{
+                                                                backgroundColor: 'rgba(0,0,0,0.5)',
+                                                                padding: '30px',
+                                                                textAlign: 'center',
+                                                                borderRadius: '8px',
+                                                                border: '1px dashed rgba(220, 20, 60, 0.3)'
                                                             }}
                                                         >
-                                                            <CardMedia
-                                                                component="img"
-                                                                height="250"
-                                                                image={movie.poster}
-                                                                alt={movie.title}
-                                                                sx={{ 
-                                                                    objectFit: 'cover',
-                                                                    filter: 'brightness(0.8)'
-                                                                }}
-                                                            />
-                                                            <Box sx={{ p: 2, color: 'white' }}>
-                                                                <Typography variant="h6" sx={{ color: 'crimson' }}>
-                                                                    {movie.title}
-                                                                </Typography>
-                                                                <Typography variant="body2">
-                                                                    Genre: {movie.genre}
-                                                                </Typography>
-                                                                <Typography variant="body2">
-                                                                    Rating: {movie.rating}/5
-                                                                </Typography>
-                                                            </Box>
-                                                        </Card>
+                                                            <Typography variant="h6" sx={{ color: 'rgba(255,255,255,0.7)' }}>
+                                                                No recently watched content
+                                                            </Typography>
+                                                            <Typography variant="body2" sx={{ color: 'rgba(255,255,255,0.5)', mt: 1 }}>
+                                                                Start watching to see your history here
+                                                            </Typography>
+                                                        </Paper>
                                                     </Grid>
-                                                ))}
+                                                )}
                                             </Grid>
                                         </motion.div>
                                     )}
