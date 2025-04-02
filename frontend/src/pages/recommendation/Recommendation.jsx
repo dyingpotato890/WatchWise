@@ -6,7 +6,12 @@ import Loading from "../../components/Loading"; // ✅ Import Loading Page
 
 // Initial empty movie list
 const initialMovies = [];
-
+// Move this outside of fetchMovies to make it accessible
+const platformIcons = {
+  "Netflix": "https://upload.wikimedia.org/wikipedia/commons/0/0c/Netflix_2015_N_logo.svg", // Just the N
+  "Amazon Prime": "https://upload.wikimedia.org/wikipedia/commons/1/11/Amazon_Prime_Video_logo.svg", // Full "Prime Video" 
+  "Disney+": "https://upload.wikimedia.org/wikipedia/commons/3/3e/Disney%2B_logo.svg" // Disney+ with plus
+};
 // Function to fetch movies from the backend API
 const fetchMovies = async (setMovies, setLoading) => {
   console.log("fetchMovies function called!");
@@ -45,8 +50,10 @@ const fetchMovies = async (setMovies, setLoading) => {
 
     const data = await response.json();
     console.log("Raw Movies Data:", data);
+    
+  
 
-    const validMovies = data.movies.map((movie) => ({
+    const validMovies = Array.isArray(data.movies) ? data.movies.map((movie) => ({  
       ...movie,
       poster: typeof movie.poster === "string" && movie.poster.trim() !== ""
         ? movie.poster
@@ -58,7 +65,9 @@ const fetchMovies = async (setMovies, setLoading) => {
       duration: movie.duration || "N/A",
       language: movie.language || "Unknown",
       show_id: movie.show_id,
-    }));
+      available_on: Array.isArray(movie.available_on) ? movie.available_on : [], // ✅ Ensure it's always an array
+    })) : [];
+    
 
     console.log("Validated Movies:", validMovies);
     setMovies(validMovies);
@@ -72,13 +81,17 @@ const fetchMovies = async (setMovies, setLoading) => {
 
 // Function to convert YouTube URLs to embed format
 const convertToEmbedUrl = (url) => {
+  if (!url || typeof url !== "string" || url.trim() === "") {  // Added check for empty string
+    return "https://www.youtube.com/embed/dQw4w9WgXcQ";
+  }
+
   try {
     const urlObj = new URL(url);
     const videoId = urlObj.searchParams.get("v");
     return videoId ? `https://www.youtube.com/embed/${videoId}` : url;
   } catch (error) {
     console.error("Invalid YouTube URL:", url);
-    return url;
+    return "https://www.youtube.com/embed/dQw4w9WgXcQ"; // Fallback video
   }
 };
 
@@ -93,14 +106,15 @@ const Recommendation = () => {
   const [processedIds, setProcessedIds] = useState(new Set());
 
   // Fetch movies after a delay when the component mounts
+    // Fetch movies after a delay when the component mounts
 
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      fetchMovies(setMovies, setLoading); // Pass setLoading to fetchMovies
-    }, 3000);
-    return () => clearTimeout(timer);
-  }, []);
-
+    useEffect(() => {
+      const timer = setTimeout(() => {
+        fetchMovies(setMovies, setLoading); // Pass setLoading to fetchMovies
+      }, 3000);
+      return () => clearTimeout(timer);
+    }, []);
+    
   // Initialize Vanta.js background effect
   useEffect(() => {
     if (!vantaEffect) {
@@ -132,6 +146,7 @@ const Recommendation = () => {
   
   // Function to move to the next movie in the list
   const handleNext = () => {
+    if (movies.length === 0) return;  
     setCurrentIndex((prevIndex) => {
       const nextIndex = (prevIndex + 1) % movies.length;
       return nextIndex === currentIndex ? prevIndex : nextIndex;
@@ -139,6 +154,7 @@ const Recommendation = () => {
   };
 
   const handleHide = async () => {
+    if (movies.length === 0 || !movies[currentIndex]?.show_id) return; 
     if (movies.length > 0) {
       const currentMovie = movies[currentIndex];
       if (!processedIds.has(currentMovie.show_id)) {
@@ -150,6 +166,7 @@ const Recommendation = () => {
   };
 
   const handleAccept = async () => {
+    if (movies.length === 0 || !movies[currentIndex]?.show_id) return; 
     if (movies.length > 0) {
       const currentMovie = movies[currentIndex];
       
@@ -239,14 +256,40 @@ if (!loading && movies.length === 0) {
               <p className="movie-info" style={{ textAlign: "left" }}>{movie.year || "Unknown Year"} • {movie.duration || "Unknown Duration"}</p>
             </div>
             <div className="movie-details">
-              <div className="info-section">
-                <p className="language"><strong>Language:</strong> {movie.language || "Unknown"}</p>
-                <p className="description">{movie.description || "No description available."}</p>
-              </div>
+            <div className="info-section">
+  <p className="language"><strong>Language:</strong> {movie.language || "Unknown"}</p>
+  <p className="description">{movie.description || "No description available."}</p>
+
+  {/* Available On Section - Moved here */}
+  {movie.available_on && movie.available_on.length > 0 && (
+  <div className="available-on">
+    <p><strong>Available on:</strong></p>
+    <div className="platform-icons-row">
+      {movie.available_on.map((platform, index) => {
+        const iconUrl = platformIcons[platform];
+        return iconUrl ? (
+          <img
+            key={index}
+            src={iconUrl}
+            alt={platform}
+            className={`platform-icon ${platform.toLowerCase().replace('+', 'plus')}`}
+            onError={(e) => {
+              e.target.style.display = 'none';
+            }}
+          />
+        ) : null;
+      })}
+    </div>
+  </div>
+)}
+  </div>
+
               <div className="poster-section">
                 <img src={movie.poster || "placeholder.jpg"} alt={`${movie.title} Poster`} className="movie-poster" />
               </div>
             </div>
+     
+
             {/* Action Buttons */}
             <div className="button-container flex justify-center gap-6 mt-4">
               <button className="group flex items-center justify-center w-16 h-16 bg-gray-800 rounded-full border-4 border-red-600 hover:bg-red-600 transition-all duration-300 transform hover:scale-110 hover:rotate-12 shadow-xl" aria-label="Reject Recommendation" onClick={handleHide}>
