@@ -10,8 +10,12 @@ const initialMovies = [];
 const platformIcons = {
   "Netflix": "https://upload.wikimedia.org/wikipedia/commons/0/0c/Netflix_2015_N_logo.svg", // Just the N
   "Amazon Prime": "https://upload.wikimedia.org/wikipedia/commons/1/11/Amazon_Prime_Video_logo.svg", // Full "Prime Video" 
-  "Disney+": "https://upload.wikimedia.org/wikipedia/commons/3/3e/Disney%2B_logo.svg" // Disney+ with plus
+  "Disney+": "https://upload.wikimedia.org/wikipedia/commons/3/3e/Disney%2B_logo.svg", // Disney+ with plus
+  "Hulu": "https://upload.wikimedia.org/wikipedia/commons/e/e4/Hulu_Logo.svg",
+  "HBO Max": "https://upload.wikimedia.org/wikipedia/commons/1/17/HBO_Max_Logo.svg",
+  "Apple TV+": "https://upload.wikimedia.org/wikipedia/commons/4/4b/Apple_TV_Plus_logo.svg"
 };
+
 // Function to fetch movies from the backend API
 const fetchMovies = async (setMovies, setLoading) => {
   console.log("fetchMovies function called!");
@@ -52,7 +56,6 @@ const fetchMovies = async (setMovies, setLoading) => {
     console.log("Raw Movies Data:", data);
     
   
-
     const validMovies = Array.isArray(data.movies) ? data.movies.map((movie) => ({  
       ...movie,
       poster: typeof movie.poster === "string" && movie.poster.trim() !== ""
@@ -65,7 +68,7 @@ const fetchMovies = async (setMovies, setLoading) => {
       duration: movie.duration || "N/A",
       language: movie.language || "Unknown",
       show_id: movie.show_id,
-      available_on: Array.isArray(movie.available_on) ? movie.available_on : [], // ✅ Ensure it's always an array
+      source: movie.source || "Unknown" // Changed from available_on to source
     })) : [];
     
 
@@ -106,14 +109,12 @@ const Recommendation = () => {
   const [processedIds, setProcessedIds] = useState(new Set());
 
   // Fetch movies after a delay when the component mounts
-    // Fetch movies after a delay when the component mounts
-
-    useEffect(() => {
-      const timer = setTimeout(() => {
-        fetchMovies(setMovies, setLoading); // Pass setLoading to fetchMovies
-      }, 3000);
-      return () => clearTimeout(timer);
-    }, []);
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      fetchMovies(setMovies, setLoading); // Pass setLoading to fetchMovies
+    }, 3000);
+    return () => clearTimeout(timer);
+  }, []);
     
   // Initialize Vanta.js background effect
   useEffect(() => {
@@ -256,33 +257,39 @@ if (!loading && movies.length === 0) {
               <p className="movie-info" style={{ textAlign: "left" }}>{movie.year || "Unknown Year"} • {movie.duration || "Unknown Duration"}</p>
             </div>
             <div className="movie-details">
-            <div className="info-section">
-  <p className="language"><strong>Language:</strong> {movie.language || "Unknown"}</p>
-  <p className="description">{movie.description || "No description available."}</p>
+              <div className="info-section">
+                <p className="language"><strong>Language:</strong> {movie.language || "Unknown"}</p>
+                <p className="description">{movie.description || "No description available."}</p>
 
-  {/* Available On Section - Moved here */}
-  {movie.available_on && movie.available_on.length > 0 && (
-  <div className="available-on">
-    <p><strong>Available on:</strong></p>
-    <div className="platform-icons-row">
-      {movie.available_on.map((platform, index) => {
-        const iconUrl = platformIcons[platform];
-        return iconUrl ? (
-          <img
-            key={index}
-            src={iconUrl}
-            alt={platform}
-            className={`platform-icon ${platform.toLowerCase().replace('+', 'plus')}`}
-            onError={(e) => {
-              e.target.style.display = 'none';
-            }}
-          />
-        ) : null;
-      })}
-    </div>
-  </div>
-)}
-  </div>
+                {/* Updated Available On Section */}
+                {movie.source && (
+                  <div className="available-on">
+                    <p><strong>Available on:</strong></p>
+                    <div className="platform-icons-row">
+                      {(() => {
+                        const platform = movie.source;
+                        const iconUrl = platformIcons[platform];
+                        return iconUrl ? (
+                          <img
+                            src={iconUrl}
+                            alt={platform}
+                            className={`platform-icon ${platform.toLowerCase().replace('+', 'plus')}`}
+                            onError={(e) => {
+                              e.target.onerror = null; // Prevent infinite loop
+                              e.target.style.display = 'none';
+                              // Optional: Insert text fallback
+                              const textNode = document.createTextNode(platform);
+                              e.target.parentNode.appendChild(textNode);
+                            }}
+                          />
+                        ) : (
+                          <span className="platform-name">{platform}</span>
+                        );
+                      })()}
+                    </div>
+                  </div>
+                )}
+              </div>
 
               <div className="poster-section">
                 <img src={movie.poster || "placeholder.jpg"} alt={`${movie.title} Poster`} className="movie-poster" />
