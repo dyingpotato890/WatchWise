@@ -24,7 +24,7 @@ const Watchlist = () => {
     const fetchWatchlist = async () => {
         try {
             const token = localStorage.getItem("accessToken");
-            const response = await fetch("http://localhost:5010/api/fetchWatchlater", {
+            const response = await fetch("/api/fetchWatchlater", {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",
@@ -56,7 +56,7 @@ const Watchlist = () => {
             try {
                 const token = localStorage.getItem("accessToken");
     
-                const response = await fetch("http://localhost:5010/api/addRating", {
+                const response = await fetch("/api/addRating", {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",

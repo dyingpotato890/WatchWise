@@ -21,7 +21,7 @@ const fetchMovies = async (setMovies, setLoading) => {
       return;
     }
 
-    const response = await fetch("http://localhost:5010/api/movies", {
+    const response = await fetch("/api/movies", {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -166,7 +166,7 @@ const Recommendation = () => {
       }
 
       try {
-        const response = await fetch("http://localhost:5010/api/watchlater", {
+        const response = await fetch("/api/watchlater", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",

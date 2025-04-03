@@ -38,7 +38,7 @@ const LanguagePage = ({ mood, selectedGenres, onBack }) => {
         };
     
         try {
-            const response = await fetch("http://localhost:5010/api/preference", {
+            const response = await fetch("/api/preference", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(userPreferences),

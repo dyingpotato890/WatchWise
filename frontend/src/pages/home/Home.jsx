@@ -74,7 +74,7 @@ export default function Home() {
     e.preventDefault();
 
     try {
-      const response = await fetch("http://localhost:5000/submit-contact-form", {
+      const response = await fetch("/submit-contact-form", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

@@ -34,7 +34,7 @@ const UserProfile = () => {
                 return;
             }
 
-            const response = await fetch("http://localhost:5010/api/profile", {
+            const response = await fetch("/api/profile", {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",
@@ -77,7 +77,7 @@ const UserProfile = () => {
                 return;
             }
 
-            const response = await fetch("http://localhost:5010/api/count", {
+            const response = await fetch("/api/count", {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",
@@ -118,7 +118,7 @@ const UserProfile = () => {
                 return;
             }
 
-            const response = await fetch("http://localhost:5010/api/recentlyWatched", {
+            const response = await fetch("/api/recentlyWatched", {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",

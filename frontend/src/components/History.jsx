@@ -7,7 +7,7 @@ const History = () => {
     const fetchHistory = async () => {
         try {
             const token = localStorage.getItem("accessToken");
-            const response = await fetch("http://localhost:5010/api/fetchHistory", {
+            const response = await fetch("/api/fetchHistory", {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",

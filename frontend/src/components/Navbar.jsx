@@ -18,7 +18,7 @@ const checkLoginStatus = async () => {
         const token = localStorage.getItem("accessToken");
         if (!token) return false; // No token means not logged in
 
-        const response = await axios.get("http://localhost:5010/api/check", {
+        const response = await axios.get("/api/check", {
             headers: {
                 "x-access-token": token, // Include token in x-access-token header
             },
