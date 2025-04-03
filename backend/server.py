@@ -41,12 +41,12 @@ def handle_preflight():
     if request.method == "OPTIONS":
         return '', 200  # Empty response with 200 status for preflight requests
 
-@app.route("/", defaults={"filename": ""})
-@app.route("/<path:filename>")
-def index(filename):
-    if not filename:
-        filename = "index.html"
-    return send_from_directory(frontend_path, filename)
+@app.route("/", defaults={"path": ""})
+@app.route("/<path:path>")
+def index(path):
+    if not path or not os.path.exists(os.path.join(frontend_path, path)):
+        path = "index.html"
+    return send_from_directory(frontend_path, path)
 
 
 
