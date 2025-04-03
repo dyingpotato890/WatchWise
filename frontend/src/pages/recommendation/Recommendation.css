@@ -275,3 +275,116 @@ body, html {
   border-radius: 50%;
   animation: spin 1s linear infinite;
 } */
+
+.available-on {
+  margin-top: 15px;
+  text-align: left;
+}
+
+/* Streaming Icons Container */
+.streaming-icons {
+  display: flex;
+  gap: 12px;
+  margin-top: 8px;
+  align-items: center;
+}
+
+/* Individual Icon Wrapper */
+.icon-wrapper {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+
+
+/* Hover Effect */
+.streaming-icon:hover {
+  transform: scale(1.1);
+  transition: transform 0.2s ease;
+}
+.platform-name {
+  color: white;
+  font-size: 0.9rem;
+  padding: 5px;
+  background: rgba(255,255,255,0.2);
+  border-radius: 5px;
+}
+
+
+.platform-icon-wrapper {
+  height: 24px;
+  display: flex;
+  align-items: center;
+  margin-right: 12px;
+}
+
+.streaming-icon {
+  height: 100%;
+  width: auto;
+  object-fit: contain;
+  filter: none;
+}
+
+/* Platform-specific adjustments */
+.streaming-icon.netflix {
+  height: 20px; /* Slightly smaller to match others */
+}
+
+.streaming-icon.amazon-prime {
+  height: 22px;
+}
+
+.streaming-icon.disney+ {
+  height: 24px;
+}
+
+
+.streaming-platforms {
+  display: flex;
+  gap: 15px;
+  margin-top: 8px;
+  flex-wrap: wrap;
+}
+
+
+
+
+.platform-icons-row {
+  display: flex;
+  gap: 15px;
+  align-items: center;
+  margin-top: 8px;
+  flex-wrap: wrap;
+}
+
+/* Platform-specific adjustments */
+
+/* Update your CSS with these rules */
+.platform-icon {
+  height: 24px;
+  width: auto;
+  object-fit: contain;
+  background-color: white; /* Add white background */
+  filter: brightness(0.8) sepia(0.1); /* Soft white */
+  opacity: 0.9; /* Slightly transparent */
+  padding: 4px; /* Add some padding */
+  border-radius: 4px; /* Optional: rounded corners */
+  box-shadow: 0 0 8px rgba(255, 255, 255, 0.3); /* Optional: subtle glow */
+}
+
+
+.platform-icon.amazon-prime {
+  height: 22px;
+  padding: 3px 8px; /* Prime needs more horizontal space */
+}
+
+.platform-icon.disney-plus {
+  height: 24px;
+  background-color: #113CCF; /* Disney blue background */
+}
