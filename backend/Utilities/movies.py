@@ -87,7 +87,8 @@ class Movies:
                 "poster": poster_path,
                 "trailer": movie_doc["trailer_link"],
                 "year": str(int(movie_doc["release_year"])),
-                "duration": movie_doc["duration"]
+                "duration": movie_doc["duration"],
+                "source": movie_doc["source"]
             }
             
             langFlag = False
